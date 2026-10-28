@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Last Haven">
+  <meta name="theme-color" content="#0f131c">
+  <title>Last Haven</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="game"></canvas>
+
+  <header id="hud">
+    <div class="row">
+      <div id="clock" class="pill"></div>
+      <div id="baseLabel" class="pill ghost"></div>
+      <button id="speedBtn" class="pill btn" aria-label="Game speed">1×</button>
+    </div>
+    <div id="res" class="chips"></div>
+  </header>
+
+  <div id="banner" class="banner hidden"></div>
+  <div id="toasts"></div>
+
+  <nav id="bar">
+    <button data-act="bases"><span class="ic">🏚️</span><span>Bases</span></button>
+    <button data-act="build"><span class="ic">🔨</span><span>Build</span></button>
+    <button data-act="scav"><span class="ic">🎒</span><span id="scavLabel">Scavenge</span></button>
+    <button data-act="more"><span class="ic">☰</span><span>More</span></button>
+  </nav>
+
+  <div id="scrim" class="hidden"></div>
+  <section id="sheet" class="hidden" aria-modal="true" role="dialog">
+    <div class="grab"></div>
+    <div class="sheet-head">
+      <h2 id="sheetTitle"></h2>
+      <button id="sheetClose" class="x" aria-label="Close">✕</button>
+    </div>
+    <div id="sheetBody"></div>
+  </section>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
