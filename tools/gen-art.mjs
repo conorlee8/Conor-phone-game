@@ -6,18 +6,22 @@
 //   node tools/gen-art.mjs item_bed base_train_car         # just these ids
 //   node tools/gen-art.mjs --force item_bed                # redo one
 //   IMAGE_MODEL=gpt-image-2 node tools/gen-art.mjs         # pick a model
+//   MANIFEST=art/style-test.json node tools/gen-art.mjs    # another asset list
 //
 // Node's fetch only uses the HTTPS proxy with NODE_USE_ENV_PROXY=1.
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { basename } from 'node:path';
 
 const root = new URL('../', import.meta.url);
-const manifest = JSON.parse(readFileSync(new URL('art/assets.json', root)));
+const manifestPath = process.env.MANIFEST || 'art/assets.json';
+const manifest = JSON.parse(readFileSync(new URL(manifestPath, root)));
 const outDir = new URL('art/raw/', root);
 mkdirSync(outDir, { recursive: true });
 
 const key = process.env.OPENAI_API_KEY;
 const model = process.env.IMAGE_MODEL || 'gpt-image-2';
+// gpt-image-2 can't make transparent backgrounds, so cut-out pieces use 1.5.
+const CUTOUT_MODEL = process.env.CUTOUT_MODEL || 'gpt-image-1.5';
 const args = process.argv.slice(2);
 const force = args.includes('--force');
 const only = args.filter(a => !a.startsWith('--'));
@@ -28,6 +32,7 @@ if (!key) {
 }
 
 function promptFor(a) {
+  if (a.kind === 'raw') return a.prompt;
   if (a.kind !== 'item') return `${manifest.style} ${manifest.view} ${a.prompt}`;
   return `${manifest.style} ${manifest.view} ${manifest.itemRules} Subject: ${a.prompt}`;
 }
@@ -67,7 +72,7 @@ async function generate(a) {
   return call('https://api.openai.com/v1/images/generations', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model, prompt, size: a.size || '1024x1024', quality: 'high', background: 'transparent', output_format: 'png' }),
+    body: JSON.stringify({ model: a.model || ((a.background || 'transparent') === 'transparent' ? CUTOUT_MODEL : model), prompt, size: a.size || '1024x1024', quality: a.quality || 'high', background: a.background || 'transparent', output_format: 'png' }),
   });
 }
 

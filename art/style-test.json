@@ -1,0 +1,128 @@
+{
+  "assets": [
+    {
+      "id": "test_painted_bunk_bed",
+      "kind": "raw",
+      "quality": "medium",
+      "prompt": "Hand-painted anime illustration in the style of Studio Ghibli background art: soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette of sage green, cream, rust and faded navy. Game asset sprite for a side-view cutaway base-building game. Seen almost straight from the front with the camera slightly above (about 15 degrees) so the top surface is just visible. Neutral, even, soft daylight: no strong shadows, no coloured light, no glow unless described. A single object, centred, isolated on a fully transparent background. No floor, no wall, no text, no people. Subject: a grey metal bunk bed with two thin mattresses, a navy blanket below and a red plaid blanket above, and a small ladder."
+    },
+    {
+      "id": "test_painted_generator",
+      "kind": "raw",
+      "quality": "medium",
+      "prompt": "Hand-painted anime illustration in the style of Studio Ghibli background art: soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette of sage green, cream, rust and faded navy. Game asset sprite for a side-view cutaway base-building game. Seen almost straight from the front with the camera slightly above (about 15 degrees) so the top surface is just visible. Neutral, even, soft daylight: no strong shadows, no coloured light, no glow unless described. A single object, centred, isolated on a fully transparent background. No floor, no wall, no text, no people. Subject: a small red portable petrol generator on a steel frame with wheels."
+    },
+    {
+      "id": "test_painted_purifier",
+      "kind": "raw",
+      "quality": "medium",
+      "prompt": "Hand-painted anime illustration in the style of Studio Ghibli background art: soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette of sage green, cream, rust and faded navy. Game asset sprite for a side-view cutaway base-building game. Seen almost straight from the front with the camera slightly above (about 15 degrees) so the top surface is just visible. Neutral, even, soft daylight: no strong shadows, no coloured light, no glow unless described. A single object, centred, isolated on a fully transparent background. No floor, no wall, no text, no people. Subject: a tall water purifier: a clear acrylic tank of water on a white machine base with pipes and small indicator lights."
+    },
+    {
+      "id": "test_painted_battery_bank",
+      "kind": "raw",
+      "quality": "medium",
+      "prompt": "Hand-painted anime illustration in the style of Studio Ghibli background art: soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette of sage green, cream, rust and faded navy. Game asset sprite for a side-view cutaway base-building game. Seen almost straight from the front with the camera slightly above (about 15 degrees) so the top surface is just visible. Neutral, even, soft daylight: no strong shadows, no coloured light, no glow unless described. A single object, centred, isolated on a fully transparent background. No floor, no wall, no text, no people. Subject: a stack of three dark grey deep-cycle batteries joined by thick red and black cables."
+    },
+    {
+      "id": "test_painted_shelf",
+      "kind": "raw",
+      "quality": "medium",
+      "prompt": "Hand-painted anime illustration in the style of Studio Ghibli background art: soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette of sage green, cream, rust and faded navy. Game asset sprite for a side-view cutaway base-building game. Seen almost straight from the front with the camera slightly above (about 15 degrees) so the top surface is just visible. Neutral, even, soft daylight: no strong shadows, no coloured light, no glow unless described. A single object, centred, isolated on a fully transparent background. No floor, no wall, no text, no people. Subject: a tall metal wire storage shelf stocked with canned food, rice bags, water bottles and a first aid kit."
+    },
+    {
+      "id": "test_painted_planter",
+      "kind": "raw",
+      "quality": "medium",
+      "prompt": "Hand-painted anime illustration in the style of Studio Ghibli background art: soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette of sage green, cream, rust and faded navy. Game asset sprite for a side-view cutaway base-building game. Seen almost straight from the front with the camera slightly above (about 15 degrees) so the top surface is just visible. Neutral, even, soft daylight: no strong shadows, no coloured light, no glow unless described. A single object, centred, isolated on a fully transparent background. No floor, no wall, no text, no people. Subject: a long wooden hydroponic planter trough of leafy green lettuce with a white grow-light bar on posts above it."
+    },
+    {
+      "id": "test_painted_workbench",
+      "kind": "raw",
+      "quality": "medium",
+      "prompt": "Hand-painted anime illustration in the style of Studio Ghibli background art: soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette of sage green, cream, rust and faded navy. Game asset sprite for a side-view cutaway base-building game. Seen almost straight from the front with the camera slightly above (about 15 degrees) so the top surface is just visible. Neutral, even, soft daylight: no strong shadows, no coloured light, no glow unless described. A single object, centred, isolated on a fully transparent background. No floor, no wall, no text, no people. Subject: a sturdy wooden workbench with a vice, hand tools and a pegboard of tools behind it."
+    },
+    {
+      "id": "test_painted_wall_lamp",
+      "kind": "raw",
+      "quality": "medium",
+      "prompt": "Hand-painted anime illustration in the style of Studio Ghibli background art: soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette of sage green, cream, rust and faded navy. Game asset sprite for a side-view cutaway base-building game. Seen almost straight from the front with the camera slightly above (about 15 degrees) so the top surface is just visible. Neutral, even, soft daylight: no strong shadows, no coloured light, no glow unless described. A single object, centred, isolated on a fully transparent background. No floor, no wall, no text, no people. Subject: a small brass wall sconce lamp with a cream glass shade, turned off."
+    },
+    {
+      "id": "test_painted_wall",
+      "kind": "raw",
+      "quality": "medium",
+      "background": "opaque",
+      "prompt": "Hand-painted anime illustration in the style of Studio Ghibli background art: soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette of sage green, cream, rust and faded navy. Seamless tileable texture for the inside back wall of a shelter room, flat front view with no perspective: weathered cream-painted wooden wall panels with a dark wood skirting strip at the bottom. Even lighting, no objects, no text."
+    },
+    {
+      "id": "test_painted_floor",
+      "kind": "raw",
+      "quality": "medium",
+      "background": "opaque",
+      "prompt": "Hand-painted anime illustration in the style of Studio Ghibli background art: soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette of sage green, cream, rust and faded navy. Seamless tileable texture of worn dark wooden floor planks seen from slightly above, planks running left to right. Even lighting, no objects, no text."
+    },
+    {
+      "id": "test_pixel_bunk_bed",
+      "kind": "raw",
+      "quality": "medium",
+      "prompt": "High-detail HD pixel art in the style of Dave the Diver and Octopath Traveler: crisp chunky pixel clusters, limited palette, clean dark pixel outlines, simple dithered shading, muted post-apocalyptic palette of sage green, cream, rust and faded navy. Game asset sprite for a side-view cutaway base-building game. Seen almost straight from the front with the camera slightly above (about 15 degrees) so the top surface is just visible. Neutral, even, soft daylight: no strong shadows, no coloured light, no glow unless described. A single object, centred, isolated on a fully transparent background. No floor, no wall, no text, no people. Subject: a grey metal bunk bed with two thin mattresses, a navy blanket below and a red plaid blanket above, and a small ladder."
+    },
+    {
+      "id": "test_pixel_generator",
+      "kind": "raw",
+      "quality": "medium",
+      "prompt": "High-detail HD pixel art in the style of Dave the Diver and Octopath Traveler: crisp chunky pixel clusters, limited palette, clean dark pixel outlines, simple dithered shading, muted post-apocalyptic palette of sage green, cream, rust and faded navy. Game asset sprite for a side-view cutaway base-building game. Seen almost straight from the front with the camera slightly above (about 15 degrees) so the top surface is just visible. Neutral, even, soft daylight: no strong shadows, no coloured light, no glow unless described. A single object, centred, isolated on a fully transparent background. No floor, no wall, no text, no people. Subject: a small red portable petrol generator on a steel frame with wheels."
+    },
+    {
+      "id": "test_pixel_purifier",
+      "kind": "raw",
+      "quality": "medium",
+      "prompt": "High-detail HD pixel art in the style of Dave the Diver and Octopath Traveler: crisp chunky pixel clusters, limited palette, clean dark pixel outlines, simple dithered shading, muted post-apocalyptic palette of sage green, cream, rust and faded navy. Game asset sprite for a side-view cutaway base-building game. Seen almost straight from the front with the camera slightly above (about 15 degrees) so the top surface is just visible. Neutral, even, soft daylight: no strong shadows, no coloured light, no glow unless described. A single object, centred, isolated on a fully transparent background. No floor, no wall, no text, no people. Subject: a tall water purifier: a clear acrylic tank of water on a white machine base with pipes and small indicator lights."
+    },
+    {
+      "id": "test_pixel_battery_bank",
+      "kind": "raw",
+      "quality": "medium",
+      "prompt": "High-detail HD pixel art in the style of Dave the Diver and Octopath Traveler: crisp chunky pixel clusters, limited palette, clean dark pixel outlines, simple dithered shading, muted post-apocalyptic palette of sage green, cream, rust and faded navy. Game asset sprite for a side-view cutaway base-building game. Seen almost straight from the front with the camera slightly above (about 15 degrees) so the top surface is just visible. Neutral, even, soft daylight: no strong shadows, no coloured light, no glow unless described. A single object, centred, isolated on a fully transparent background. No floor, no wall, no text, no people. Subject: a stack of three dark grey deep-cycle batteries joined by thick red and black cables."
+    },
+    {
+      "id": "test_pixel_shelf",
+      "kind": "raw",
+      "quality": "medium",
+      "prompt": "High-detail HD pixel art in the style of Dave the Diver and Octopath Traveler: crisp chunky pixel clusters, limited palette, clean dark pixel outlines, simple dithered shading, muted post-apocalyptic palette of sage green, cream, rust and faded navy. Game asset sprite for a side-view cutaway base-building game. Seen almost straight from the front with the camera slightly above (about 15 degrees) so the top surface is just visible. Neutral, even, soft daylight: no strong shadows, no coloured light, no glow unless described. A single object, centred, isolated on a fully transparent background. No floor, no wall, no text, no people. Subject: a tall metal wire storage shelf stocked with canned food, rice bags, water bottles and a first aid kit."
+    },
+    {
+      "id": "test_pixel_planter",
+      "kind": "raw",
+      "quality": "medium",
+      "prompt": "High-detail HD pixel art in the style of Dave the Diver and Octopath Traveler: crisp chunky pixel clusters, limited palette, clean dark pixel outlines, simple dithered shading, muted post-apocalyptic palette of sage green, cream, rust and faded navy. Game asset sprite for a side-view cutaway base-building game. Seen almost straight from the front with the camera slightly above (about 15 degrees) so the top surface is just visible. Neutral, even, soft daylight: no strong shadows, no coloured light, no glow unless described. A single object, centred, isolated on a fully transparent background. No floor, no wall, no text, no people. Subject: a long wooden hydroponic planter trough of leafy green lettuce with a white grow-light bar on posts above it."
+    },
+    {
+      "id": "test_pixel_workbench",
+      "kind": "raw",
+      "quality": "medium",
+      "prompt": "High-detail HD pixel art in the style of Dave the Diver and Octopath Traveler: crisp chunky pixel clusters, limited palette, clean dark pixel outlines, simple dithered shading, muted post-apocalyptic palette of sage green, cream, rust and faded navy. Game asset sprite for a side-view cutaway base-building game. Seen almost straight from the front with the camera slightly above (about 15 degrees) so the top surface is just visible. Neutral, even, soft daylight: no strong shadows, no coloured light, no glow unless described. A single object, centred, isolated on a fully transparent background. No floor, no wall, no text, no people. Subject: a sturdy wooden workbench with a vice, hand tools and a pegboard of tools behind it."
+    },
+    {
+      "id": "test_pixel_wall_lamp",
+      "kind": "raw",
+      "quality": "medium",
+      "prompt": "High-detail HD pixel art in the style of Dave the Diver and Octopath Traveler: crisp chunky pixel clusters, limited palette, clean dark pixel outlines, simple dithered shading, muted post-apocalyptic palette of sage green, cream, rust and faded navy. Game asset sprite for a side-view cutaway base-building game. Seen almost straight from the front with the camera slightly above (about 15 degrees) so the top surface is just visible. Neutral, even, soft daylight: no strong shadows, no coloured light, no glow unless described. A single object, centred, isolated on a fully transparent background. No floor, no wall, no text, no people. Subject: a small brass wall sconce lamp with a cream glass shade, turned off."
+    },
+    {
+      "id": "test_pixel_wall",
+      "kind": "raw",
+      "quality": "medium",
+      "background": "opaque",
+      "prompt": "High-detail HD pixel art in the style of Dave the Diver and Octopath Traveler: crisp chunky pixel clusters, limited palette, clean dark pixel outlines, simple dithered shading, muted post-apocalyptic palette of sage green, cream, rust and faded navy. Seamless tileable texture for the inside back wall of a shelter room, flat front view with no perspective: weathered cream-painted wooden wall panels with a dark wood skirting strip at the bottom. Even lighting, no objects, no text."
+    },
+    {
+      "id": "test_pixel_floor",
+      "kind": "raw",
+      "quality": "medium",
+      "background": "opaque",
+      "prompt": "High-detail HD pixel art in the style of Dave the Diver and Octopath Traveler: crisp chunky pixel clusters, limited palette, clean dark pixel outlines, simple dithered shading, muted post-apocalyptic palette of sage green, cream, rust and faded navy. Seamless tileable texture of worn dark wooden floor planks seen from slightly above, planks running left to right. Even lighting, no objects, no text."
+    }
+  ]
+}
