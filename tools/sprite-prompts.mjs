@@ -47,7 +47,7 @@ const DESC = {
   barricade: 'a low barricade of stacked sandbags with a plank across them',
   spikes: 'a row of sharpened rebar spikes in a wooden frame, a defensive trap',
   fence: 'a section of chain-link fence on metal posts with barbed wire on top',
-  turret: 'a homemade automatic turret: a rifle on a motorised mount with a small camera',
+  turret: 'a homemade motorised sentry post: a swivelling metal head with a spotlight and a camera on a sturdy tripod, wires and a junction box',
   gun_rack: 'a wooden wall gun rack holding two hunting rifles',
   window_bars: 'heavy steel security bars in a square frame',
   ladder: 'a tall wooden ladder',

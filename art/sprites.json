@@ -514,7 +514,7 @@
         "art/templates/turret.png",
         "art/reference/sprite_style.png"
       ],
-      "prompt": "Paint over the grey placeholder box in the first image: replace it with a homemade automatic turret: a rifle on a motorised mount with a small camera. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a homemade motorised sentry post: a swivelling metal head with a spotlight and a camera on a sturdy tripod, wires and a junction box. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
     },
     {
       "id": "sprite_gun_rack",

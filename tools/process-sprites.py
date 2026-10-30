@@ -38,11 +38,11 @@ def main():
     for src in sorted(RAW.glob("sprite_*.png")):
         im = trim(Image.open(src).convert("RGBA"))
         im.thumbnail((512, 512), Image.LANCZOS)
-        im.save(SPRITES / f"{src.stem[len('sprite_'):]}.webp", "WEBP", quality=88, method=6)
+        im.save(SPRITES / f"{src.stem[len('sprite_'):]}.webp", "WEBP", quality=88, method=4)
     for src in sorted(RAW.glob("tex_*.png")):
         im = Image.open(src).convert("RGB").resize((256, 256), Image.LANCZOS)
         im = mirror_tile(im)
-        im.save(TEXTURES / f"{src.stem[len('tex_'):]}.webp", "WEBP", quality=85, method=6)
+        im.save(TEXTURES / f"{src.stem[len('tex_'):]}.webp", "WEBP", quality=85, method=4)
     print(f"{len(list(SPRITES.glob('*.webp')))} sprites, {len(list(TEXTURES.glob('*.webp')))} textures")
 
 

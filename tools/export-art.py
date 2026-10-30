@@ -30,7 +30,7 @@ def main():
             print(f"missing {src.name}")
             continue
         dst = OUT / f"{name}.webp"
-        Image.open(src).convert("RGB").save(dst, "WEBP", quality=82, method=6)
+        Image.open(src).convert("RGB").save(dst, "WEBP", quality=82, method=4)
         print(f"{name}: {dst.stat().st_size // 1024} KB")
 
 

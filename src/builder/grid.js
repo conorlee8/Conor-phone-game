@@ -45,7 +45,8 @@ export function cellsOf(it) {
     const x = it.x + k;
     switch (it.m) {
       case 'wall': for (let r = it.r; r < it.r + rowsOf(d); r++) out.push(`wall:${x},${it.f},${r}`); break;
-      case 'ceiling': out.push(`ceil:${x},${it.f}`); break;
+      // ceiling pieces hang into the top wall row, so they claim it too
+      case 'ceiling': out.push(`ceil:${x},${it.f}`, `wall:${x},${it.f},${ROWS - 1}`); break;
       case 'roof': out.push(`roof:${x}`); break;
       case 'yard': out.push(`yard:${x}`); break;
       default:
