@@ -5,7 +5,7 @@
 //   OPENAI_API_KEY=... node tools/gen-art.mjs              # everything missing
 //   node tools/gen-art.mjs item_bed base_train_car         # just these ids
 //   node tools/gen-art.mjs --force item_bed                # redo one
-//   IMAGE_MODEL=gpt-image-1 node tools/gen-art.mjs         # pick a model
+//   IMAGE_MODEL=gpt-image-2 node tools/gen-art.mjs         # pick a model
 //
 // Node's fetch only uses the HTTPS proxy with NODE_USE_ENV_PROXY=1.
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
@@ -17,7 +17,7 @@ const outDir = new URL('art/raw/', root);
 mkdirSync(outDir, { recursive: true });
 
 const key = process.env.OPENAI_API_KEY;
-const model = process.env.IMAGE_MODEL || 'gpt-image-1';
+const model = process.env.IMAGE_MODEL || 'gpt-image-2';
 const args = process.argv.slice(2);
 const force = args.includes('--force');
 const only = args.filter(a => !a.startsWith('--'));
