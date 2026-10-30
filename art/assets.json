@@ -165,6 +165,79 @@
       ],
       "size": "1024x1536",
       "prompt": "Keep this exact image: same framing, same raft shape and pontoons, same lake, shore and art style. Only build the raft up into a cozy floating home: a small wooden shack with a canvas roof at one end with a bed and a glowing lantern inside, a planter box with climbing beans on a stick trellis, fish hanging to dry on a line, a blue water barrel with a filter, a small wind turbine on a pole, a cooking fire in a metal drum with a kettle, crates of supplies, and a bearded survivor sitting at the edge fishing. Late afternoon golden light breaking through the mist."
+    },
+    {
+      "id": "base_train_car_kitted",
+      "kind": "base",
+      "images": [
+        "art/raw/base_train_car.png",
+        "art/reference/train_car_target_look.png"
+      ],
+      "size": "1536x1024",
+      "prompt": "Keep the first image's exact framing, train car shape, windows, track and background. Fill the empty interior of the train car with a cozy survivor home like the second image: a bed with a green quilt and a girl asleep at the left end, framed photos and string lights along the wall, a tall hydroponic shelf of lettuce under grow lights, a kitchen corner with a camp stove, steaming kettle and hanging pans, shelves of canned food, rugs on the floor, glowing lanterns, a low wall of sandbags and stacked ammo crates at the right end where a young woman in tactical gear kneels aiming a rifle out of the window. Dusk light, warm lamplight inside, cold fog outside with zombie silhouettes in the field."
+    },
+    {
+      "id": "base_train_car_s2",
+      "kind": "base",
+      "images": [
+        "art/raw/base_train_car_kitted.png"
+      ],
+      "size": "1536x1024",
+      "prompt": "Keep this exact image unchanged: same framing, same camera angle, same lighting, same art style, and every remaining object in exactly the same place and size. Only remove the following, replacing each with whatever bare surface would be behind it: the woman with the rifle, the sandbags, the ammo crates and military boxes at the right end, and the sleeping girl (leave the bed neatly made and empty)."
+    },
+    {
+      "id": "base_train_car_s1",
+      "kind": "base",
+      "images": [
+        "art/raw/base_train_car_s2.png"
+      ],
+      "size": "1536x1024",
+      "prompt": "Keep this exact image unchanged: same framing, same camera angle, same lighting, same art style, and every remaining object in exactly the same place and size. Only remove the following, replacing each with whatever bare surface would be behind it: the hydroponic shelf with its plants and grow lights, the kitchen corner (stove, kettle, hanging pans and spice shelf), the rugs, and the string lights. Keep the bed, the lanterns and the shelves of canned food."
+    },
+    {
+      "id": "base_water_tower_s2",
+      "kind": "base",
+      "images": [
+        "art/raw/base_water_tower_kitted.png"
+      ],
+      "size": "1024x1536",
+      "prompt": "Keep this exact image unchanged: same framing, same camera angle, same lighting, same art style, and every remaining object in exactly the same place and size. Only remove the following, replacing each with whatever bare surface would be behind it: the woman with the rifle on the catwalk, the large funnel and pipe on the catwalk, and the girl asleep in the bed (leave the bed made and empty)."
+    },
+    {
+      "id": "base_water_tower_s1",
+      "kind": "base",
+      "images": [
+        "art/raw/base_water_tower_s2.png"
+      ],
+      "size": "1024x1536",
+      "prompt": "Keep this exact image unchanged: same framing, same camera angle, same lighting, same art style, and every remaining object in exactly the same place and size. Only remove the following, replacing each with whatever bare surface would be behind it: the string lights, the round rug, the wood stove with its kettle and chimney pipe, and the plant shelves with the grow light. Keep the bed, the lanterns, the small table and chair, the water jugs and the food shelf."
+    },
+    {
+      "id": "base_raft_s2",
+      "kind": "base",
+      "images": [
+        "art/raw/base_raft_kitted.png"
+      ],
+      "size": "1024x1536",
+      "prompt": "Keep this exact image unchanged: same framing, same camera angle, same lighting, same art style, and every remaining object in exactly the same place and size. Only remove the following, replacing each with whatever bare surface would be behind it: the wind turbine and its pole, the line of drying fish and its posts, the bearded man fishing and his fishing rod, and the wooden crates of supplies."
+    },
+    {
+      "id": "base_raft_s1",
+      "kind": "base",
+      "images": [
+        "art/raw/base_raft_s2.png"
+      ],
+      "size": "1024x1536",
+      "prompt": "Keep this exact image unchanged: same framing, same camera angle, same lighting, same art style, and every remaining object in exactly the same place and size. Only remove the following, replacing each with whatever bare surface would be behind it: the planter box with the bean trellis, the blue water barrel with its filter, and the fire drum with the kettle. Keep the shack with its bed and lantern."
+    },
+    {
+      "id": "base_raft_s0",
+      "kind": "base",
+      "images": [
+        "art/raw/base_raft_s1.png"
+      ],
+      "size": "1024x1536",
+      "prompt": "Keep this exact image unchanged: same framing, same camera angle, same lighting, same art style, and every remaining object in exactly the same place and size. Only remove the following, replacing each with whatever bare surface would be behind it: the whole shack: its walls, door, canvas roof, chimney, bed, rug and lantern, leaving only the bare wooden deck planks of the raft."
     }
   ]
 }
