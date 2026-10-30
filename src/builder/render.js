@@ -4,18 +4,19 @@ import { smooth, rr, clamp, hash1 } from '../util.js';
 
 export const darkness = h => 1 - smooth(5, 7.5, h) + smooth(18, 20.5, h);
 
-const sprites = new Map();
-export function sprite(style, id) {
-  const key = `${style}/${id}`;
-  if (!sprites.has(key)) {
+const images = new Map();
+function load(path) {
+  if (!images.has(path)) {
     const img = new Image();
-    img.src = `assets/sprites/${key}.${style === 'pixel' ? 'png' : 'webp'}`;
+    img.src = path;
     img.onerror = () => { img.failed = true; };
-    sprites.set(key, img);
+    images.set(path, img);
   }
-  const img = sprites.get(key);
+  const img = images.get(path);
   return img.complete && img.naturalWidth && !img.failed ? img : null;
 }
+export const sprite = id => load(`assets/sprites/${id}.webp`);
+const texture = name => load(`assets/textures/${name}.webp`);
 
 const PAINT = Object.fromEntries(Object.entries(PAINTS).map(([k, list]) => [k, Object.fromEntries(list.map(p => [p.id, p]))]));
 const WIRE = '#f2c14e', PIPE = '#5ab0e8';
@@ -35,13 +36,12 @@ export class Renderer {
 
   render(v) {
     const { c, W, H, dpr } = this;
-    const { L, cam, style, hour, t, mode, ghost, base, sel } = v;
+    const { L, cam, hour, t, mode, ghost, base, sel } = v;
     const sh = L.sh;
     const s = cam.s;
     const dark = darkness(hour);
     const sun = 1 - dark;
     const world = () => c.setTransform(dpr * s, 0, 0, dpr * s, dpr * (W / 2 - cam.x * s), dpr * (H / 2 - cam.y * s));
-    c.imageSmoothingEnabled = style !== 'pixel';
     this.skyTop = dark > 0.5 ? '#0d1322' : '#8fa6b8';
     this.skyLow = dark > 0.5 ? '#1c2232' : '#d8dcd6';
 
@@ -97,7 +97,7 @@ export class Renderer {
       const d = ITEM[it.id];
       const dim = it.on === false && !['idle'].includes(it.why) ? 0.6 : 1;
       if (it.m === 'floor' || it.m === 'yard') this.shadow(box);
-      this.drawItem(style, d, box, dim);
+      this.drawItem(d, box, dim);
       if (sel === i) { c.strokeStyle = '#f0b45a'; c.lineWidth = 0.05; c.strokeRect(box.x - 0.03, box.y - 0.03, box.w + 0.06, box.h + 0.06); }
       if (d.light && it.on) lights.push({ x: box.x + box.w / 2, y: box.y + box.h * 0.5, r: d.light, k: 1 });
     }
@@ -109,7 +109,7 @@ export class Renderer {
     if (ghost) {
       const box = itemBox(L, ghost);
       c.globalAlpha = 0.75;
-      this.drawItem(style, ITEM[ghost.id], box, 1);
+      this.drawItem(ITEM[ghost.id], box, 1);
       c.globalAlpha = 1;
       c.fillStyle = ghost.ok ? 'rgba(90,220,120,0.28)' : 'rgba(255,80,70,0.32)';
       c.fillRect(box.x, box.y, box.w, box.h);
@@ -152,6 +152,7 @@ export class Renderer {
     const c = this.c;
     const p = PAINT.wall[mat] || PAINT.wall.panel;
     const h = ROOM_H - FLOOR_BAND;
+    if (mat !== 'window' && this.textured(`wall_${mat}`, x, top, 1.002, h, 3)) return;
     c.fillStyle = p.color;
     c.fillRect(x, top, 1.002, h);
     c.strokeStyle = 'rgba(0,0,0,0.16)'; c.lineWidth = 0.015;
@@ -208,6 +209,7 @@ export class Renderer {
   floorCell(mat, x, y, cx) {
     const c = this.c;
     const p = PAINT.floor[mat] || PAINT.floor.planks;
+    if (this.textured(`floor_${mat}`, x, y, 1.002, FLOOR_BAND, 2.4)) { this.floorShade(x, y); return; }
     c.fillStyle = p.color;
     c.fillRect(x, y, 1.002, FLOOR_BAND);
     c.strokeStyle = 'rgba(0,0,0,0.22)'; c.lineWidth = 0.014;
@@ -216,10 +218,27 @@ export class Renderer {
     if (mat === 'tile') { line(x + 0.5, y, x + 0.5, y + FLOOR_BAND); line(x, y + 0.25, x + 1, y + 0.25); line(x, y, x, y + FLOOR_BAND); }
     if (mat === 'concrete') { if (cx % 2 === 0) line(x, y, x, y + FLOOR_BAND); }
     if (mat === 'carpet') { c.fillStyle = 'rgba(255,220,180,0.12)'; c.fillRect(x, y + 0.08, 1, 0.04); c.fillRect(x, y + 0.38, 1, 0.04); }
-    // a slight top-down tilt: the back of the floor is darker
+    this.floorShade(x, y);
+  }
+
+  // a slight top-down tilt: the back of the floor is darker
+  floorShade(x, y) {
+    const c = this.c;
     const g = c.createLinearGradient(0, y, 0, y + FLOOR_BAND);
     g.addColorStop(0, 'rgba(0,0,0,0.28)'); g.addColorStop(1, 'rgba(255,255,255,0.05)');
     c.fillStyle = g; c.fillRect(x, y, 1.002, FLOOR_BAND);
+  }
+
+  // Fill a rect with a painted texture, tiled seamlessly in world space.
+  textured(name, x, y, w, h, unitsPerTile) {
+    const img = texture(name);
+    if (!img) return false;
+    this.pats ||= {};
+    const pat = (this.pats[name] ||= this.c.createPattern(img, 'repeat'));
+    pat.setTransform(new DOMMatrix().scale(unitsPerTile / img.naturalWidth));
+    this.c.fillStyle = pat;
+    this.c.fillRect(x, y, w, h);
+    return true;
   }
 
   divider(kind, x, st) {
@@ -309,9 +328,9 @@ export class Renderer {
     c.beginPath(); c.ellipse(box.x + box.w / 2, box.y + box.h - 0.01, box.w * 0.46, 0.07, 0, 0, Math.PI * 2); c.fill();
   }
 
-  drawItem(style, d, box, alpha) {
+  drawItem(d, box, alpha) {
     const c = this.c;
-    const img = sprite(style, d.id);
+    const img = sprite(d.id);
     const a0 = c.globalAlpha;
     c.globalAlpha = a0 * alpha;
     if (img) {

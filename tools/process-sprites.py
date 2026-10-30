@@ -1,10 +1,9 @@
-"""Turn raw generated pieces into game sprites.
+"""Turn raw generated pieces and textures into game assets.
 
-Trims each cut-out to its visible pixels, scales it down, and for the pixel
-style snaps it to a coarse pixel grid on a shared palette so every piece looks
-like it came from the same artist.
+Pieces are trimmed to their visible pixels and scaled down; textures are
+resized for tiling.
 
-    python3 tools/process-sprites.py            # style test pieces
+    python3 tools/process-sprites.py
 """
 from pathlib import Path
 
@@ -12,13 +11,8 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "art" / "raw"
-OUT = ROOT / "assets" / "sprites"
-
-PIXELS_PER_UNIT = 40  # pixel style: art pixels per grid unit
-HEIGHT_UNITS = {
-    "bunk_bed": 2.2, "generator": 1.1, "purifier": 2, "battery_bank": 1.2, "shelf": 2.2,
-    "planter": 1.6, "workbench": 1.4, "wall_lamp": 0.6,
-}
+SPRITES = ROOT / "assets" / "sprites"
+TEXTURES = ROOT / "assets" / "textures"
 
 
 def trim(im):
@@ -27,47 +21,29 @@ def trim(im):
     return im.crop(box) if box else im
 
 
-def painted(src, dst):
-    im = trim(Image.open(src).convert("RGBA"))
-    im.thumbnail((512, 512), Image.LANCZOS)
-    im.save(dst.with_suffix(".webp"), "WEBP", quality=88, method=6)
-
-
-def pixel(src, dst, units):
-    im = trim(Image.open(src).convert("RGBA"))
-    h = max(8, round(units * PIXELS_PER_UNIT / 2))  # half-resolution art pixels
-    w = max(8, round(im.width * h / im.height))
-    small = im.resize((w, h), Image.BOX)
-    alpha = small.getchannel("A").point(lambda a: 255 if a > 110 else 0)
-    rgb = small.convert("RGB").quantize(colors=40, method=Image.MEDIANCUT, dither=Image.NONE).convert("RGB")
-    out = rgb.convert("RGBA")
-    out.putalpha(alpha)
-    out.save(dst.with_suffix(".png"))
-
-
-def tile(src, dst, pixelate):
-    im = Image.open(src).convert("RGB")
-    if pixelate:
-        im = im.resize((96, 96), Image.BOX).quantize(colors=32, dither=Image.NONE).convert("RGB")
-        im.save(dst.with_suffix(".png"))
-    else:
-        im.resize((384, 384), Image.LANCZOS).save(dst.with_suffix(".webp"), "WEBP", quality=85)
+def mirror_tile(im):
+    """2x2 mirrored copy: edges always meet, so the texture tiles without seams."""
+    w, h = im.size
+    out = Image.new("RGB", (w * 2, h * 2))
+    out.paste(im, (0, 0))
+    out.paste(im.transpose(Image.FLIP_LEFT_RIGHT), (w, 0))
+    out.paste(im.transpose(Image.FLIP_TOP_BOTTOM), (0, h))
+    out.paste(im.transpose(Image.ROTATE_180), (w, h))
+    return out
 
 
 def main():
-    for style in ("painted", "pixel"):
-        out = OUT / style
-        out.mkdir(parents=True, exist_ok=True)
-        for src in sorted(RAW.glob(f"test_{style}_*.png")):
-            name = src.stem[len(f"test_{style}_"):]
-            dst = out / name
-            if name in ("wall", "floor"):
-                tile(src, dst, style == "pixel")
-            elif style == "pixel":
-                pixel(src, dst, HEIGHT_UNITS.get(name, 1.5))
-            else:
-                painted(src, dst)
-            print(f"{style}/{name}")
+    SPRITES.mkdir(parents=True, exist_ok=True)
+    TEXTURES.mkdir(parents=True, exist_ok=True)
+    for src in sorted(RAW.glob("sprite_*.png")):
+        im = trim(Image.open(src).convert("RGBA"))
+        im.thumbnail((512, 512), Image.LANCZOS)
+        im.save(SPRITES / f"{src.stem[len('sprite_'):]}.webp", "WEBP", quality=88, method=6)
+    for src in sorted(RAW.glob("tex_*.png")):
+        im = Image.open(src).convert("RGB").resize((256, 256), Image.LANCZOS)
+        im = mirror_tile(im)
+        im.save(TEXTURES / f"{src.stem[len('tex_'):]}.webp", "WEBP", quality=85, method=6)
+    print(f"{len(list(SPRITES.glob('*.webp')))} sprites, {len(list(TEXTURES.glob('*.webp')))} textures")
 
 
 if __name__ == "__main__":

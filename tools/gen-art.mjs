@@ -63,10 +63,11 @@ async function generate(a) {
       const png = readFileSync(new URL(path, root));
       form.append(images.length > 1 ? 'image[]' : 'image', new Blob([png], { type: 'image/png' }), basename(path));
     }
-    form.append('model', model);
+    form.append('model', a.model || (a.cutout ? CUTOUT_MODEL : model));
     form.append('prompt', prompt);
     form.append('size', a.size || '1536x1024');
-    form.append('quality', 'high');
+    form.append('quality', a.quality || 'high');
+    if (a.cutout) form.append('background', 'transparent');
     return call('https://api.openai.com/v1/images/edits', { method: 'POST', body: form });
   }
   return call('https://api.openai.com/v1/images/generations', {

@@ -256,3 +256,20 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 .row-item .emoji.sprite { background: rgba(255, 255, 255, 0.06) center / contain no-repeat; image-rendering: auto; }
 .lead.good { color: var(--good); }
 .lead.bad { color: var(--bad); }
+
+/* Landscape phones: keep the base visible */
+@media (max-height: 500px) {
+  #hud { top: calc(var(--safe-t) + 4px); gap: 4px; flex-direction: row; align-items: center; }
+  #hud .row { flex: none; }
+  #baseLabel { display: none; }
+  .pill { padding: 4px 10px; font-size: 13px; }
+  .chips { flex-wrap: nowrap; overflow-x: auto; touch-action: pan-x; scrollbar-width: none; }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip { flex: none; }
+  #bar { left: 25%; right: 25%; bottom: calc(var(--safe-b) + 6px); padding: 4px; border-radius: 16px; }
+  #bar button { padding: 4px 0; font-size: 10px; }
+  #bar button .ic { font-size: 18px; }
+  .banner { left: 15%; right: 15%; bottom: calc(var(--safe-b) + 62px); padding: 8px 12px; }
+  #toasts { top: calc(var(--safe-t) + 44px); }
+  #sheet { left: 10%; right: 10%; max-height: 88vh; }
+}

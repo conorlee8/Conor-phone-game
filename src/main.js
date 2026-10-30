@@ -21,7 +21,6 @@ let ghost = null;
 let sel = -1;
 let sheet = null;
 let catTab = 'Power';
-let style = (() => { try { return localStorage.getItem('haven-style') || 'painted'; } catch { return 'painted'; } })();
 const lay = () => S.L(state);
 
 // ---------------------------------------------------------------------------
@@ -164,9 +163,8 @@ $('sheetClose').addEventListener('click', closeSheet);
 $('scrim').addEventListener('click', closeSheet);
 
 function thumb(d) {
-  const ext = style === 'pixel' ? 'png' : 'webp';
-  return sprite(style, d.id)
-    ? `<div class="emoji sprite" style="background-image:url(assets/sprites/${style}/${d.id}.${ext})"></div>`
+  return sprite(d.id)
+    ? `<div class="emoji sprite" style="background-image:url(assets/sprites/${d.id}.webp)"></div>`
     : `<div class="emoji">${CAT_ICON[d.cat]}</div>`;
 }
 
@@ -271,8 +269,6 @@ function openMore() {
       <div class="cost">${here ? 'Home' : owned ? 'Move' : `🔩 ${sh.cost}`}</div></button>`;
   }).join('');
   openSheet('Last Haven', `
-    <div class="group-h">Art style test</div>
-    <div class="tabs"><button class="tab ${style === 'painted' ? 'on' : ''}" data-style="painted">🎨 Painted</button><button class="tab ${style === 'pixel' ? 'on' : ''}" data-style="pixel">👾 Pixel</button></div>
     <div class="group-h">Bases</div><div class="list">${shells}</div>
     <div class="group-h">How it works</div>
     <div class="help">
@@ -284,8 +280,6 @@ function openMore() {
     </div>
     <div class="stack"><button class="cta danger" id="reset">Start over</button></div>`, true);
   $('sheetBody').onclick = e => {
-    const st = e.target.closest('[data-style]');
-    if (st) { style = st.dataset.style; try { localStorage.setItem('haven-style', style); } catch { /* storage unavailable */ } openMore(); return; }
     const sh = e.target.closest('[data-shell]');
     if (sh && !sh.disabled) {
       const err = S.moveTo(state, sh.dataset.shell);
@@ -456,7 +450,7 @@ function frame(now) {
     dh -= d;
   }
   updateCam();
-  R.render({ L: lay(), cam, style, hour: state.time % 24, t, mode, ghost, base: S.base(state), sel });
+  R.render({ L: lay(), cam, hour: state.time % 24, t, mode, ghost, base: S.base(state), sel });
   if ((hudTimer -= dt) <= 0) { renderHUD(); hudTimer = 0.3; }
   if ((saveTimer -= dt) <= 0) { S.save(state); saveTimer = 5; }
   requestAnimationFrame(frame);
@@ -477,6 +471,5 @@ window.__haven = {
   S,
   setHour: h => { state.time = Math.floor(state.time / 24) * 24 + h; },
   give: n => { for (const k of ['scrap', 'parts', 'fuel', 'food', 'water']) state[k] += n; },
-  style: s => { style = s; },
   mode: (m, w) => setMode(m, w),
 };

@@ -1,0 +1,628 @@
+{
+  "assets": [
+    {
+      "id": "sprite_generator",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/generator.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a small red portable petrol generator on a steel frame with wheels. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_solar",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/solar.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a solar panel tilted on a metal stand, dark blue cells with a silver frame. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_wind",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/wind.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a small homemade wind turbine with three white blades on a tall metal pole. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_battery_bank",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/battery_bank.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a stack of three dark grey deep-cycle batteries joined by red and black cables. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_wall_battery",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/wall_battery.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a compact grey wall-mounted battery box with a small charge display. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_wall_lamp",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/wall_lamp.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a brass wall sconce lamp with a cream glass shade. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_ceiling_light",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/ceiling_light.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a hanging industrial pendant lamp with a green enamel shade on a short chain. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_string_lights",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/string_lights.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a strand of warm bulb string lights hanging in two gentle swags. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_floor_lamp",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/floor_lamp.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a tall standing floor lamp with a fabric shade. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_flood_light",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/flood_light.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a heavy outdoor flood light with a metal housing on a short post. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_rain_collector",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/rain_collector.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a blue rain barrel with a wide funnel top and a mesh filter. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_well_pump",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/well_pump.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a cast iron electric well pump with pipes coming out of the ground. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_water_tank",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/water_tank.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a tall white plastic water tank with a ladder-ribbed side and a tap. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_purifier",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/purifier.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a water purifier: a clear acrylic tank of water on a white machine base with pipes and small lights. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_sink",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/sink.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a small enamel sink on a wooden stand with a tap. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_water_heater",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/water_heater.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a white cylindrical wall water heater with copper pipes. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_shower",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/shower.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a simple open shower stall with a metal frame, shower head and a plastic curtain. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_planter",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/planter.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a long wooden hydroponic planter trough of leafy green lettuce with a white grow-light bar on posts above it. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_wall_planter",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/wall_planter.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a metal gutter planter mounted on the wall with herbs growing in it. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_hanging_plant",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/hanging_plant.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a woven hanging basket with a trailing green plant. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_soil_bed",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/soil_bed.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a raised wooden garden bed of dark soil with rows of vegetables. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_stove",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/stove.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a small cast iron wood stove with a kettle on top. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_fridge",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/fridge.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a slightly dented retro white fridge. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_shelf",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/shelf.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a tall metal wire storage shelf stocked with canned food, rice bags, water bottles and a first aid kit. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_wall_shelf",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/wall_shelf.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a wooden wall shelf on brackets with jars and cans. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_cabinet",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/cabinet.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a small green metal wall cabinet with a tool sticker on the door. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_crate",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/crate.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a sturdy wooden supply crate with rope handles. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_locker",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/locker.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a tall grey metal locker with vents, slightly dented. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_fuel_drum",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/fuel_drum.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a red steel fuel drum with a hand pump on top. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_bunk_bed",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/bunk_bed.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a grey metal bunk bed with two thin mattresses, a navy blanket below and a red plaid blanket above, and a small ladder. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_bed",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/bed.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a cozy wooden single bed with a thick patchwork quilt and two pillows. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_sofa",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/sofa.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a worn olive-green two-seat sofa with a crocheted blanket over one arm. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_tv",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/tv.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with an old flat screen TV mounted on the wall, screen dark. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_radio",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/radio.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a ham radio set with dials and a microphone on a small wooden desk. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_heater",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/heater.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with an old portable oil-filled radiator heater on wheels. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_ceiling_fan",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/ceiling_fan.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a simple ceiling fan with four wooden blades on a short rod. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_clock",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/clock.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a round wooden wall clock with a cream face. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_workbench",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/workbench.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a sturdy wooden workbench with a vice and hand tools on it. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_pegboard",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/pegboard.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a wall pegboard with hanging hand tools: hammer, saw, wrenches, pliers. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_barricade",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/barricade.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a low barricade of stacked sandbags with a plank across them. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_spikes",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/spikes.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a row of sharpened rebar spikes in a wooden frame, a defensive trap. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_fence",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/fence.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a section of chain-link fence on metal posts with barbed wire on top. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_turret",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/turret.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a homemade automatic turret: a rifle on a motorised mount with a small camera. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_gun_rack",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/gun_rack.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a wooden wall gun rack holding two hunting rifles. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_window_bars",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/window_bars.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with heavy steel security bars in a square frame. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "sprite_ladder",
+      "kind": "raw",
+      "cutout": true,
+      "quality": "medium",
+      "size": "1024x1024",
+      "images": [
+        "art/templates/ladder.png",
+        "art/reference/sprite_style.png"
+      ],
+      "prompt": "Paint over the grey placeholder box in the first image: replace it with a tall wooden ladder. The object must fill the placeholder’s exact outline, width and height, standing on the same baseline, seen front-on and slightly from above. Match the art style of the second image exactly: hand-painted anime illustration like Studio Ghibli background art, soft cel shading, clean thin dark ink outlines, painterly texture, muted post-apocalyptic palette, slightly worn and used. Neutral, even, soft lighting with no glow and no coloured light. A single object on a fully transparent background. No floor, no wall, no shadow, no text, no people."
+    },
+    {
+      "id": "tex_wall_panel",
+      "kind": "raw",
+      "background": "opaque",
+      "quality": "medium",
+      "size": "1024x1024",
+      "prompt": "Seamless tileable texture, flat front view with no perspective and even lighting: weathered cream-painted vertical wooden wall panels with a dark wood skirting board along the bottom. Hand-painted anime background-art style like Studio Ghibli, soft painterly texture, muted post-apocalyptic palette. No objects, no text."
+    },
+    {
+      "id": "tex_wall_brick",
+      "kind": "raw",
+      "background": "opaque",
+      "quality": "medium",
+      "size": "1024x1024",
+      "prompt": "Seamless tileable texture, flat front view with no perspective and even lighting: old red-brown brick wall with worn mortar. Hand-painted anime background-art style like Studio Ghibli, soft painterly texture, muted post-apocalyptic palette. No objects, no text."
+    },
+    {
+      "id": "tex_wall_concrete",
+      "kind": "raw",
+      "background": "opaque",
+      "quality": "medium",
+      "size": "1024x1024",
+      "prompt": "Seamless tileable texture, flat front view with no perspective and even lighting: stained grey poured concrete wall with faint formwork seams. Hand-painted anime background-art style like Studio Ghibli, soft painterly texture, muted post-apocalyptic palette. No objects, no text."
+    },
+    {
+      "id": "tex_wall_metal",
+      "kind": "raw",
+      "background": "opaque",
+      "quality": "medium",
+      "size": "1024x1024",
+      "prompt": "Seamless tileable texture, flat front view with no perspective and even lighting: riveted steel wall plates, grey-green paint, a little rust at the seams. Hand-painted anime background-art style like Studio Ghibli, soft painterly texture, muted post-apocalyptic palette. No objects, no text."
+    },
+    {
+      "id": "tex_wall_wallpaper",
+      "kind": "raw",
+      "background": "opaque",
+      "quality": "medium",
+      "size": "1024x1024",
+      "prompt": "Seamless tileable texture, flat front view with no perspective and even lighting: faded sage-green striped wallpaper over a dark wood dado rail. Hand-painted anime background-art style like Studio Ghibli, soft painterly texture, muted post-apocalyptic palette. No objects, no text."
+    },
+    {
+      "id": "tex_floor_planks",
+      "kind": "raw",
+      "background": "opaque",
+      "quality": "medium",
+      "size": "1024x1024",
+      "prompt": "Seamless tileable texture, flat front view with no perspective and even lighting: worn dark wooden floor planks running left to right. Hand-painted anime background-art style like Studio Ghibli, soft painterly texture, muted post-apocalyptic palette. No objects, no text."
+    },
+    {
+      "id": "tex_floor_concrete",
+      "kind": "raw",
+      "background": "opaque",
+      "quality": "medium",
+      "size": "1024x1024",
+      "prompt": "Seamless tileable texture, flat front view with no perspective and even lighting: scuffed grey concrete floor. Hand-painted anime background-art style like Studio Ghibli, soft painterly texture, muted post-apocalyptic palette. No objects, no text."
+    },
+    {
+      "id": "tex_floor_tile",
+      "kind": "raw",
+      "background": "opaque",
+      "quality": "medium",
+      "size": "1024x1024",
+      "prompt": "Seamless tileable texture, flat front view with no perspective and even lighting: cream square ceramic floor tiles with grey grout, slightly chipped. Hand-painted anime background-art style like Studio Ghibli, soft painterly texture, muted post-apocalyptic palette. No objects, no text."
+    },
+    {
+      "id": "tex_floor_carpet",
+      "kind": "raw",
+      "background": "opaque",
+      "quality": "medium",
+      "size": "1024x1024",
+      "prompt": "Seamless tileable texture, flat front view with no perspective and even lighting: a faded red patterned carpet. Hand-painted anime background-art style like Studio Ghibli, soft painterly texture, muted post-apocalyptic palette. No objects, no text."
+    }
+  ]
+}
