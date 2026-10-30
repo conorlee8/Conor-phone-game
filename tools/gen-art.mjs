@@ -28,7 +28,7 @@ if (!key) {
 }
 
 function promptFor(a) {
-  if (a.kind === 'base') return `${manifest.style} ${manifest.view} ${a.prompt}`;
+  if (a.kind !== 'item') return `${manifest.style} ${manifest.view} ${a.prompt}`;
   return `${manifest.style} ${manifest.view} ${manifest.itemRules} Subject: ${a.prompt}`;
 }
 
@@ -46,12 +46,18 @@ async function call(url, init) {
   throw new Error('gave up after 3 attempts');
 }
 
+// Assets with source images (a layout guide, a style reference, or an earlier
+// painting to build on) go through the edits endpoint; the rest are generated
+// fresh on a transparent background.
 async function generate(a) {
   const prompt = promptFor(a);
-  if (a.kind === 'base') {
+  const images = a.images || (a.guide ? [a.guide] : null);
+  if (images) {
     const form = new FormData();
-    const png = readFileSync(new URL(a.guide, root));
-    form.append('image', new Blob([png], { type: 'image/png' }), basename(a.guide));
+    for (const path of images) {
+      const png = readFileSync(new URL(path, root));
+      form.append(images.length > 1 ? 'image[]' : 'image', new Blob([png], { type: 'image/png' }), basename(path));
+    }
     form.append('model', model);
     form.append('prompt', prompt);
     form.append('size', a.size || '1536x1024');

@@ -10,28 +10,161 @@
       "size": "1536x1024",
       "prompt": "Paint over this layout exactly, keeping every wall, window, floor edge and the track in the same position and proportions. An abandoned passenger train car seen in cutaway, roof and front wall removed so we look down into it. The interior is completely EMPTY: bare worn wooden plank floor, cream painted wall panels with brass trim, eight train windows along the back wall. No furniture, no people, no objects inside. The car body is weathered sage-green steel with a rust-orange stripe along the bottom edge. It sits on rusted bogies on a gravel railway track. Outside the windows and around the car: an overcast foggy morning, wet green fields, distant telegraph poles fading into mist."
     },
-
-    { "id": "item_bedroll", "kind": "item", "slot": "front", "prompt": "A rolled-out camping bedroll with a faded blue sleeping mat, a rust-orange quilted blanket and a white pillow." },
-    { "id": "item_bedroll_sleeping", "kind": "item", "slot": "front", "prompt": "A rolled-out camping bedroll with a faded blue sleeping mat, a rust-orange quilted blanket and a white pillow, with a young woman with short brown hair asleep under the blanket, peaceful face." },
-    { "id": "item_bed", "kind": "item", "slot": "back", "prompt": "A cozy wooden single bed with a thick cream duvet, a knitted throw, two pillows and a small plush bear, headboard against the wall." },
-    { "id": "item_bunk", "kind": "item", "slot": "back", "prompt": "A grey metal bunk bed with two thin mattresses, a navy blanket on the bottom and a red plaid blanket on top, a small ladder on the side." },
-    { "id": "item_sofa", "kind": "item", "slot": "front", "prompt": "A worn olive-green two-seat sofa with a cream crocheted blanket draped over one arm and a rust-coloured cushion." },
-    { "id": "item_planter", "kind": "item", "slot": "front", "prompt": "A wooden crate planter full of dark soil and growing lettuce, herbs and small tomato plants." },
-    { "id": "item_hydro", "kind": "item", "slot": "back", "prompt": "A tall white PVC-pipe hydroponic rack with four tiers of leafy green lettuce, glowing green grow lights under each tier, a blue water bottle feeding it through tubes." },
-    { "id": "item_purifier", "kind": "item", "slot": "back", "prompt": "A tall clear acrylic water purification tank with glowing pale-blue water and bubbles, white pipes and a small control unit with green and red lights at its base." },
-    { "id": "item_rain_barrel", "kind": "item", "slot": "back", "prompt": "A blue plastic rain barrel with a metal funnel on top and a small brass tap near the bottom, slightly weathered." },
-    { "id": "item_stove", "kind": "item", "slot": "front", "prompt": "A small folding camp table with a single-burner gas camp stove, a dented black kettle steaming gently, and a tin mug." },
-    { "id": "item_pantry", "kind": "item", "slot": "back", "prompt": "A metal wire shelving unit stocked with canned food, bags of rice, bottled water and a red first aid kit." },
-    { "id": "item_crates", "kind": "item", "slot": "front", "prompt": "A stack of three wooden supply crates, one open showing canned food and water bottles." },
-    { "id": "item_sandbags", "kind": "item", "slot": "front", "prompt": "A low wall of stacked tan military sandbags." },
-    { "id": "item_lookout_guard", "kind": "item", "slot": "back", "prompt": "A young woman in olive tactical gear with a brown ponytail, kneeling and aiming a rifle out toward a window, seen from behind and slightly to the side, beside an ammo crate." },
-
-    { "id": "wall_string_lights", "kind": "item", "slot": "wall", "prompt": "A short strand of warm glowing fairy string lights hanging in a gentle curve." },
-    { "id": "wall_lantern", "kind": "item", "slot": "wall", "prompt": "A small brass hurricane lantern with a warm glowing flame, hanging from a hook." },
-    { "id": "wall_map", "kind": "item", "slot": "wall", "prompt": "A cork board with a hand-marked paper road map, red string between pins, and yellow sticky notes." },
-    { "id": "wall_shelf", "kind": "item", "slot": "wall", "prompt": "A small wooden wall shelf holding jars, a potted plant and a few canned goods." },
-
-    { "id": "zombie_walk_1", "kind": "item", "slot": "outside", "prompt": "A shambling zombie silhouette walking, ragged clothes, hunched, arms hanging forward, desaturated grey-green, softened as if seen through fog, full body side view." },
-    { "id": "zombie_walk_2", "kind": "item", "slot": "outside", "prompt": "A tall gaunt zombie silhouette limping, torn coat, head tilted, desaturated grey, softened as if seen through fog, full body, three-quarter view." }
+    {
+      "id": "item_bedroll",
+      "kind": "item",
+      "slot": "front",
+      "prompt": "A rolled-out camping bedroll with a faded blue sleeping mat, a rust-orange quilted blanket and a white pillow."
+    },
+    {
+      "id": "item_bedroll_sleeping",
+      "kind": "item",
+      "slot": "front",
+      "prompt": "A rolled-out camping bedroll with a faded blue sleeping mat, a rust-orange quilted blanket and a white pillow, with a young woman with short brown hair asleep under the blanket, peaceful face."
+    },
+    {
+      "id": "item_bed",
+      "kind": "item",
+      "slot": "back",
+      "prompt": "A cozy wooden single bed with a thick cream duvet, a knitted throw, two pillows and a small plush bear, headboard against the wall."
+    },
+    {
+      "id": "item_bunk",
+      "kind": "item",
+      "slot": "back",
+      "prompt": "A grey metal bunk bed with two thin mattresses, a navy blanket on the bottom and a red plaid blanket on top, a small ladder on the side."
+    },
+    {
+      "id": "item_sofa",
+      "kind": "item",
+      "slot": "front",
+      "prompt": "A worn olive-green two-seat sofa with a cream crocheted blanket draped over one arm and a rust-coloured cushion."
+    },
+    {
+      "id": "item_planter",
+      "kind": "item",
+      "slot": "front",
+      "prompt": "A wooden crate planter full of dark soil and growing lettuce, herbs and small tomato plants."
+    },
+    {
+      "id": "item_hydro",
+      "kind": "item",
+      "slot": "back",
+      "prompt": "A tall white PVC-pipe hydroponic rack with four tiers of leafy green lettuce, glowing green grow lights under each tier, a blue water bottle feeding it through tubes."
+    },
+    {
+      "id": "item_purifier",
+      "kind": "item",
+      "slot": "back",
+      "prompt": "A tall clear acrylic water purification tank with glowing pale-blue water and bubbles, white pipes and a small control unit with green and red lights at its base."
+    },
+    {
+      "id": "item_rain_barrel",
+      "kind": "item",
+      "slot": "back",
+      "prompt": "A blue plastic rain barrel with a metal funnel on top and a small brass tap near the bottom, slightly weathered."
+    },
+    {
+      "id": "item_stove",
+      "kind": "item",
+      "slot": "front",
+      "prompt": "A small folding camp table with a single-burner gas camp stove, a dented black kettle steaming gently, and a tin mug."
+    },
+    {
+      "id": "item_pantry",
+      "kind": "item",
+      "slot": "back",
+      "prompt": "A metal wire shelving unit stocked with canned food, bags of rice, bottled water and a red first aid kit."
+    },
+    {
+      "id": "item_crates",
+      "kind": "item",
+      "slot": "front",
+      "prompt": "A stack of three wooden supply crates, one open showing canned food and water bottles."
+    },
+    {
+      "id": "item_sandbags",
+      "kind": "item",
+      "slot": "front",
+      "prompt": "A low wall of stacked tan military sandbags."
+    },
+    {
+      "id": "item_lookout_guard",
+      "kind": "item",
+      "slot": "back",
+      "prompt": "A young woman in olive tactical gear with a brown ponytail, kneeling and aiming a rifle out toward a window, seen from behind and slightly to the side, beside an ammo crate."
+    },
+    {
+      "id": "wall_string_lights",
+      "kind": "item",
+      "slot": "wall",
+      "prompt": "A short strand of warm glowing fairy string lights hanging in a gentle curve."
+    },
+    {
+      "id": "wall_lantern",
+      "kind": "item",
+      "slot": "wall",
+      "prompt": "A small brass hurricane lantern with a warm glowing flame, hanging from a hook."
+    },
+    {
+      "id": "wall_map",
+      "kind": "item",
+      "slot": "wall",
+      "prompt": "A cork board with a hand-marked paper road map, red string between pins, and yellow sticky notes."
+    },
+    {
+      "id": "wall_shelf",
+      "kind": "item",
+      "slot": "wall",
+      "prompt": "A small wooden wall shelf holding jars, a potted plant and a few canned goods."
+    },
+    {
+      "id": "zombie_walk_1",
+      "kind": "item",
+      "slot": "outside",
+      "prompt": "A shambling zombie silhouette walking, ragged clothes, hunched, arms hanging forward, desaturated grey-green, softened as if seen through fog, full body side view."
+    },
+    {
+      "id": "zombie_walk_2",
+      "kind": "item",
+      "slot": "outside",
+      "prompt": "A tall gaunt zombie silhouette limping, torn coat, head tilted, desaturated grey, softened as if seen through fog, full body, three-quarter view."
+    },
+    {
+      "id": "base_water_tower",
+      "kind": "base",
+      "images": [
+        "art/reference/train_car_target_look.png"
+      ],
+      "size": "1024x1536",
+      "prompt": "Create a brand-new illustration in exactly the same art style, brushwork, lighting and level of detail as this reference image, but a completely different scene. An old riveted steel water tower standing on tall lattice legs in a misty overgrown field, with a ladder up one leg and a railed catwalk ring around the tank. The top of the round tank is cut away so we look down inside it: the drained tank is now an EMPTY dry circular room with a worn wooden plank floor, curved riveted steel walls and a few small round portholes. No furniture, no objects, no people inside. Overcast foggy morning, wet green fields, telegraph poles fading into mist, a few small zombie silhouettes in the fog far below. Portrait composition with the tower filling most of the frame."
+    },
+    {
+      "id": "base_water_tower_kitted",
+      "kind": "base",
+      "images": [
+        "art/raw/base_water_tower.png"
+      ],
+      "size": "1024x1536",
+      "prompt": "Keep this exact image: same framing, same tower, same tank shape, same background and art style. Only fill the inside of the tank with a cozy survivor home: a bed with a patchwork quilt against the curved wall with a girl asleep in it, warm string lights around the rim of the tank, a shelf of potted herbs and lettuce under glowing grow lights, a small camp stove with a steaming kettle, shelves of canned food and blue water jugs, a round rug, glowing lanterns, a rain-collecting funnel and pipe. On the catwalk outside, a young woman in tactical gear kneels with a rifle watching the zombies below. Dusk: warm amber lamplight glowing out of the tank against cold blue fog."
+    },
+    {
+      "id": "base_raft",
+      "kind": "base",
+      "images": [
+        "art/reference/train_car_target_look.png"
+      ],
+      "size": "1024x1536",
+      "prompt": "Create a brand-new illustration in exactly the same art style, brushwork, lighting and level of detail as this reference image, but a completely different scene. A small survival raft floating on a calm misty lake: rough weathered wooden planks lashed onto rusty oil-drum pontoons, an anchor chain dropping into the dark water. The deck is EMPTY: bare planks only, no furniture, no objects, no people. Forested hills fading into fog around the lake, and on the far shore a broken wooden pier with a few zombie silhouettes standing at the water's edge. Seen from the front and above, the raft filling the lower middle of a portrait frame."
+    },
+    {
+      "id": "base_raft_kitted",
+      "kind": "base",
+      "images": [
+        "art/raw/base_raft.png"
+      ],
+      "size": "1024x1536",
+      "prompt": "Keep this exact image: same framing, same raft shape and pontoons, same lake, shore and art style. Only build the raft up into a cozy floating home: a small wooden shack with a canvas roof at one end with a bed and a glowing lantern inside, a planter box with climbing beans on a stick trellis, fish hanging to dry on a line, a blue water barrel with a filter, a small wind turbine on a pole, a cooking fire in a metal drum with a kettle, crates of supplies, and a bearded survivor sitting at the edge fishing. Late afternoon golden light breaking through the mist."
+    }
   ]
 }
