@@ -6,6 +6,8 @@
 //   node tools/gen-art.mjs item_bed base_train_car         # just these ids
 //   node tools/gen-art.mjs --force item_bed                # redo one
 //   IMAGE_MODEL=gpt-image-1 node tools/gen-art.mjs         # pick a model
+//
+// Node's fetch only uses the HTTPS proxy with NODE_USE_ENV_PROXY=1.
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { basename } from 'node:path';
 
@@ -35,8 +37,10 @@ async function call(url, init) {
     const res = await fetch(url, { ...init, headers: { Authorization: `Bearer ${key}`, ...init.headers } });
     if (res.ok) return res.json();
     const body = await res.text();
-    if (res.status < 500 && res.status !== 429) throw new Error(`${res.status}: ${body.slice(0, 300)}`);
-    console.warn(`  retry ${attempt} after ${res.status}`);
+    // Out of credit or blocked: retrying won't help, so say why.
+    const fatal = /insufficient_quota|credit_balance|billing|verif|must be verified/i.test(body);
+    if (fatal || (res.status < 500 && res.status !== 429)) throw new Error(`${res.status}: ${body.slice(0, 400)}`);
+    console.warn(`  retry ${attempt} after ${res.status}: ${body.slice(0, 160)}`);
     await new Promise(r => setTimeout(r, 4000 * attempt));
   }
   throw new Error('gave up after 3 attempts');
