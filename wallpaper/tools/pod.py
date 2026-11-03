@@ -19,6 +19,12 @@ from PIL import Image, ImageDraw, ImageFilter
 
 ROOT = Path(__file__).resolve().parent.parent
 BASE = ROOT / "raw" / "r8_inner.png"     # the locked base painting the pins sit on
+MASTER = ROOT / "pods" / "work" / "master.png"   # the base with every placed pod (tools/master.py)
+
+
+def station():
+    """The current station: the master if pods have been placed, else the base."""
+    return Image.open(MASTER if MASTER.exists() else BASE).convert("RGB")
 WORK = ROOT / "pods" / "work"
 SIZE = 1024
 CONTEXT = 2.6                             # crop side = this × the room's longer side
@@ -49,7 +55,7 @@ def prep(pin_path, base_render=None):
     pid, room = pin["id"], pin["room"]
     out = WORK / pid
     out.mkdir(parents=True, exist_ok=True)
-    base = Image.open(BASE).convert("RGB")
+    base = station()
     crop = crop_for(room, *base.size)
     original = base.crop(crop).resize((SIZE, SIZE), Image.LANCZOS)
     original.save(out / "original.png")
@@ -127,7 +133,7 @@ def finish(work_dir):
     out.save(work / f"pod_{meta['render']}.png")
     out.save(work / f"pod_{meta['render']}.jpg", quality=88)
     # The pod at its true size inside the whole painting, for checking the fit.
-    base = Image.open(BASE).convert("RGB")
+    base = station()
     c = meta["crop"]
     base.paste(out.resize((c[2] - c[0], c[3] - c[1]), Image.LANCZOS), (c[0], c[1]))
     base.save(work / f"context_{meta['render']}.jpg", quality=90)

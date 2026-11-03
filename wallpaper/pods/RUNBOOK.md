@@ -36,7 +36,12 @@ request too. Handle it like this.
    `before.jpg` (it has the room outlined) too as `kind: "current"` first.
    Append `{asset, kind: "paint", touch, who}` to `renders`, clear `base`
    (`{"__delete__": true}`), set `status: "done"`.
-7. **On failure** set `status: "error"` and a plain `statusNote` the page shows
+7. **Place it in the station.** Export every pin (`ArtifactData list`
+   collection `pins`, `out_dir: wallpaper/pods/work/_db`), run
+   `python3 wallpaper/tools/master.py`, and republish the page with
+   `files: {"station.jpg": "<abs path>/wallpaper/pods/station.jpg"}`. The map
+   then shows the pod, and later pods are painted against it.
+8. **On failure** set `status: "error"` and a plain `statusNote` the page shows
    (for example: "The image service is out of credits; add credits and generate
    again.").
 
