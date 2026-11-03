@@ -1,0 +1,56 @@
+{
+  "out": "raw",
+  "model": "gpt-image-2",
+  "quality": "high",
+  "text": {
+    "guide": "The first image is a layout guide: paint over it. Keep its architecture exactly: the sphere and its hull cut edge, every room's position, size, floor height and perspective depth, the open atrium shaft with its glass elevator, bridges and zip line, the patches of closed hull with portholes, the pipes, balconies and docking modules. The rooms are deliberately different widths and heights at staggered floor levels, like a station built up piece by piece over many years by different people: keep that irregularity and never straighten it into a grid. The second image shows the target painting style, linework and colour: match its look, not its layout.",
+    "scale": "Scale: the light grey figures in the guide mark people and the tan shapes mark dogs, at their exact size and position. Paint a person at every grey figure, keeping adults the same height as the figures (children shorter), and a dog at every tan shape (dogs reach an adult's knee). Add more people and animals freely, but always at that same scale, smaller when further back in a room. No person or dog is ever bigger than the markers.",
+    "rooms": "The signs in the guide name the shop in that room: paint each such room as that shop, with its sign restyled to suit it. The blue box is a two-storey saltwater reef tank, the orange-floored double-height room is a basketball court, the room with a ramp is a skate park, the green-floored rooms are the dog park and a plant nursery. Unlabelled rooms are cozy homes, lounges, a 90s game room, a band practice room, workshops and storerooms.",
+    "depth": "Depth and spontaneity: every room is full of objects at different distances, things in the foreground overlapping the cut edge, plants spilling over balconies, laundry lines, cables and fairy lights strung between rooms, stairs and ladders cutting between floors, a cat on a ledge, a robot wandering a corridor, small hand-made additions bolted on wherever there was space.",
+    "style": "Style: lofi anime night scene with a strong touch of a classic 1990s ink-and-watercolour cutaway book: crisp, clean, precise ink outlines on every object, clear readable shapes, transparent watercolour washes, no murky brown haze. Soft cel shading. People are drawn with slightly chunky storybook proportions (heads a little large, simple friendly faces).",
+    "color": "Colour: varied and lively, never one amber tone. Lead with three palettes mixed room by room: ocean (navy, aqua, coral), neon night (magenta, cyan, violet) and retro 70s (burnt orange, mustard, teal). Each room has its own light: aqua glow from fish tanks, magenta and cyan neon in the arcade, warm orange in the diner, cool white in the vet and gym, violet grow lights in the nursery, red lanterns at the dumpling stall. People wear many different colourful outfits. The grey hull and deep navy space frame all that colour.",
+    "tech": "Tech is a cozy mix of 1990s, Y2K and near-future: chunky CRT TVs and grey 90s game consoles with three-pronged controllers next to holograms, glowing glass panels, little helper robots, robot vacuums, drones, lava lamps, neon signs, vending machines, radio antenna rigs. 90s kid touches everywhere: green slime splat posters, inflatable chairs, posters of spiky-haired anime fighters with glowing auras, VHS stacks.",
+    "busy": "Dozens of cheerful people everywhere, every one busy: gaming, cooking, gardening, lifting weights, watching a game on a big screen, grilling, throwing a party, stargazing through a telescope, skateboarding, reading, jamming in a band, fixing a robot. Animals too: dogs, cats, birds, fish and a couple of friendly little green aliens. Two fawn-and-white boxer dogs play in the dog park, and tiny boxer look-alikes hide in odd places (a boxer plush, a boxer poster, a boxer peeking out of a tube). People ride glass elevators, pneumatic tubes, scooters, skateboards and a zip line across an open atrium. Signs are small, short and in English. Cozy, warm, happy and high-tech: nothing scary, no weapons.",
+    "sky": "Keep the starry sky above the station calm and empty, exactly as in the guide."
+  },
+  "assets": [
+    {
+      "id": "r6_inner",
+      "parts": [
+        "guide",
+        "scale",
+        "rooms",
+        "depth",
+        "style",
+        "color",
+        "tech",
+        "busy",
+        "sky"
+      ],
+      "size": "1824x1280",
+      "images": [
+        "guides/inner_guide.png",
+        "raw/r5_cover.png"
+      ]
+    },
+    {
+      "id": "r6_cover",
+      "parts": [
+        "guide",
+        "scale",
+        "rooms",
+        "depth",
+        "style",
+        "color",
+        "tech",
+        "busy",
+        "sky"
+      ],
+      "size": "1280x1824",
+      "images": [
+        "guides/cover_guide.png",
+        "raw/r5_cover.png"
+      ]
+    }
+  ]
+}
