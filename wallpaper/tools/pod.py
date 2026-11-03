@@ -55,6 +55,22 @@ def prep(pin_path, base_render=None):
     original.save(out / "original.png")
     src = Image.open(base_render).convert("RGB").resize((SIZE, SIZE), Image.LANCZOS) if base_render else original
     src.save(out / "input.png")
+    # Reference images for the real people and pets in this pod: each one's
+    # approved character sheet and a face photo, downloaded beforehand.
+    images = ["input.png"]
+    ref_lines = []
+    for i, ref in enumerate(pin.get("refs", [])):
+        idx = []
+        for kind in ("sheet", "photo"):
+            if ref.get(kind):
+                name = f"ref_{i + 1}_{kind}.jpg"
+                Image.open(ref[kind]).convert("RGB").save(out / name, quality=92)
+                images.append(name)
+                idx.append(f"image {len(images)} ({'their approved character drawing' if kind == 'sheet' else 'a photo'})")
+        if idx:
+            what = "this exact dog" if ref.get("kind") == "dog" else "this exact person"
+            looks = f" ({ref['looks'].strip()})" if (ref.get("looks") or "").strip() else ""
+            ref_lines.append(f"{ref['name']}{looks}: {what}, shown in reference " + " and ".join(idx) + ".")
     r = to_crop(room, crop)
     mask = Image.new("RGBA", (SIZE, SIZE), (0, 0, 0, 255))
     ImageDraw.Draw(mask).rectangle(r, fill=(0, 0, 0, 0))
@@ -73,7 +89,12 @@ def prep(pin_path, base_render=None):
         "Repaint ONLY the inside of the one small room in the transparent area of the mask, between its own walls, "
         "ceiling and floor slab. Everything outside it stays exactly as it is." + revise,
         f"The room becomes: {touch}.",
-        f"Who is here: {who}." if who else "",
+        ("Real people and pets in this room, painted from the reference images so their friends recognize them: "
+         + " ".join(ref_lines) + " They are small here, so carry their likeness through face shape, skin tone, "
+         "hairstyle and hair colour, facial hair, glasses, build and their clothes, exactly as in the references, "
+         "in this painting's style. Reference images after the first are references only: never paste them in."
+         ) if ref_lines else "",
+        f"Also here: {who}." if who else "",
         f"Keep the room its current size; it is small. A standing adult is about {stand}% of the room's height, "
         "exactly the size of the people in the neighbouring rooms, and seated people are smaller; dogs are knee-high. "
         "Only two or three people fit. Pack it with small, specific objects that suit the description.",
@@ -86,7 +107,7 @@ def prep(pin_path, base_render=None):
     n = len([x for x in pin.get("renders", []) if x.get("kind") == "paint"]) + 1
     job = {"out": ".", "model": "gpt-image-2", "quality": "high",
            "assets": [{"id": f"render_{n}", "prompt": prompt, "size": f"{SIZE}x{SIZE}",
-                       "images": ["input.png"], "mask": "mask.png"}]}
+                       "images": images, "mask": "mask.png"}]}
     (out / "job.json").write_text(json.dumps(job, indent=1))
     (out / "meta.json").write_text(json.dumps({"pin": pid, "room": room, "crop": crop, "render": n}))
     print(out / "job.json")

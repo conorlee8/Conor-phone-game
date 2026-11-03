@@ -45,3 +45,37 @@ that sheet to the job's `images` and name them in the prompt.
 
 Later, approved pod renders get composited back into the master painting at
 their `room` (base-painting pixels), then the cover is re-cut from the master.
+
+# People: "draw character" messages
+
+People live in the page's `people` collection: `{kind: person|dog, name,
+photos: [asset ids], looks, fix, sheets: [{asset}], approved: asset id|null,
+status, statusNote, order}`. The page sends
+`Pod Planner: draw character <id> (<name>).` (or Conor says "draw <name>").
+
+1. `ArtifactData get` `people/<id>`; write `{...data, id}` to
+   `wallpaper/pods/work/_db/person.json`. Set `status: "working"`.
+2. Download the photos: `Artifact read`, `url` = the page, `paths` = the photo
+   asset ids, `out_dir` = `wallpaper/pods/work/_db/photos/<id>`. Look at them:
+   skip any that aren't of this person or dog, and lead with the clearest face.
+3. If redrawing (the person has `sheets`), also download the latest sheet and
+   pass `--previous`; the prompt then applies `fix`.
+   ```sh
+   python3 wallpaper/tools/character.py prep wallpaper/pods/work/_db/person.json <photos…> [--previous <sheet>]
+   NODE_USE_ENV_PROXY=1 node wallpaper/tools/paint.mjs wallpaper/pods/work/people/<id>/job.json
+   python3 wallpaper/tools/character.py finish wallpaper/pods/work/people/<id>
+   ```
+4. Compare the sheet with the photos yourself before uploading. Upload
+   `sheet_N.jpg` as an asset, append `{asset}` to `sheets`, set `status: "done"`.
+   Conor approves it on the page (`approved` = that asset id).
+
+Photos stay in `wallpaper/pods/work/` (ignored by git) and the page's asset
+store. Never commit them.
+
+# People in pods
+
+A pin's `people` lists person ids. When generating it, for each one download
+their approved sheet (or latest sheet) and their clearest face photo, and add
+`refs: [{name, kind, looks, sheet: <path>, photo: <path>}]` to `pin.json`
+before `pod.py prep`. The job passes them as extra reference images and names
+them in the prompt; only the first image is masked and repainted.

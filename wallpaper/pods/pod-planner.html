@@ -69,7 +69,7 @@ h1 .jp { display: inline-block; margin-left: .3em; font-size: .38em; vertical-al
 .sheet { position: fixed; inset: 0; z-index: 20; display: grid; align-items: end; justify-items: center; }
 .backdrop { position: absolute; inset: 0; background: #05081299; }
 .panel {
-  position: relative; width: 100%; max-width: 600px; max-height: 92%; overflow-y: auto; display: grid; gap: 14px;
+  position: relative; width: 100%; max-width: 600px; max-height: 92%; overflow-y: auto; display: grid; gap: 14px; grid-auto-rows: max-content;
   background: var(--hull); border: 1px solid var(--line); border-bottom: 0; border-radius: 18px 18px 0 0;
   padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: max(18px, env(safe-area-inset-right, 0px));
   padding-top: 0; padding-bottom: calc(22px + env(safe-area-inset-bottom, 0px));
@@ -106,6 +106,49 @@ h1 .jp { display: inline-block; margin-left: .3em; font-size: .38em; vertical-al
 .saved { font-family: var(--mono); font-size: 12px; color: var(--muted); }
 .remove { font: inherit; font-size: 14px; color: var(--sakura); background: transparent; border: 1px solid var(--sakura); border-radius: 99px; padding: 6px 14px; cursor: pointer; }
 .remove.confirm { background: var(--sakura); color: var(--void); }
+/* People */
+.sect-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+.sect-head h2 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 28px; }
+.sect-head p { margin: 0; color: var(--muted); font-size: 14px; max-width: 60ch; }
+.row-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.add { font: inherit; font-weight: 700; color: var(--void); background: var(--lantern); border: 0; border-radius: 99px; padding: 9px 16px; cursor: pointer; }
+.people { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.pcard { display: grid; grid-template-columns: 64px 1fr; gap: 12px; align-items: center; width: 100%; padding: 10px; text-align: left; font: inherit; color: inherit; background: var(--hull); border: 1px solid var(--line); border-radius: 12px; cursor: pointer; }
+.pcard:hover { border-color: var(--muted); }
+.avatar { width: 64px; height: 64px; border-radius: 10px; overflow: hidden; background: var(--panel); display: grid; place-items: center; font-family: var(--display); font-size: 24px; color: var(--muted); }
+.avatar img { width: 100%; height: 100%; object-fit: cover; display: block; color: transparent; }
+.pmeta { display: grid; gap: 2px; min-width: 0; }
+.pname { font-weight: 700; font-size: 17px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pname.empty { color: var(--muted); font-weight: 500; }
+.badge { justify-self: start; font-family: var(--mono); font-size: 11px; letter-spacing: .04em; padding: 2px 8px; border-radius: 99px; background: var(--panel); color: var(--muted); }
+.badge.need { color: var(--lantern); }
+.badge.busy { color: #b9a7ff; }
+.badge.check { background: var(--lantern); color: var(--void); }
+.badge.ok { background: var(--mint); color: var(--void); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 8px; font: inherit; font-size: 15px; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 99px; padding: 4px 12px 4px 4px; cursor: pointer; }
+.chip .mini { width: 28px; height: 28px; border-radius: 50%; overflow: hidden; background: var(--void); display: grid; place-items: center; font-size: 12px; color: var(--muted); }
+.chip .mini img { width: 100%; height: 100%; object-fit: cover; color: transparent; }
+.chip[aria-pressed="true"] { background: var(--mint); border-color: var(--mint); color: var(--void); font-weight: 700; }
+.chip.new { padding: 6px 14px; border-style: dashed; color: var(--lantern); border-color: var(--lantern); background: transparent; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 99px; overflow: hidden; justify-self: start; }
+.seg button { font: inherit; color: var(--ink); background: transparent; border: 0; padding: 6px 16px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--mint); color: var(--void); font-weight: 700; }
+.photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
+.thumb { position: relative; aspect-ratio: 1; max-width: 100%; border-radius: 10px; overflow: hidden; background: var(--panel); }
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; color: transparent; }
+.thumb button { position: absolute; top: 4px; right: 4px; font: inherit; font-size: 12px; font-weight: 700; color: var(--ink); background: #0e1322cc; border: 1px solid var(--line); border-radius: 99px; padding: 2px 8px; cursor: pointer; }
+.thumb button.confirm { background: var(--sakura); color: var(--void); border-color: var(--sakura); }
+.addtile { aspect-ratio: 1; border-radius: 10px; border: 1.5px dashed var(--lantern); color: var(--lantern); background: transparent; font: inherit; font-weight: 700; font-size: 14px; display: grid; place-items: center; text-align: center; cursor: pointer; padding: 6px; }
+.addtile span { display: block; font-size: 28px; line-height: 1; }
+.tips { margin: 0; padding: 12px 14px; border-radius: 10px; background: var(--panel); font-size: 14px; color: var(--muted); }
+.tips b { color: var(--ink); }
+.tips ul { margin: 6px 0 0; padding-left: 18px; }
+.charbox { display: grid; gap: 8px; }
+.charbox img { width: 100%; max-width: 100%; border-radius: 10px; border: 1px solid var(--line); background: #05070d; color: transparent; }
+.btnrow { display: flex; gap: 8px; flex-wrap: wrap; }
+.okbtn { font: inherit; font-weight: 700; color: var(--void); background: var(--mint); border: 0; border-radius: 12px; padding: 10px 16px; cursor: pointer; }
+.okbtn:disabled { background: var(--panel); color: var(--muted); cursor: default; }
 button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
 @media (min-width: 700px) { .sheet { align-items: center; } .panel { border-radius: 18px; border-bottom: 1px solid var(--line); } }
 </style>
@@ -114,7 +157,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
   <header style="display:grid;gap:10px">
     <p class="eyebrow">Station wallpaper · your touches</p>
     <h1>Pod Planner<span class="jp">部屋</span></h1>
-    <p class="lede">Tap anywhere on the station to drop a pin and write what you want there. Hit Generate and Claude paints that pod; keep editing your notes and generating until it's right. Everything saves, so come back any time.</p>
+    <p class="lede">Tap the station to drop a pin and write what you want there, pick who's in it, and hit Generate: Claude paints that pod. Keep editing and generating until it's right. Everything saves, so come back any time.</p>
   </header>
   <p id="notice" class="notice" hidden></p>
   <div class="toolbar">
@@ -129,6 +172,16 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
     <div class="map" id="map"><img id="station" src="station.jpg" alt="The space station cutaway, open-screen view" width="1824" height="1280"></div>
   </div>
   <div class="list" id="list"></div>
+
+  <div class="sect-head">
+    <h2>People</h2>
+    <div class="row-btns" id="addPeopleRow">
+      <button type="button" class="add" id="addPerson">Add a person</button>
+      <button type="button" class="ghost" id="addDog">Add a dog</button>
+    </div>
+    <p>Add photos of someone once, approve their character, then pick them in any pod. Claude paints them from their photos and approved character.</p>
+  </div>
+  <div class="people" id="people"></div>
 </div>
 
 <div class="sheet" id="sheet" hidden>
@@ -147,8 +200,13 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
       <textarea id="f-touch" placeholder="Turn this into a tiny sports bar showing the Eagles game, with a 'Go Birds' flag…"></textarea>
     </div>
     <div class="field">
-      <label for="f-who">Who's here</label>
-      <input id="f-who" autocomplete="off" placeholder="Me and Elliot, my sister…">
+      <span style="font-weight:700;font-size:14px" id="whoLabel">Who's here</span>
+      <p class="hint">Tap people to put them in this pod. They're painted from their photos and approved character.</p>
+      <div class="chips" id="pinPeople" role="group" aria-labelledby="whoLabel"></div>
+    </div>
+    <div class="field">
+      <label for="f-who">Anyone else</label>
+      <input id="f-who" autocomplete="off" placeholder="The shopkeeper, a grandma knitting…">
     </div>
     <div class="gen">
       <button type="button" class="gen-btn" id="genBtn">Generate this pod</button>
@@ -159,23 +217,126 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
   </section>
 </div>
 
+<div class="sheet" id="psheet" hidden>
+  <div class="backdrop" id="pbackdrop"></div>
+  <section class="panel" role="dialog" aria-modal="true" aria-labelledby="pTitle">
+    <div class="panel-head"><h2 id="pTitle">Person</h2><button type="button" class="done-btn" id="pDone">Done</button></div>
+    <div class="field">
+      <label for="p-name">Name</label>
+      <input id="p-name" autocomplete="off">
+    </div>
+    <div class="seg" role="group" aria-label="Person or dog">
+      <button type="button" data-kind="person" aria-pressed="true">Person</button>
+      <button type="button" data-kind="dog" aria-pressed="false">Dog</button>
+    </div>
+    <div class="photos" id="pPhotos"></div>
+    <input type="file" id="pFile" accept="image/*" multiple hidden>
+    <p class="gen-status" id="pUpload" aria-live="polite"></p>
+    <div class="tips" id="pTips"></div>
+    <div class="field">
+      <label for="p-looks" id="pLooksLabel">How to recognize them</label>
+      <textarea id="p-looks"></textarea>
+    </div>
+    <div class="charbox" id="pChar">
+      <span style="font-weight:700;font-size:14px">Character</span>
+      <img id="pCharImg" alt="" hidden>
+      <p class="gen-status" id="pCharStatus" aria-live="polite"></p>
+      <div class="field" id="pFixField" hidden>
+        <label for="p-fix">What to fix on the next draw</label>
+        <textarea id="p-fix" placeholder="Nose is wider, hair shorter on the sides, no glasses…"></textarea>
+      </div>
+      <div class="btnrow">
+        <button type="button" class="gen-btn" id="pDraw">Draw character</button>
+        <button type="button" class="okbtn" id="pApprove" hidden>Looks like them</button>
+      </div>
+    </div>
+    <div class="foot"><span class="saved" id="pSaved">Changes save as you type.</span><button type="button" class="remove" id="pRemove">Remove person</button></div>
+  </section>
+</div>
+
 <script>
 (() => {
   const SESSION = 'session_01GienRPveNGrwCfEGPeaPsR';
   const SERVER = 'Claude Code Remote';
   const $ = id => document.getElementById(id);
-  const pins = new Map();       // id -> pin data
-  let db = null, mcp = null, comments = null, readOnly = false, openId = null, zoom = 1, viewIdx = null;
-  const pending = new Map(), timers = new Map(), writing = new Set();
-  const sendNote = new Map();   // id -> message from the last send attempt
+  const pins = new Map();       // id -> pin
+  const people = new Map();     // id -> person
+  let db = null, mcp = null, comments = null, assets = null, readOnly = false;
+  let openId = null, openPerson = null, zoom = 1, viewIdx = null;
+  const sendNote = new Map();   // 'pin:<id>' | 'person:<id>' -> message from the last send attempt
 
   function setNotice(t) { $('notice').textContent = t; $('notice').hidden = !t; }
   const ordered = () => [...pins.entries()].sort((a, b) => (a[1].n || 0) - (b[1].n || 0));
+  const orderedPeople = () => [...people.entries()].sort((a, b) => (a[1].order || 0) - (b[1].order || 0));
   const renders = p => (p && Array.isArray(p.renders) ? p.renders : []);
   const latest = p => renders(p)[renders(p).length - 1];
   const busy = p => p && (p.status === 'queued' || p.status === 'working');
   const blob = id => '/_blob/' + id;
+  const sheets = m => (m && Array.isArray(m.sheets) ? m.sheets : []);
+  const photosOf = m => (m && Array.isArray(m.photos) ? m.photos : []);
+  const pinPeople = p => (p && Array.isArray(p.people) ? p.people : []);
 
+  // ----- writes: one at a time per document, coalesced -----
+  function makeStore(coll, map, savedEl, isOpen) {
+    const pending = new Map(), timers = new Map(), writing = new Set();
+    async function flush(id, retried) {
+      if (writing.has(id)) { await new Promise(r => setTimeout(r, 250)); return flush(id, retried); }
+      const patch = pending.get(id); if (!patch) return;
+      pending.delete(id); writing.add(id);
+      try {
+        await db.doc(coll + '/' + id).update(patch);
+        if (isOpen(id) && !pending.has(id)) $(savedEl).textContent = 'Saved';
+      } catch (e) {
+        if (e && e.code === 'unavailable' && !retried) { pending.set(id, { ...patch, ...(pending.get(id) || {}) }); writing.delete(id); await new Promise(r => setTimeout(r, 900)); return flush(id, true); }
+        if (e && e.code === 'invalid_argument') readOnly = true;
+        if (isOpen(id)) $(savedEl).textContent = 'Not saved: ' + ((e && e.message) || 'try again');
+        throw e;
+      } finally { writing.delete(id); }
+    }
+    return {
+      pending,
+      queue(id, patch, delay = 700) {
+        pending.set(id, { ...(pending.get(id) || {}), ...patch });
+        map.set(id, { ...map.get(id), ...patch });
+        clearTimeout(timers.get(id));
+        timers.set(id, setTimeout(() => flush(id).catch(() => {}), delay));
+        if (isOpen(id)) $(savedEl).textContent = 'Saving…';
+      },
+      async now(id) { clearTimeout(timers.get(id)); while (pending.has(id) || writing.has(id)) await flush(id); },
+      drop(id) { clearTimeout(timers.get(id)); pending.delete(id); },
+    };
+  }
+  const pinStore = makeStore('pins', pins, 'savedLine', id => id === openId);
+  const personStore = makeStore('people', people, 'pSaved', id => id === openPerson);
+
+  // ----- waking Claude: a Send-to-Claude comment first, then Claude Code Remote -----
+  async function wake(key, text, anchorEl, chatHint) {
+    if (comments) {
+      try {
+        if ((await comments.canSendToClaude()) === 'available') {
+          await comments.sendToClaude({ anchor: await comments.anchorFor(anchorEl), text });
+          sendNote.set(key, 'Sent to Claude. It shows up here in about two minutes.');
+          return refresh();
+        }
+      } catch (e) { /* try the next route */ }
+    }
+    const chat = ` Or tell Claude in chat: "${chatHint}".`;
+    if (!mcp) { sendNote.set(key, 'Queued, but this page couldn\'t reach Claude.' + chat); return refresh(); }
+    try {
+      await mcp.callTool(SERVER, 'send_message', { session_id: SESSION, message: text });
+      sendNote.set(key, 'Sent to Claude. It shows up here in about two minutes.');
+    } catch (e) {
+      const c = e && e.code;
+      sendNote.set(key,
+        c === 'approval_required' || c === 'not_in_manifest' ? 'Queued, but this page needs your OK to message Claude. Tap "Nudge Claude again" and allow it.' + chat
+        : c === 'needs_reauth' ? 'Queued, but Claude Code Remote needs reconnecting in claude.ai Settings → Connectors.' + chat
+        : 'Queued, but the message to Claude may not have gone through.' + chat);
+    }
+    refresh();
+  }
+  function refresh() { render(); renderPeople(); if (openPerson) renderPersonSheet(); }
+
+  // ----- the map, pin list and pin sheet -----
   function render() {
     const map = $('map');
     map.querySelectorAll('.pin, .roombox').forEach(p => p.remove());
@@ -208,7 +369,9 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
       const t = document.createElement('span'); t.className = 't';
       const touch = document.createElement('div'); touch.className = 'touch' + (p.touch ? '' : ' empty'); touch.textContent = p.touch || 'Nothing written yet';
       t.appendChild(touch);
-      if (p.who) { const w = document.createElement('div'); w.className = 'who'; w.textContent = p.who; t.appendChild(w); }
+      const names = pinPeople(p).map(pid => (people.get(pid) || {}).name).filter(Boolean);
+      const whoLine = [names.join(', '), p.who].filter(Boolean).join(' · ');
+      if (whoLine) { const w = document.createElement('div'); w.className = 'who'; w.textContent = whoLine; t.appendChild(w); }
       if (busy(p)) { const s = document.createElement('div'); s.className = 'state'; s.textContent = p.status === 'working' ? 'Painting…' : 'Queued'; t.appendChild(s); }
       it.append(n, t);
       const last = latest(p);
@@ -220,6 +383,37 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
     const done = [...pins.values()].filter(p => renders(p).some(r => r.kind === 'paint')).length;
     $('count').textContent = pins.size ? `${pins.size} pins, ${done} painted` : 'No pins yet';
     if (openId) renderSheet();
+  }
+
+  function miniAvatar(m) {
+    const d = document.createElement('span'); d.className = 'mini';
+    const src = (m.approved || photosOf(m)[0]);
+    if (src) { const im = document.createElement('img'); im.src = blob(src); im.alt = ''; d.appendChild(im); }
+    else d.textContent = (m.name || '?').charAt(0).toUpperCase();
+    return d;
+  }
+
+  function renderPinPeople() {
+    const p = pins.get(openId); if (!p) return;
+    const box = $('pinPeople'); box.textContent = '';
+    const inPod = pinPeople(p);
+    orderedPeople().forEach(([pid, m]) => {
+      const c = document.createElement('button'); c.type = 'button'; c.className = 'chip';
+      c.setAttribute('aria-pressed', String(inPod.includes(pid)));
+      c.append(miniAvatar(m), document.createTextNode(m.name || (m.kind === 'dog' ? 'Unnamed dog' : 'Unnamed')));
+      c.disabled = readOnly;
+      c.addEventListener('click', () => {
+        const cur = pinPeople(pins.get(openId));
+        pinStore.queue(openId, { people: cur.includes(pid) ? cur.filter(x => x !== pid) : [...cur, pid] }, 300);
+        render();
+      });
+      box.appendChild(c);
+    });
+    if (!readOnly) {
+      const n = document.createElement('button'); n.type = 'button'; n.className = 'chip new'; n.textContent = 'New person';
+      n.addEventListener('click', async () => { const pid = await addPerson('person', openId); if (pid) openPersonSheet(pid); });
+      box.appendChild(n);
+    }
   }
 
   function renderSheet() {
@@ -254,6 +448,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
         h.appendChild(bt);
       });
     }
+    renderPinPeople();
     const painted = rs.some(x => x.kind === 'paint');
     const gb = $('genBtn');
     gb.hidden = readOnly;
@@ -261,10 +456,11 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
     gb.textContent = busy(p) ? (p.status === 'working' ? 'Painting…' : 'Waiting for Claude…') : painted ? 'Generate next version' : 'Generate this pod';
     const st = $('genStatus');
     st.classList.toggle('err', p.status === 'error');
-    st.textContent = p.status === 'queued' ? (sendNote.get(openId) || 'Queued. Claude picks it up shortly; painting takes about two minutes.')
+    const unapproved = pinPeople(p).map(pid => people.get(pid)).filter(m => m && !m.approved).map(m => m.name || 'someone');
+    st.textContent = p.status === 'queued' ? (sendNote.get('pin:' + openId) || 'Queued. Claude picks it up shortly; painting takes about two minutes.')
       : p.status === 'working' ? 'Claude is painting this pod. It shows up here when it\'s done.'
       : p.status === 'error' ? (p.statusNote || 'That didn\'t work. Try again.')
-      : (sendNote.get(openId) || '');
+      : (sendNote.get('pin:' + openId) || (unapproved.length ? `No approved character yet for ${unapproved.join(', ')}: they'll be painted from photos alone, which looks less like them.` : ''));
     $('resend').hidden = readOnly || p.status !== 'queued' || !(mcp || comments);
   }
 
@@ -274,82 +470,27 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
     document.querySelectorAll('.toolbar [data-z]').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.z === z)));
   }
 
-  // ----- writes: one at a time per pin, coalesced -----
-  function queue(id, patch, delay = 700) {
-    pending.set(id, { ...(pending.get(id) || {}), ...patch });
-    pins.set(id, { ...pins.get(id), ...patch });
-    clearTimeout(timers.get(id));
-    timers.set(id, setTimeout(() => flush(id).catch(() => {}), delay));
-    if (id === openId) $('savedLine').textContent = 'Saving…';
-  }
-  async function flush(id, retried) {
-    if (writing.has(id)) { await new Promise(r => setTimeout(r, 250)); return flush(id, retried); }
-    const patch = pending.get(id); if (!patch) return;
-    pending.delete(id); writing.add(id);
-    try {
-      await db.doc('pins/' + id).update(patch);
-      if (id === openId && !pending.has(id)) $('savedLine').textContent = 'Saved';
-    } catch (e) {
-      if (e && e.code === 'unavailable' && !retried) { pending.set(id, { ...patch, ...(pending.get(id) || {}) }); writing.delete(id); await new Promise(r => setTimeout(r, 900)); return flush(id, true); }
-      if (e && e.code === 'invalid_argument') readOnly = true;
-      if (id === openId) $('savedLine').textContent = 'Not saved: ' + ((e && e.message) || 'try again');
-      throw e;
-    } finally { writing.delete(id); }
-  }
-  async function flushNow(id) { clearTimeout(timers.get(id)); while (pending.has(id) || writing.has(id)) await flush(id); }
-
   async function addPin(x, y) {
     if (!db || readOnly) return;
     const n = Math.max(0, ...[...pins.values()].map(p => p.n || 0)) + 1;
     const id = 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
-    const data = { x: +x.toFixed(2), y: +y.toFixed(2), n, touch: '', who: '', status: 'idle', renders: [] };
+    const data = { x: +x.toFixed(2), y: +y.toFixed(2), n, touch: '', who: '', people: [], status: 'idle', renders: [] };
     pins.set(id, data); render();
     try { await db.doc('pins/' + id).set(data); openSheet(id); }
     catch (e) { pins.delete(id); render(); if (e && e.code === 'invalid_argument') readOnly = true; setNotice('Could not add a pin: ' + ((e && e.message) || 'try again')); }
   }
 
-  // ----- generating: mark the pin queued, then wake Claude's session -----
-  async function nudge(id) {
-    const p = pins.get(id);
-    const text = `Pod Planner: generate pin ${id} (#${p.n}).`;
-    // First route: a comment sent to Claude, which wakes the session watching this page.
-    if (comments) {
-      try {
-        if ((await comments.canSendToClaude()) === 'available') {
-          const anchor = await comments.anchorFor($('genBtn'));
-          await comments.sendToClaude({ anchor, text });
-          sendNote.set(id, 'Sent to Claude. Painting takes about two minutes; it shows up here when it\'s done.');
-          renderSheet(); return;
-        }
-      } catch (e) { /* fall through to the next route */ }
-    }
-    if (!mcp) { sendNote.set(id, `Queued. Couldn't reach Claude from this page, so tell Claude in chat: "generate pin ${p.n}".`); renderSheet(); return; }
-    try {
-      await mcp.callTool(SERVER, 'send_message', { session_id: SESSION, message: text });
-      sendNote.set(id, 'Sent to Claude. Painting takes about two minutes; it shows up here when it\'s done.');
-    } catch (e) {
-      const c = e && e.code;
-      const chat = ` Or tell Claude in chat: "generate pin ${p.n}".`;
-      sendNote.set(id,
-        c === 'approval_required' || c === 'not_in_manifest' ? 'Queued, but this page needs your OK to message Claude. Tap "Nudge Claude again" and allow it.' + chat
-        : c === 'server_not_connected' || c === 'selection_required' ? 'Queued, but Claude Code Remote isn\'t available to this page for you.' + chat
-        : c === 'needs_reauth' ? 'Queued, but Claude Code Remote needs reconnecting in claude.ai Settings → Connectors.' + chat
-        : c === 'tool_error' ? 'Queued, but Claude\'s session didn\'t accept the message (' + ((e.message || '').slice(0, 120)) + ').' + chat
-        : 'Queued, but the message to Claude may not have gone through.' + chat);
-    }
-    renderSheet();
-  }
   async function generate() {
     const id = openId, p = pins.get(id);
     if (!id || readOnly || busy(p)) return;
     if (!(p.touch || '').trim()) { $('genStatus').textContent = 'Write what goes here first.'; return; }
     $('genBtn').disabled = true;
-    sendNote.delete(id);
-    const sent = nudge(id);               // send while the tap still counts as the viewer's own gesture
+    sendNote.delete('pin:' + id);
+    const sent = wake('pin:' + id, `Pod Planner: generate pin ${id} (#${p.n}).`, $('genBtn'), `generate pin ${p.n}`);
     try {
-      await flushNow(id);
-      queue(id, { status: 'queued', statusNote: '', req: (p.req || 0) + 1 }, 0);
-      await flushNow(id);
+      await pinStore.now(id);
+      pinStore.queue(id, { status: 'queued', statusNote: '', req: (p.req || 0) + 1 }, 0);
+      await pinStore.now(id);
     } catch (e) { renderSheet(); return; }
     renderSheet();
     await sent;
@@ -357,7 +498,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
   function useAsBase() {
     const p = pins.get(openId); const rs = renders(p);
     const idx = viewIdx == null || viewIdx >= rs.length ? rs.length - 1 : viewIdx;
-    queue(openId, { base: rs[idx].asset }, 0);
+    pinStore.queue(openId, { base: rs[idx].asset }, 0);
     renderSheet();
   }
 
@@ -385,43 +526,283 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
   }
   function closeSheet() {
     const id = openId;
-    openId = null; $('sheet').hidden = true; document.body.style.overflow = ''; render();
-    if (id && pending.has(id)) flushNow(id).catch(() => {});
+    openId = null; $('sheet').hidden = true; document.body.style.overflow = openPerson ? 'hidden' : ''; render();
+    if (id && pinStore.pending.has(id)) pinStore.now(id).catch(() => {});
   }
   let rmTimer;
   function resetRemove() { const b = $('removeBtn'); b.classList.remove('confirm'); b.textContent = 'Remove pin'; clearTimeout(rmTimer); }
   async function removePin() {
     const b = $('removeBtn');
     if (!b.classList.contains('confirm')) { b.classList.add('confirm'); b.textContent = 'Tap again to remove'; rmTimer = setTimeout(resetRemove, 3000); return; }
-    const id = openId; clearTimeout(timers.get(id)); pending.delete(id);
+    const id = openId; pinStore.drop(id);
     closeSheet();
     try { await db.doc('pins/' + id).delete(); } catch (e) { setNotice('Could not remove: ' + ((e && e.message) || 'try again')); }
   }
 
+  // ----- people -----
+  const TIPS = {
+    person: '<b>Photos that give the best likeness</b><ul><li>Face straight on, good even light, no sunglasses</li><li>Face from a 3/4 angle</li><li>Full body standing, in clothes they usually wear</li><li>One more of their face, a different day</li></ul>',
+    dog: '<b>Photos that give the best likeness</b><ul><li>Whole body from the side</li><li>Face straight on</li><li>Close-ups of markings: white chest, socks, face blaze</li><li>Next to a person, to show size</li></ul>',
+  };
+  function badgeFor(m) {
+    if (m.status === 'queued' || m.status === 'working') return ['busy', 'Drawing…'];
+    if (m.status === 'error') return ['need', 'Draw failed'];
+    if (m.approved) return ['ok', 'Approved'];
+    if (sheets(m).length) return ['check', 'Check character'];
+    const n = photosOf(m).length;
+    return n >= 2 ? ['need', 'Ready to draw'] : ['need', n ? 'Add 1 more photo' : 'Add photos'];
+  }
+  function renderPeople() {
+    const box = $('people'); box.textContent = '';
+    if (!people.size) {
+      const p = document.createElement('p'); p.className = 'empty-list';
+      p.textContent = 'No one yet. Add a person or a dog.';
+      box.appendChild(p);
+    }
+    orderedPeople().forEach(([pid, m]) => {
+      const c = document.createElement('button'); c.type = 'button'; c.className = 'pcard';
+      const av = document.createElement('div'); av.className = 'avatar';
+      const src = m.approved || photosOf(m)[0];
+      if (src) { const im = document.createElement('img'); im.src = blob(src); im.alt = ''; im.loading = 'lazy'; av.appendChild(im); }
+      else av.textContent = (m.name || '?').charAt(0).toUpperCase();
+      const meta = document.createElement('div'); meta.className = 'pmeta';
+      const nm = document.createElement('span'); nm.className = 'pname' + (m.name ? '' : ' empty'); nm.textContent = m.name || 'Add name';
+      const sub = document.createElement('span'); sub.style.cssText = 'font-size:13px;color:var(--muted)';
+      const pods = [...pins.values()].filter(p => pinPeople(p).includes(pid)).map(p => '#' + p.n);
+      sub.textContent = `${m.kind === 'dog' ? 'Dog' : 'Person'} · ${photosOf(m).length} photo${photosOf(m).length === 1 ? '' : 's'}${pods.length ? ' · pin ' + pods.join(', ') : ''}`;
+      const [cls, label] = badgeFor(m);
+      const bd = document.createElement('span'); bd.className = 'badge ' + cls; bd.textContent = label;
+      meta.append(nm, sub, bd);
+      c.append(av, meta);
+      c.addEventListener('click', () => openPersonSheet(pid));
+      box.appendChild(c);
+    });
+  }
+
+  async function addPerson(kind, intoPin) {
+    if (!db || readOnly) return null;
+    const pid = (kind === 'dog' ? 'dog-' : 'person-') + Math.random().toString(36).slice(2, 8);
+    const order = Math.max(0, ...[...people.values()].map(m => m.order || 0)) + 1;
+    const data = { kind, name: '', photos: [], looks: '', fix: '', sheets: [], approved: null, status: 'idle', order };
+    people.set(pid, data); renderPeople();
+    try {
+      await db.doc('people/' + pid).set(data);
+      if (intoPin) { pinStore.queue(intoPin, { people: [...pinPeople(pins.get(intoPin)), pid] }, 0); render(); }
+      return pid;
+    } catch (e) { people.delete(pid); renderPeople(); setNotice('Could not add someone: ' + ((e && e.message) || 'try again')); return null; }
+  }
+
+  function renderPersonSheet() {
+    const m = people.get(openPerson); if (!m) return;
+    const kind = m.kind === 'dog' ? 'dog' : 'person';
+    $('pTitle').textContent = m.name || (kind === 'dog' ? 'New dog' : 'New person');
+    document.querySelectorAll('#psheet .seg button').forEach(b => { b.setAttribute('aria-pressed', String(b.dataset.kind === kind)); b.disabled = readOnly; });
+    $('pTips').innerHTML = TIPS[kind];
+    $('pLooksLabel').textContent = kind === 'dog' ? 'Coat, markings, size and collar' : 'How to recognize them';
+    $('p-looks').placeholder = kind === 'dog' ? 'Fawn with a white chest and white socks, black mask, floppy ears, red collar, tall for a boxer…'
+      : 'Curly brown hair, round glasses, short beard, tall and broad, always in a green hoodie and a beanie…';
+    if (document.activeElement !== $('p-name')) $('p-name').value = m.name || '';
+    if (document.activeElement !== $('p-looks')) $('p-looks').value = m.looks || '';
+    if (document.activeElement !== $('p-fix')) $('p-fix').value = m.fix || '';
+    ['p-name', 'p-looks', 'p-fix'].forEach(i => $(i).readOnly = readOnly);
+    // photos
+    const box = $('pPhotos');
+    if (!box.querySelector('button.confirm')) {
+      box.textContent = '';
+      photosOf(m).forEach(aid => {
+        const t = document.createElement('div'); t.className = 'thumb';
+        const im = document.createElement('img'); im.src = blob(aid); im.alt = 'Photo of ' + (m.name || 'them'); im.decoding = 'async';
+        t.appendChild(im);
+        if (!readOnly && assets) {
+          const x = document.createElement('button'); x.type = 'button'; x.textContent = 'Remove'; x.setAttribute('aria-label', 'Remove this photo');
+          x.addEventListener('click', () => {
+            if (!x.classList.contains('confirm')) { x.classList.add('confirm'); x.textContent = 'Tap to confirm'; setTimeout(() => { x.classList.remove('confirm'); x.textContent = 'Remove'; }, 3000); return; }
+            removePhoto(openPerson, aid);
+          });
+          t.appendChild(x);
+        }
+        box.appendChild(t);
+      });
+      if (!readOnly && assets) {
+        const add = document.createElement('button'); add.type = 'button'; add.className = 'addtile';
+        add.innerHTML = '<div><span>+</span>Add photos</div>';
+        add.addEventListener('click', () => $('pFile').click());
+        box.appendChild(add);
+      }
+    }
+    if (!assets && !readOnly) $('pUpload').textContent = 'Only editors of this page can add photos.';
+    // character
+    const ss = sheets(m), last = ss[ss.length - 1];
+    const img = $('pCharImg');
+    img.hidden = !last;
+    if (last && img.dataset.asset !== last.asset) { img.src = blob(last.asset); img.dataset.asset = last.asset; img.alt = 'Character drawing of ' + (m.name || 'them'); }
+    const isBusy = m.status === 'queued' || m.status === 'working';
+    const approved = last && m.approved === last.asset;
+    $('pFixField').hidden = readOnly || !last || approved;
+    const draw = $('pDraw');
+    draw.hidden = readOnly;
+    draw.disabled = isBusy || photosOf(m).length < 1;
+    draw.textContent = isBusy ? (m.status === 'working' ? 'Drawing…' : 'Waiting for Claude…') : last ? 'Redraw with these notes' : 'Draw character';
+    const ap = $('pApprove');
+    ap.hidden = readOnly || !last || isBusy;
+    ap.disabled = !!approved;
+    ap.textContent = approved ? 'Approved' : 'Looks like them';
+    const st = $('pCharStatus');
+    st.classList.toggle('err', m.status === 'error');
+    st.textContent = m.status === 'queued' ? (sendNote.get('person:' + openPerson) || 'Queued. Drawing takes about two minutes.')
+      : m.status === 'working' ? 'Claude is drawing them. It shows up here when it\'s done.'
+      : m.status === 'error' ? (m.statusNote || 'That didn\'t work. Try again.')
+      : approved ? 'Approved. Pods with them in it are painted from this.'
+      : last ? 'Does this look like them? Approve it, or write what to fix and redraw.'
+      : photosOf(m).length ? 'Add a few more photos for a better likeness, then draw their character.'
+      : 'Add photos first.';
+    $('pRemove').hidden = readOnly;
+  }
+
+  function openPersonSheet(pid) {
+    openPerson = pid;
+    $('pUpload').textContent = '';
+    $('pSaved').textContent = readOnly ? 'View only' : 'Changes save as you type.';
+    resetPRemove();
+    $('pPhotos').textContent = '';
+    renderPersonSheet();
+    $('psheet').hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+  function closePersonSheet() {
+    const pid = openPerson;
+    openPerson = null; $('psheet').hidden = true; document.body.style.overflow = openId ? 'hidden' : '';
+    if (pid && personStore.pending.has(pid)) personStore.now(pid).catch(() => {});
+    refresh();
+  }
+
+  async function shrink(file) {
+    const MAX = 2048;
+    try {
+      const bmp = await createImageBitmap(file);
+      const k = Math.min(1, MAX / Math.max(bmp.width, bmp.height));
+      const c = document.createElement('canvas');
+      c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
+      c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+      if (bmp.close) bmp.close();
+      const out = await new Promise(r => c.toBlob(r, 'image/jpeg', 0.92));
+      if (out) return out;
+    } catch (e) { /* use the original file */ }
+    return file;
+  }
+  async function addPhotos(pid, files) {
+    const list = [...files];
+    let ok = 0, failed = false;
+    for (let i = 0; i < list.length; i++) {
+      if (pid === openPerson) $('pUpload').textContent = `Uploading ${i + 1} of ${list.length}…`;
+      try {
+        const b = await shrink(list[i]);
+        const type = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'].includes(b.type) ? b.type : 'image/jpeg';
+        const r = await assets.upload(b, { type });
+        personStore.queue(pid, { photos: [...photosOf(people.get(pid)), r.id] }, 200);
+        ok++;
+        if (pid === openPerson) { $('pPhotos').textContent = ''; renderPersonSheet(); }
+        renderPeople();
+      } catch (e) {
+        failed = true;
+        const c = e && e.code;
+        const why = c === 'unsupported_type' ? 'that format isn\'t supported, try a JPEG or PNG'
+          : c === 'too_large' ? 'that photo is over 20 MB'
+          : c === 'quota_or_state' ? 'the page is out of photo storage'
+          : c === 'rate_limited' ? 'too many uploads at once, wait a moment'
+          : 'the upload didn\'t go through';
+        if (pid === openPerson) $('pUpload').textContent = `Photo ${i + 1} not added: ${why}.`;
+        if (c === 'quota_or_state' || c === 'not_granted' || c === 'capability_disabled') break;
+      }
+    }
+    if (pid === openPerson && !failed) $('pUpload').textContent = ok ? `Added ${ok} photo${ok > 1 ? 's' : ''}.` : '';
+  }
+  async function removePhoto(pid, aid) {
+    personStore.queue(pid, { photos: photosOf(people.get(pid)).filter(x => x !== aid) }, 0);
+    $('pPhotos').textContent = ''; renderPersonSheet(); renderPeople();
+    try { await personStore.now(pid); await assets.delete(aid); } catch (e) { /* no row points at it either way */ }
+  }
+
+  async function drawCharacter() {
+    const pid = openPerson, m = people.get(pid);
+    if (!pid || readOnly || !m || m.status === 'queued' || m.status === 'working') return;
+    if (!(m.name || '').trim()) { $('pCharStatus').textContent = 'Add their name first.'; return; }
+    $('pDraw').disabled = true;
+    sendNote.delete('person:' + pid);
+    const sent = wake('person:' + pid, `Pod Planner: draw character ${pid} (${m.name}).`, $('pDraw'), `draw ${m.name}`);
+    try {
+      await personStore.now(pid);
+      personStore.queue(pid, { status: 'queued', statusNote: '', req: (m.req || 0) + 1 }, 0);
+      await personStore.now(pid);
+    } catch (e) { renderPersonSheet(); return; }
+    renderPersonSheet(); renderPeople();
+    await sent;
+  }
+  function approve() {
+    const m = people.get(openPerson); const last = sheets(m)[sheets(m).length - 1];
+    if (!last) return;
+    personStore.queue(openPerson, { approved: last.asset, fix: '' }, 0);
+    renderPersonSheet(); renderPeople();
+  }
+  let prmTimer;
+  function resetPRemove() { const b = $('pRemove'); b.classList.remove('confirm'); b.textContent = 'Remove person'; clearTimeout(prmTimer); }
+  async function removePerson() {
+    const b = $('pRemove');
+    if (!b.classList.contains('confirm')) { b.classList.add('confirm'); b.textContent = 'Tap again to remove'; prmTimer = setTimeout(resetPRemove, 3000); return; }
+    const pid = openPerson, m = people.get(pid) || {};
+    personStore.drop(pid);
+    closePersonSheet();
+    try {
+      for (const [id, p] of pins) if (pinPeople(p).includes(pid)) pinStore.queue(id, { people: pinPeople(p).filter(x => x !== pid) }, 0);
+      await db.doc('people/' + pid).delete();
+      for (const aid of [...photosOf(m), ...sheets(m).map(s => s.asset)]) { try { await assets.delete(aid); } catch (e) { /* ignore */ } }
+    } catch (e) { setNotice('Could not remove: ' + ((e && e.message) || 'try again')); }
+  }
+
+  // ----- events -----
   $('map').addEventListener('click', e => {
     if (e.target.closest('.pin')) return;
     const r = $('station').getBoundingClientRect();
     addPin((e.clientX - r.left) / r.width * 100, (e.clientY - r.top) / r.height * 100);
   });
   document.querySelectorAll('.toolbar [data-z]').forEach(b => b.addEventListener('click', () => setZoom(+b.dataset.z)));
-  ['touch', 'who'].forEach(f => $('f-' + f).addEventListener('input', e => { if (openId && !readOnly) { queue(openId, { [f]: e.target.value }); render(); } }));
+  ['touch', 'who'].forEach(f => $('f-' + f).addEventListener('input', e => { if (openId && !readOnly) { pinStore.queue(openId, { [f]: e.target.value }); render(); } }));
   $('genBtn').addEventListener('click', generate);
-  $('resend').addEventListener('click', () => openId && nudge(openId));
+  $('resend').addEventListener('click', () => { if (!openId) return; const p = pins.get(openId); wake('pin:' + openId, `Pod Planner: generate pin ${openId} (#${p.n}).`, $('genBtn'), `generate pin ${p.n}`); });
   $('useBase').addEventListener('click', useAsBase);
   $('doneBtn').addEventListener('click', closeSheet);
   $('backdrop').addEventListener('click', closeSheet);
   $('removeBtn').addEventListener('click', removePin);
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && openId) closeSheet(); });
-  render();
+  $('addPerson').addEventListener('click', async () => { const pid = await addPerson('person'); if (pid) openPersonSheet(pid); });
+  $('addDog').addEventListener('click', async () => { const pid = await addPerson('dog'); if (pid) openPersonSheet(pid); });
+  [['p-name', 'name'], ['p-looks', 'looks'], ['p-fix', 'fix']].forEach(([el, f]) => $(el).addEventListener('input', e => {
+    if (!openPerson || readOnly) return;
+    personStore.queue(openPerson, { [f]: e.target.value });
+    if (f === 'name') { $('pTitle').textContent = e.target.value || 'New person'; renderPeople(); }
+  }));
+  document.querySelectorAll('#psheet .seg button').forEach(b => b.addEventListener('click', () => {
+    if (!openPerson || readOnly) return;
+    personStore.queue(openPerson, { kind: b.dataset.kind }, 200);
+    renderPersonSheet(); renderPeople();
+  }));
+  $('pFile').addEventListener('change', e => { if (openPerson && e.target.files.length) addPhotos(openPerson, e.target.files); e.target.value = ''; });
+  $('pDraw').addEventListener('click', drawCharacter);
+  $('pApprove').addEventListener('click', approve);
+  $('pDone').addEventListener('click', closePersonSheet);
+  $('pbackdrop').addEventListener('click', closePersonSheet);
+  $('pRemove').addEventListener('click', removePerson);
+  document.addEventListener('keydown', e => { if (e.key !== 'Escape') return; if (openPerson) closePersonSheet(); else if (openId) closeSheet(); });
+  render(); renderPeople();
   $('count').textContent = 'Loading…';
 
   (async () => {
     db = await window.claude?.use?.('db');
-    if (!db) { $('count').textContent = 'Not connected'; setNotice('Open this page in Claude while signed in so your pins save.'); return; }
+    if (!db) { $('count').textContent = 'Not connected'; $('addPeopleRow').hidden = true; setNotice('Open this page in Claude while signed in so your pins and people save.'); return; }
     const user = await window.claude.use('user');
-    if (user && user.can && (await user.can('data.write')) === false) readOnly = true;
+    if (user && user.can && (await user.can('data.write')) === false) { readOnly = true; $('addPeopleRow').hidden = true; }
     mcp = await window.claude.use('mcp');
     comments = await window.claude.use('comments');
+    assets = await window.claude.use('assets');
     let loaded = false;
     const slow = setTimeout(() => { if (!loaded) $('count').textContent = 'Still connecting…'; }, 10000);
     db.collection('pins').onSnapshot(snap => {
@@ -430,20 +811,34 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
       snap.docs.forEach(d => {
         seen.add(d.id);
         const prev = pins.get(d.id);
-        const next = { ...d.data(), ...(pending.get(d.id) || {}) };
+        const next = { ...d.data(), ...(pinStore.pending.get(d.id) || {}) };
         if (prev && renders(prev).length < renders(next).length && d.id === openId) viewIdx = null;   // a new render arrived: show it
-        if (prev && busy(prev) && !busy(next)) sendNote.delete(d.id);
+        if (prev && busy(prev) && !busy(next)) sendNote.delete('pin:' + d.id);
         pins.set(d.id, next);
       });
-      if (!snap.metadata.fromCache) [...pins.keys()].forEach(k => { if (!seen.has(k) && !pending.has(k)) pins.delete(k); });
+      if (!snap.metadata.fromCache) [...pins.keys()].forEach(k => { if (!seen.has(k) && !pinStore.pending.has(k)) pins.delete(k); });
       if (openId && !pins.has(openId)) closeSheet();
       if (openId) {
         const p = pins.get(openId);
-        if (document.activeElement !== $('f-touch') && !pending.has(openId)) $('f-touch').value = p.touch || '';
-        if (document.activeElement !== $('f-who') && !pending.has(openId)) $('f-who').value = p.who || '';
+        if (document.activeElement !== $('f-touch') && !pinStore.pending.has(openId)) $('f-touch').value = p.touch || '';
+        if (document.activeElement !== $('f-who') && !pinStore.pending.has(openId)) $('f-who').value = p.who || '';
       }
-      render();
+      render(); renderPeople();
     }, err => { clearTimeout(slow); $('count').textContent = 'Could not load'; setNotice('Pins could not load (' + ((err && err.code) || 'error') + '). Reopen the page to try again.'); });
+    db.collection('people').onSnapshot(snap => {
+      const seen = new Set();
+      snap.docs.forEach(d => {
+        seen.add(d.id);
+        const prev = people.get(d.id);
+        const next = { ...d.data(), ...(personStore.pending.get(d.id) || {}) };
+        if (prev && (prev.status === 'queued' || prev.status === 'working') && !(next.status === 'queued' || next.status === 'working')) sendNote.delete('person:' + d.id);
+        people.set(d.id, next);
+      });
+      if (!snap.metadata.fromCache) [...people.keys()].forEach(k => { if (!seen.has(k) && !personStore.pending.has(k)) people.delete(k); });
+      if (openPerson && !people.has(openPerson)) closePersonSheet();
+      renderPeople(); render();
+      if (openPerson) renderPersonSheet();
+    }, err => setNotice('People could not load (' + ((err && err.code) || 'error') + '). Reopen the page to try again.'));
   })();
 })();
 </script>
