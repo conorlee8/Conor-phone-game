@@ -47,6 +47,10 @@ async function paint(a) {
       const type = p.endsWith('.png') ? 'image/png' : p.endsWith('.webp') ? 'image/webp' : 'image/jpeg';
       form.append('image[]', new Blob([buf], { type }), basename(p));
     }
+    if (a.mask) {
+      // Transparent pixels in the mask mark where the model may repaint.
+      form.append('mask', new Blob([readFileSync(resolve(base, a.mask))], { type: 'image/png' }), basename(a.mask));
+    }
     form.append('model', model); form.append('prompt', prompt);
     form.append('size', size); form.append('quality', quality);
     return call('https://api.openai.com/v1/images/edits', { method: 'POST', body: form });

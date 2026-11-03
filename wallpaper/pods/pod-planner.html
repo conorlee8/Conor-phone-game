@@ -4,7 +4,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=IBM+Plex+Mono:wght@500&family=Zen+Maru+Gothic:wght@500;700&display=swap">
 <style>
-/* Layout: the station painting is the map. Tap it to drop a numbered pin, write the touch in a bottom sheet; pins are listed under the map. */
+/* Layout: the station painting is the map. Tap it to drop a numbered pin; a bottom sheet holds the pod's latest render, its versions, your notes and the Generate button. */
 :root {
   --void: #0e1322;
   --hull: #171e33;
@@ -49,38 +49,58 @@ h1 .jp { display: inline-block; margin-left: .3em; font-size: .38em; vertical-al
   font: 700 13px/22px var(--mono); text-align: center; cursor: pointer; box-shadow: 0 0 0 2px #ffb45e66;
 }
 .pin.done { background: var(--mint); box-shadow: 0 0 0 2px #7fdcc966; }
+.pin.busy { background: #b9a7ff; box-shadow: 0 0 0 3px #b9a7ff66; }
 .pin.active { background: var(--sakura); }
 
 .list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
-.item { display: grid; grid-template-columns: 34px 1fr; gap: 10px; align-items: start; text-align: left; width: 100%;
+.item { display: grid; grid-template-columns: 34px 1fr auto; gap: 10px; align-items: start; text-align: left; width: 100%;
   padding: 12px; font: inherit; color: inherit; background: var(--hull); border: 1px solid var(--line); border-radius: 12px; cursor: pointer; }
 .item:hover { border-color: var(--muted); }
 .item .n { width: 30px; height: 30px; border-radius: 99px; background: var(--panel); display: grid; place-items: center; font: 700 13px var(--mono); color: var(--lantern); }
 .item .t { min-width: 0; }
-.item .touch { overflow-wrap: anywhere; }
+.item .touch { overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .item .touch.empty { color: var(--muted); }
 .item .who { font-size: 13px; color: var(--mint); margin-top: 2px; overflow-wrap: anywhere; }
+.item .state { font-family: var(--mono); font-size: 12px; color: #b9a7ff; margin-top: 2px; }
+.item img { width: 56px; height: 56px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); color: transparent; }
 .empty-list { color: var(--muted); margin: 0; }
 
 .sheet { position: fixed; inset: 0; z-index: 20; display: grid; align-items: end; justify-items: center; }
 .backdrop { position: absolute; inset: 0; background: #05081299; }
 .panel {
-  position: relative; width: 100%; max-width: 560px; max-height: 90%; overflow-y: auto; display: grid; gap: 14px;
+  position: relative; width: 100%; max-width: 600px; max-height: 92%; overflow-y: auto; display: grid; gap: 14px;
   background: var(--hull); border: 1px solid var(--line); border-bottom: 0; border-radius: 18px 18px 0 0;
   padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: max(18px, env(safe-area-inset-right, 0px));
-  padding-top: 16px; padding-bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+  padding-top: 0; padding-bottom: calc(22px + env(safe-area-inset-bottom, 0px));
 }
-.panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.panel-head { position: sticky; top: 0; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 0 10px; background: var(--hull); }
 .panel-head h2 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 22px; }
 .done-btn { font: inherit; font-weight: 700; color: var(--void); background: var(--mint); border: 0; border-radius: 99px; padding: 8px 16px; cursor: pointer; }
 .zoom { width: 100%; aspect-ratio: 16 / 9; max-width: 100%; border-radius: 10px; border: 1px solid var(--line); background-color: #05070d; background-repeat: no-repeat; position: relative; }
 .zoom::after { content: ""; position: absolute; left: 50%; top: 50%; width: 22px; height: 22px; transform: translate(-50%, -50%); border: 2px solid var(--sakura); border-radius: 50%; box-shadow: 0 0 0 2px #0e1322aa; }
+.render { display: grid; gap: 8px; }
+.render img { width: 100%; max-width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px; border: 1px solid var(--line); background: #05070d; color: transparent; }
+.render-cap { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; font-size: 14px; color: var(--muted); }
+.render-cap b { color: var(--ink); }
+.ghost { font: inherit; font-size: 14px; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 99px; padding: 6px 12px; cursor: pointer; }
+.history { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; }
+.history button { flex: none; padding: 0; border: 2px solid transparent; border-radius: 8px; background: none; cursor: pointer; position: relative; }
+.history button[aria-current="true"] { border-color: var(--sakura); }
+.history img { display: block; width: 58px; height: 58px; object-fit: cover; border-radius: 6px; color: transparent; }
+.history .tag { position: absolute; left: 3px; bottom: 3px; font: 700 10px var(--mono); background: #0e1322cc; color: var(--ink); border-radius: 4px; padding: 0 4px; }
+.history .base { position: absolute; right: 3px; top: 3px; width: 10px; height: 10px; border-radius: 50%; background: var(--mint); border: 2px solid var(--void); }
 .field { display: grid; gap: 6px; }
 .field label { font-weight: 700; font-size: 14px; }
 .field .hint { margin: -4px 0 0; font-size: 13px; color: var(--muted); }
 .field input, .field textarea { width: 100%; font: inherit; color: var(--ink); background: var(--void); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
 .field textarea { min-height: 110px; resize: vertical; }
 .field input::placeholder, .field textarea::placeholder { color: #6c7593; }
+.gen { display: grid; gap: 8px; }
+.gen-btn { font: inherit; font-weight: 700; font-size: 17px; color: var(--void); background: var(--lantern); border: 0; border-radius: 12px; padding: 12px 16px; cursor: pointer; }
+.gen-btn:disabled { background: var(--panel); color: var(--muted); cursor: default; }
+.gen-status { margin: 0; font-size: 14px; color: var(--muted); }
+.gen-status.err { color: var(--sakura); }
+.linkish { font: inherit; font-size: 13px; color: var(--mint); background: none; border: 0; padding: 0; text-decoration: underline; cursor: pointer; justify-self: start; }
 .foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 10px; }
 .saved { font-family: var(--mono); font-size: 12px; color: var(--muted); }
 .remove { font: inherit; font-size: 14px; color: var(--sakura); background: transparent; border: 1px solid var(--sakura); border-radius: 99px; padding: 6px 14px; cursor: pointer; }
@@ -93,7 +113,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
   <header style="display:grid;gap:10px">
     <p class="eyebrow">Station wallpaper · your touches</p>
     <h1>Pod Planner<span class="jp">部屋</span></h1>
-    <p class="lede">Tap anywhere on the station to drop a pin, then write what you want in that spot: a detail, a sign, an inside joke, who hangs out there. Zoom in to hit small pods.</p>
+    <p class="lede">Tap anywhere on the station to drop a pin and write what you want there. Hit Generate and Claude paints that pod; keep editing your notes and generating until it's right. Everything saves, so come back any time.</p>
   </header>
   <p id="notice" class="notice" hidden></p>
   <div class="toolbar">
@@ -115,14 +135,24 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
   <section class="panel" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
     <div class="panel-head"><h2 id="sheetTitle">Pin</h2><button type="button" class="done-btn" id="doneBtn">Done</button></div>
     <div class="zoom" id="zoom" role="img" aria-label="Close-up of the pinned spot"></div>
+    <div class="render" id="render" hidden>
+      <img id="renderImg" alt="">
+      <div class="render-cap"><span id="renderCap"></span><button type="button" class="ghost" id="useBase" hidden>Build the next version from this</button></div>
+      <div class="history" id="history" aria-label="Versions"></div>
+    </div>
     <div class="field">
       <label for="f-touch">What goes here</label>
-      <p class="hint">A detail, a sign's wording, a running joke, what's happening.</p>
+      <p class="hint">Describe the whole pod. Edit it and generate again to refine.</p>
       <textarea id="f-touch" placeholder="Turn this into a tiny sports bar showing the Eagles game, with a 'Go Birds' flag…"></textarea>
     </div>
     <div class="field">
       <label for="f-who">Who's here</label>
       <input id="f-who" autocomplete="off" placeholder="Me and Elliot, my sister…">
+    </div>
+    <div class="gen">
+      <button type="button" class="gen-btn" id="genBtn">Generate this pod</button>
+      <p class="gen-status" id="genStatus" aria-live="polite"></p>
+      <button type="button" class="linkish" id="resend" hidden>Nudge Claude again</button>
     </div>
     <div class="foot"><span class="saved" id="savedLine">Changes save as you type.</span><button type="button" class="remove" id="removeBtn">Remove pin</button></div>
   </section>
@@ -130,13 +160,20 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
 
 <script>
 (() => {
+  const SESSION = 'session_01GienRPveNGrwCfEGPeaPsR';
+  const SERVER = 'Claude Code Remote';
   const $ = id => document.getElementById(id);
-  const pins = new Map();       // id -> {x, y, n, touch, who}
-  let db = null, readOnly = false, openId = null, zoom = 1;
+  const pins = new Map();       // id -> pin data
+  let db = null, mcp = null, readOnly = false, openId = null, zoom = 1, viewIdx = null;
   const pending = new Map(), timers = new Map(), writing = new Set();
+  const sendNote = new Map();   // id -> message from the last send attempt
 
   function setNotice(t) { $('notice').textContent = t; $('notice').hidden = !t; }
   const ordered = () => [...pins.entries()].sort((a, b) => (a[1].n || 0) - (b[1].n || 0));
+  const renders = p => (p && Array.isArray(p.renders) ? p.renders : []);
+  const latest = p => renders(p)[renders(p).length - 1];
+  const busy = p => p && (p.status === 'queued' || p.status === 'working');
+  const blob = id => '/_blob/' + id;
 
   function render() {
     const map = $('map');
@@ -144,7 +181,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
     ordered().forEach(([id, p]) => {
       const b = document.createElement('button');
       b.type = 'button';
-      b.className = 'pin' + (p.touch ? ' done' : '') + (id === openId ? ' active' : '');
+      b.className = 'pin' + (busy(p) ? ' busy' : p.touch ? ' done' : '') + (id === openId ? ' active' : '');
       b.style.left = p.x + '%'; b.style.top = p.y + '%';
       b.textContent = p.n;
       b.setAttribute('aria-label', 'Pin ' + p.n + (p.touch ? ': ' + p.touch : ''));
@@ -165,12 +202,63 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
       const touch = document.createElement('div'); touch.className = 'touch' + (p.touch ? '' : ' empty'); touch.textContent = p.touch || 'Nothing written yet';
       t.appendChild(touch);
       if (p.who) { const w = document.createElement('div'); w.className = 'who'; w.textContent = p.who; t.appendChild(w); }
+      if (busy(p)) { const s = document.createElement('div'); s.className = 'state'; s.textContent = p.status === 'working' ? 'Painting…' : 'Queued'; t.appendChild(s); }
       it.append(n, t);
+      const last = latest(p);
+      if (last) { const im = document.createElement('img'); im.src = blob(last.asset); im.alt = ''; im.loading = 'lazy'; it.appendChild(im); }
+      else it.appendChild(document.createElement('span'));
       it.addEventListener('click', () => openSheet(id));
       list.appendChild(it);
     });
-    const done = [...pins.values()].filter(p => p.touch).length;
-    $('count').textContent = pins.size ? `${pins.size} pins, ${done} written` : 'No pins yet';
+    const done = [...pins.values()].filter(p => renders(p).some(r => r.kind === 'paint')).length;
+    $('count').textContent = pins.size ? `${pins.size} pins, ${done} painted` : 'No pins yet';
+    if (openId) renderSheet();
+  }
+
+  function renderSheet() {
+    const p = pins.get(openId); if (!p) return;
+    const rs = renders(p);
+    $('zoom').hidden = rs.length > 0;
+    $('render').hidden = rs.length === 0;
+    if (rs.length) {
+      const idx = viewIdx == null || viewIdx >= rs.length ? rs.length - 1 : viewIdx;
+      const r = rs[idx];
+      const img = $('renderImg');
+      if (img.dataset.asset !== r.asset) { img.src = blob(r.asset); img.dataset.asset = r.asset; }
+      let paintNo = 0;
+      const labels = rs.map(x => x.kind === 'paint' ? 'v' + (++paintNo) : 'Before');
+      const baseAsset = p.base || latest(p).asset;
+      $('renderCap').innerHTML = '';
+      const b = document.createElement('b'); b.textContent = labels[idx] === 'Before' ? 'Before: the painting now' : 'Version ' + labels[idx].slice(1);
+      $('renderCap').appendChild(b);
+      if (r.asset === baseAsset) $('renderCap').append(' · next version builds on this');
+      img.alt = labels[idx] === 'Before' ? 'This spot in the painting before any changes' : 'Pod render, version ' + labels[idx].slice(1);
+      $('useBase').hidden = readOnly || r.asset === baseAsset;
+      const h = $('history'); h.textContent = '';
+      rs.forEach((x, i) => {
+        const bt = document.createElement('button'); bt.type = 'button';
+        bt.setAttribute('aria-current', String(i === idx));
+        bt.setAttribute('aria-label', labels[i] === 'Before' ? 'Before' : 'Version ' + labels[i].slice(1));
+        const im = document.createElement('img'); im.src = blob(x.asset); im.alt = ''; im.loading = 'lazy';
+        const tag = document.createElement('span'); tag.className = 'tag'; tag.textContent = labels[i];
+        bt.append(im, tag);
+        if (x.asset === baseAsset) { const d = document.createElement('span'); d.className = 'base'; bt.appendChild(d); }
+        bt.addEventListener('click', () => { viewIdx = i; renderSheet(); });
+        h.appendChild(bt);
+      });
+    }
+    const painted = rs.some(x => x.kind === 'paint');
+    const gb = $('genBtn');
+    gb.hidden = readOnly;
+    gb.disabled = busy(p);
+    gb.textContent = busy(p) ? (p.status === 'working' ? 'Painting…' : 'Waiting for Claude…') : painted ? 'Generate next version' : 'Generate this pod';
+    const st = $('genStatus');
+    st.classList.toggle('err', p.status === 'error');
+    st.textContent = p.status === 'queued' ? (sendNote.get(openId) || 'Queued. Claude picks it up shortly; painting takes about two minutes.')
+      : p.status === 'working' ? 'Claude is painting this pod. It shows up here when it\'s done.'
+      : p.status === 'error' ? (p.statusNote || 'That didn\'t work. Try again.')
+      : (sendNote.get(openId) || '');
+    $('resend').hidden = readOnly || p.status !== 'queued' || !mcp;
   }
 
   function setZoom(z) {
@@ -184,45 +272,82 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
     pending.set(id, { ...(pending.get(id) || {}), ...patch });
     pins.set(id, { ...pins.get(id), ...patch });
     clearTimeout(timers.get(id));
-    timers.set(id, setTimeout(() => flush(id), delay));
+    timers.set(id, setTimeout(() => flush(id).catch(() => {}), delay));
     if (id === openId) $('savedLine').textContent = 'Saving…';
   }
   async function flush(id, retried) {
-    if (writing.has(id)) { timers.set(id, setTimeout(() => flush(id), 300)); return; }
+    if (writing.has(id)) { await new Promise(r => setTimeout(r, 250)); return flush(id, retried); }
     const patch = pending.get(id); if (!patch) return;
     pending.delete(id); writing.add(id);
     try {
       await db.doc('pins/' + id).update(patch);
       if (id === openId && !pending.has(id)) $('savedLine').textContent = 'Saved';
     } catch (e) {
-      if (e && e.code === 'unavailable' && !retried) { pending.set(id, { ...patch, ...(pending.get(id) || {}) }); writing.delete(id); setTimeout(() => flush(id, true), 900); return; }
+      if (e && e.code === 'unavailable' && !retried) { pending.set(id, { ...patch, ...(pending.get(id) || {}) }); writing.delete(id); await new Promise(r => setTimeout(r, 900)); return flush(id, true); }
       if (e && e.code === 'invalid_argument') readOnly = true;
       if (id === openId) $('savedLine').textContent = 'Not saved: ' + ((e && e.message) || 'try again');
-    } finally { writing.delete(id); if (pending.has(id)) { clearTimeout(timers.get(id)); timers.set(id, setTimeout(() => flush(id), 0)); } }
+      throw e;
+    } finally { writing.delete(id); }
   }
+  async function flushNow(id) { clearTimeout(timers.get(id)); while (pending.has(id) || writing.has(id)) await flush(id); }
 
   async function addPin(x, y) {
     if (!db || readOnly) return;
     const n = Math.max(0, ...[...pins.values()].map(p => p.n || 0)) + 1;
     const id = 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
-    const data = { x: +x.toFixed(2), y: +y.toFixed(2), n, touch: '', who: '' };
+    const data = { x: +x.toFixed(2), y: +y.toFixed(2), n, touch: '', who: '', status: 'idle', renders: [] };
     pins.set(id, data); render();
     try { await db.doc('pins/' + id).set(data); openSheet(id); }
     catch (e) { pins.delete(id); render(); if (e && e.code === 'invalid_argument') readOnly = true; setNotice('Could not add a pin: ' + ((e && e.message) || 'try again')); }
   }
 
+  // ----- generating: mark the pin queued, then wake Claude's session -----
+  async function nudge(id) {
+    const p = pins.get(id);
+    if (!mcp) { sendNote.set(id, `Queued. Couldn't reach Claude from this page, so tell Claude in chat: "generate pin ${p.n}".`); renderSheet(); return; }
+    try {
+      await mcp.callTool(SERVER, 'send_message', { session_id: SESSION, message: `Pod Planner: generate pin ${id} (#${p.n}).` });
+      sendNote.set(id, 'Sent to Claude. Painting takes about two minutes; it shows up here when it\'s done.');
+    } catch (e) {
+      const c = e && e.code;
+      const chat = ` Or tell Claude in chat: "generate pin ${p.n}".`;
+      sendNote.set(id,
+        c === 'approval_required' || c === 'not_in_manifest' ? 'Queued, but this page needs your OK to message Claude. Tap "Nudge Claude again" and allow it.' + chat
+        : c === 'server_not_connected' || c === 'selection_required' ? 'Queued, but Claude Code Remote isn\'t available to this page for you.' + chat
+        : c === 'needs_reauth' ? 'Queued, but Claude Code Remote needs reconnecting in claude.ai Settings → Connectors.' + chat
+        : c === 'tool_error' ? 'Queued, but Claude\'s session didn\'t accept the message (' + ((e.message || '').slice(0, 120)) + ').' + chat
+        : 'Queued, but the message to Claude may not have gone through.' + chat);
+    }
+    renderSheet();
+  }
+  async function generate() {
+    const id = openId, p = pins.get(id);
+    if (!id || readOnly || busy(p)) return;
+    if (!(p.touch || '').trim()) { $('genStatus').textContent = 'Write what goes here first.'; return; }
+    $('genBtn').disabled = true;
+    try {
+      await flushNow(id);
+      queue(id, { status: 'queued', statusNote: '', req: (p.req || 0) + 1 }, 0);
+      await flushNow(id);
+    } catch (e) { renderSheet(); return; }
+    sendNote.delete(id);
+    renderSheet();
+    nudge(id);
+  }
+  function useAsBase() {
+    const p = pins.get(openId); const rs = renders(p);
+    const idx = viewIdx == null || viewIdx >= rs.length ? rs.length - 1 : viewIdx;
+    queue(openId, { base: rs[idx].asset }, 0);
+    renderSheet();
+  }
+
   function openSheet(id) {
-    openId = id;
+    openId = id; viewIdx = null;
     const p = pins.get(id);
     $('sheetTitle').textContent = 'Pin ' + p.n;
     const z = $('zoom');
     z.style.backgroundImage = 'url(station.jpg)';
     z.style.backgroundSize = '500% auto';
-    requestAnimationFrame(() => {        // centre the pinned spot in the close-up
-      const r = z.getBoundingClientRect();
-      const iw = r.width * 5, ih = iw * 1280 / 1824;
-      z.style.backgroundPosition = `${r.width / 2 - p.x / 100 * iw}px ${r.height / 2 - p.y / 100 * ih}px`;
-    });
     $('f-touch').value = p.touch || '';
     $('f-who').value = p.who || '';
     $('f-touch').readOnly = $('f-who').readOnly = readOnly;
@@ -232,11 +357,16 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
     $('sheet').hidden = false;
     document.body.style.overflow = 'hidden';
     render();
-    setTimeout(() => $('f-touch').focus(), 50);
+    requestAnimationFrame(() => {        // centre the pinned spot in the close-up
+      const r = z.getBoundingClientRect();
+      const iw = r.width * 5, ih = iw * 1280 / 1824;
+      z.style.backgroundPosition = `${r.width / 2 - p.x / 100 * iw}px ${r.height / 2 - p.y / 100 * ih}px`;
+    });
   }
   function closeSheet() {
-    if (openId) { clearTimeout(timers.get(openId)); flush(openId); }
+    const id = openId;
     openId = null; $('sheet').hidden = true; document.body.style.overflow = ''; render();
+    if (id && pending.has(id)) flushNow(id).catch(() => {});
   }
   let rmTimer;
   function resetRemove() { const b = $('removeBtn'); b.classList.remove('confirm'); b.textContent = 'Remove pin'; clearTimeout(rmTimer); }
@@ -255,6 +385,9 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
   });
   document.querySelectorAll('.toolbar [data-z]').forEach(b => b.addEventListener('click', () => setZoom(+b.dataset.z)));
   ['touch', 'who'].forEach(f => $('f-' + f).addEventListener('input', e => { if (openId && !readOnly) { queue(openId, { [f]: e.target.value }); render(); } }));
+  $('genBtn').addEventListener('click', generate);
+  $('resend').addEventListener('click', () => openId && nudge(openId));
+  $('useBase').addEventListener('click', useAsBase);
   $('doneBtn').addEventListener('click', closeSheet);
   $('backdrop').addEventListener('click', closeSheet);
   $('removeBtn').addEventListener('click', removePin);
@@ -267,18 +400,26 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
     if (!db) { $('count').textContent = 'Not connected'; setNotice('Open this page in Claude while signed in so your pins save.'); return; }
     const user = await window.claude.use('user');
     if (user && user.can && (await user.can('data.write')) === false) readOnly = true;
+    mcp = await window.claude.use('mcp');
     let loaded = false;
     const slow = setTimeout(() => { if (!loaded) $('count').textContent = 'Still connecting…'; }, 10000);
     db.collection('pins').onSnapshot(snap => {
       if (!snap.metadata.fromCache) { loaded = true; clearTimeout(slow); }
       const seen = new Set();
-      snap.docs.forEach(d => { seen.add(d.id); pins.set(d.id, { ...d.data(), ...(pending.get(d.id) || {}) }); });
-      [...pins.keys()].forEach(k => { if (!seen.has(k) && !pending.has(k) && snap.metadata.fromCache === false) pins.delete(k); });
+      snap.docs.forEach(d => {
+        seen.add(d.id);
+        const prev = pins.get(d.id);
+        const next = { ...d.data(), ...(pending.get(d.id) || {}) };
+        if (prev && renders(prev).length < renders(next).length && d.id === openId) viewIdx = null;   // a new render arrived: show it
+        if (prev && busy(prev) && !busy(next)) sendNote.delete(d.id);
+        pins.set(d.id, next);
+      });
+      if (!snap.metadata.fromCache) [...pins.keys()].forEach(k => { if (!seen.has(k) && !pending.has(k)) pins.delete(k); });
       if (openId && !pins.has(openId)) closeSheet();
       if (openId) {
         const p = pins.get(openId);
-        if (document.activeElement !== $('f-touch')) $('f-touch').value = p.touch || '';
-        if (document.activeElement !== $('f-who')) $('f-who').value = p.who || '';
+        if (document.activeElement !== $('f-touch') && !pending.has(openId)) $('f-touch').value = p.touch || '';
+        if (document.activeElement !== $('f-who') && !pending.has(openId)) $('f-who').value = p.who || '';
       }
       render();
     }, err => { clearTimeout(slow); $('count').textContent = 'Could not load'; setNotice('Pins could not load (' + ((err && err.code) || 'error') + '). Reopen the page to try again.'); });
