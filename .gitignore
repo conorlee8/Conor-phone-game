@@ -1,2 +1,3 @@
 # Personal photos for the wallpaper never go in git
 wallpaper/cast/
+__pycache__/
