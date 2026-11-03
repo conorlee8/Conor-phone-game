@@ -179,7 +179,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
       <button type="button" class="add" id="addPerson">Add a person</button>
       <button type="button" class="ghost" id="addDog">Add a dog</button>
     </div>
-    <p>Add photos of someone once, approve their character, then pick them in any pod. Claude paints them from their photos and approved character.</p>
+    <p>Add someone's photos, then tap Create character: Claude draws a big close-up of them in the station's style so you can check it really looks like them. Once you say it's them, that drawing is used every time they're in a pod.</p>
   </div>
   <div class="people" id="people"></div>
 </div>
@@ -201,7 +201,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
     </div>
     <div class="field">
       <span style="font-weight:700;font-size:14px" id="whoLabel">Who's here</span>
-      <p class="hint">Tap people to put them in this pod. They're painted from their photos and approved character.</p>
+      <p class="hint">Tap people to put them in this pod. Anyone with a character is painted from it, so they look like themselves.</p>
       <div class="chips" id="pinPeople" role="group" aria-labelledby="whoLabel"></div>
     </div>
     <div class="field">
@@ -238,16 +238,16 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
       <textarea id="p-looks"></textarea>
     </div>
     <div class="charbox" id="pChar">
-      <span style="font-weight:700;font-size:14px">Character</span>
+      <span style="font-weight:700;font-size:14px">Their character</span><p class="hint" style="margin:0">A big close-up drawing, just for checking the likeness. It's what Claude copies whenever they appear in a pod.</p>
       <img id="pCharImg" alt="" hidden>
       <p class="gen-status" id="pCharStatus" aria-live="polite"></p>
       <div class="field" id="pFixField" hidden>
-        <label for="p-fix">What to fix on the next draw</label>
+        <label for="p-fix">What's off? Claude fixes it on the next try</label>
         <textarea id="p-fix" placeholder="Nose is wider, hair shorter on the sides, no glasses…"></textarea>
       </div>
       <div class="btnrow">
-        <button type="button" class="gen-btn" id="pDraw">Draw character</button>
-        <button type="button" class="okbtn" id="pApprove" hidden>Looks like them</button>
+        <button type="button" class="gen-btn" id="pDraw">Create character</button>
+        <button type="button" class="okbtn" id="pApprove" hidden>Yes, that's them</button>
       </div>
     </div>
     <div class="foot"><span class="saved" id="pSaved">Changes save as you type.</span><button type="button" class="remove" id="pRemove">Remove person</button></div>
@@ -460,7 +460,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
     st.textContent = p.status === 'queued' ? (sendNote.get('pin:' + openId) || 'Queued. Claude picks it up shortly; painting takes about two minutes.')
       : p.status === 'working' ? 'Claude is painting this pod. It shows up here when it\'s done.'
       : p.status === 'error' ? (p.statusNote || 'That didn\'t work. Try again.')
-      : (sendNote.get('pin:' + openId) || (unapproved.length ? `No approved character yet for ${unapproved.join(', ')}: they'll be painted from photos alone, which looks less like them.` : ''));
+      : (sendNote.get('pin:' + openId) || (unapproved.length ? `${unapproved.join(', ')} ${unapproved.length > 1 ? 'have' : 'has'} no character yet, so they'll look less like themselves. Create one under People first.` : ''));
     $('resend').hidden = readOnly || p.status !== 'queued' || !(mcp || comments);
   }
 
@@ -545,12 +545,12 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
     dog: '<b>Photos that give the best likeness</b><ul><li>Whole body from the side</li><li>Face straight on</li><li>Close-ups of markings: white chest, socks, face blaze</li><li>Next to a person, to show size</li></ul>',
   };
   function badgeFor(m) {
-    if (m.status === 'queued' || m.status === 'working') return ['busy', 'Drawing…'];
+    if (m.status === 'queued' || m.status === 'working') return ['busy', 'Creating…'];
     if (m.status === 'error') return ['need', 'Draw failed'];
-    if (m.approved) return ['ok', 'Approved'];
-    if (sheets(m).length) return ['check', 'Check character'];
+    if (m.approved) return ['ok', 'Character ready'];
+    if (sheets(m).length) return ['check', 'Is this them?'];
     const n = photosOf(m).length;
-    return n >= 2 ? ['need', 'Ready to draw'] : ['need', n ? 'Add 1 more photo' : 'Add photos'];
+    return n >= 3 ? ['need', 'Create character'] : ['need', n ? `Add ${3 - n} more photo${3 - n > 1 ? 's' : ''}` : 'Add photos'];
   }
   function renderPeople() {
     const box = $('people'); box.textContent = '';
@@ -642,20 +642,21 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
     const draw = $('pDraw');
     draw.hidden = readOnly;
     draw.disabled = isBusy || photosOf(m).length < 1;
-    draw.textContent = isBusy ? (m.status === 'working' ? 'Drawing…' : 'Waiting for Claude…') : last ? 'Redraw with these notes' : 'Draw character';
+    draw.textContent = isBusy ? (m.status === 'working' ? 'Creating…' : 'Waiting for Claude…') : last ? 'Try again with my notes' : 'Create character';
     const ap = $('pApprove');
     ap.hidden = readOnly || !last || isBusy;
     ap.disabled = !!approved;
-    ap.textContent = approved ? 'Approved' : 'Looks like them';
+    ap.textContent = approved ? 'That\'s them' : 'Yes, that\'s them';
     const st = $('pCharStatus');
     st.classList.toggle('err', m.status === 'error');
-    st.textContent = m.status === 'queued' ? (sendNote.get('person:' + openPerson) || 'Queued. Drawing takes about two minutes.')
-      : m.status === 'working' ? 'Claude is drawing them. It shows up here when it\'s done.'
+    st.textContent = m.status === 'queued' ? (sendNote.get('person:' + openPerson) || 'Queued. It takes about two minutes.')
+      : m.status === 'working' ? 'Claude is creating their character. It shows up here when it\'s done.'
       : m.status === 'error' ? (m.statusNote || 'That didn\'t work. Try again.')
-      : approved ? 'Approved. Pods with them in it are painted from this.'
-      : last ? 'Does this look like them? Approve it, or write what to fix and redraw.'
-      : photosOf(m).length ? 'Add a few more photos for a better likeness, then draw their character.'
-      : 'Add photos first.';
+      : approved ? 'Done. Every pod they\'re in is painted from this.'
+      : last ? 'Is this them? If yes, tap "Yes, that\'s them". If not, write what\'s off and try again.'
+      : photosOf(m).length >= 3 ? 'Ready. Tap Create character.'
+      : photosOf(m).length ? 'Add a couple more photos (face straight on, face at an angle, full body), then tap Create character.'
+      : 'Step 1: add 3 to 5 photos. Step 2: tap Create character. Step 3: say if it\'s them.';
     $('pRemove').hidden = readOnly;
   }
 

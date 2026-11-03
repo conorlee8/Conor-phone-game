@@ -72,7 +72,7 @@ status, statusNote, order}`. The page sends
    ```
 4. Compare the sheet with the photos yourself before uploading. Upload
    `sheet_N.jpg` as an asset, append `{asset}` to `sheets`, set `status: "done"`.
-   Conor approves it on the page (`approved` = that asset id).
+   Conor approves it on the page ("Yes, that's them" sets `approved` to that asset id). The page calls it "Create character".
 
 Photos stay in `wallpaper/pods/work/` (ignored by git) and the page's asset
 store. Never commit them.
