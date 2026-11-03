@@ -1,0 +1,287 @@
+<title>Pod Planner</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=IBM+Plex+Mono:wght@500&family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<style>
+/* Layout: the station painting is the map. Tap it to drop a numbered pin, write the touch in a bottom sheet; pins are listed under the map. */
+:root {
+  --void: #0e1322;
+  --hull: #171e33;
+  --panel: #1f2843;
+  --line: #2f3a5e;
+  --ink: #eef1f8;
+  --muted: #9ba5c2;
+  --lantern: #ffb45e;
+  --mint: #7fdcc9;
+  --sakura: #f4a0b8;
+  --display: "Dela Gothic One", "Hiragino Sans", system-ui, sans-serif;
+  --body: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--void); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 80px;
+}
+.wrap { max-width: 1100px; margin: 0 auto; display: grid; gap: 18px; }
+.eyebrow { margin: 0; font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--mint); }
+h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(36px, 8vw, 58px); line-height: 1; }
+h1 .jp { display: inline-block; margin-left: .3em; font-size: .38em; vertical-align: .5em; color: var(--lantern); letter-spacing: .1em; }
+.lede { margin: 0; max-width: 62ch; color: var(--muted); }
+.notice { margin: 0; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--lantern); background: var(--hull); }
+
+.toolbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-family: var(--mono); font-size: 13px; color: var(--muted); }
+.toolbar button { font: inherit; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 99px; padding: 6px 12px; cursor: pointer; }
+.toolbar button[aria-pressed="true"] { background: var(--mint); color: var(--void); border-color: var(--mint); }
+.toolbar .spacer { flex: 1; }
+
+.mapbox { overflow: auto; border-radius: 14px; border: 1px solid var(--line); background: #05070d; max-height: 78vh; -webkit-overflow-scrolling: touch; }
+.map { position: relative; width: 100%; cursor: crosshair; }
+.map img { display: block; width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
+.pin {
+  position: absolute; transform: translate(-50%, -50%); min-width: 26px; height: 26px; padding: 0 6px;
+  border-radius: 99px; border: 2px solid var(--void); background: var(--lantern); color: var(--void);
+  font: 700 13px/22px var(--mono); text-align: center; cursor: pointer; box-shadow: 0 0 0 2px #ffb45e66;
+}
+.pin.done { background: var(--mint); box-shadow: 0 0 0 2px #7fdcc966; }
+.pin.active { background: var(--sakura); }
+
+.list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+.item { display: grid; grid-template-columns: 34px 1fr; gap: 10px; align-items: start; text-align: left; width: 100%;
+  padding: 12px; font: inherit; color: inherit; background: var(--hull); border: 1px solid var(--line); border-radius: 12px; cursor: pointer; }
+.item:hover { border-color: var(--muted); }
+.item .n { width: 30px; height: 30px; border-radius: 99px; background: var(--panel); display: grid; place-items: center; font: 700 13px var(--mono); color: var(--lantern); }
+.item .t { min-width: 0; }
+.item .touch { overflow-wrap: anywhere; }
+.item .touch.empty { color: var(--muted); }
+.item .who { font-size: 13px; color: var(--mint); margin-top: 2px; overflow-wrap: anywhere; }
+.empty-list { color: var(--muted); margin: 0; }
+
+.sheet { position: fixed; inset: 0; z-index: 20; display: grid; align-items: end; justify-items: center; }
+.backdrop { position: absolute; inset: 0; background: #05081299; }
+.panel {
+  position: relative; width: 100%; max-width: 560px; max-height: 90%; overflow-y: auto; display: grid; gap: 14px;
+  background: var(--hull); border: 1px solid var(--line); border-bottom: 0; border-radius: 18px 18px 0 0;
+  padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: max(18px, env(safe-area-inset-right, 0px));
+  padding-top: 16px; padding-bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+}
+.panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.panel-head h2 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 22px; }
+.done-btn { font: inherit; font-weight: 700; color: var(--void); background: var(--mint); border: 0; border-radius: 99px; padding: 8px 16px; cursor: pointer; }
+.zoom { width: 100%; aspect-ratio: 16 / 9; max-width: 100%; border-radius: 10px; border: 1px solid var(--line); background-color: #05070d; background-repeat: no-repeat; position: relative; }
+.zoom::after { content: ""; position: absolute; left: 50%; top: 50%; width: 22px; height: 22px; transform: translate(-50%, -50%); border: 2px solid var(--sakura); border-radius: 50%; box-shadow: 0 0 0 2px #0e1322aa; }
+.field { display: grid; gap: 6px; }
+.field label { font-weight: 700; font-size: 14px; }
+.field .hint { margin: -4px 0 0; font-size: 13px; color: var(--muted); }
+.field input, .field textarea { width: 100%; font: inherit; color: var(--ink); background: var(--void); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.field textarea { min-height: 110px; resize: vertical; }
+.field input::placeholder, .field textarea::placeholder { color: #6c7593; }
+.foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 10px; }
+.saved { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.remove { font: inherit; font-size: 14px; color: var(--sakura); background: transparent; border: 1px solid var(--sakura); border-radius: 99px; padding: 6px 14px; cursor: pointer; }
+.remove.confirm { background: var(--sakura); color: var(--void); }
+button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+@media (min-width: 700px) { .sheet { align-items: center; } .panel { border-radius: 18px; border-bottom: 1px solid var(--line); } }
+</style>
+
+<div class="wrap">
+  <header style="display:grid;gap:10px">
+    <p class="eyebrow">Station wallpaper · your touches</p>
+    <h1>Pod Planner<span class="jp">部屋</span></h1>
+    <p class="lede">Tap anywhere on the station to drop a pin, then write what you want in that spot: a detail, a sign, an inside joke, who hangs out there. Zoom in to hit small pods.</p>
+  </header>
+  <p id="notice" class="notice" hidden></p>
+  <div class="toolbar">
+    <span>Zoom</span>
+    <button type="button" data-z="1" aria-pressed="true">1×</button>
+    <button type="button" data-z="2" aria-pressed="false">2×</button>
+    <button type="button" data-z="3" aria-pressed="false">3×</button>
+    <span class="spacer"></span>
+    <span id="count">Loading…</span>
+  </div>
+  <div class="mapbox" id="mapbox">
+    <div class="map" id="map"><img id="station" src="station.jpg" alt="The space station cutaway, open-screen view" width="1824" height="1280"></div>
+  </div>
+  <div class="list" id="list"></div>
+</div>
+
+<div class="sheet" id="sheet" hidden>
+  <div class="backdrop" id="backdrop"></div>
+  <section class="panel" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div class="panel-head"><h2 id="sheetTitle">Pin</h2><button type="button" class="done-btn" id="doneBtn">Done</button></div>
+    <div class="zoom" id="zoom" role="img" aria-label="Close-up of the pinned spot"></div>
+    <div class="field">
+      <label for="f-touch">What goes here</label>
+      <p class="hint">A detail, a sign's wording, a running joke, what's happening.</p>
+      <textarea id="f-touch" placeholder="Turn this into a tiny sports bar showing the Eagles game, with a 'Go Birds' flag…"></textarea>
+    </div>
+    <div class="field">
+      <label for="f-who">Who's here</label>
+      <input id="f-who" autocomplete="off" placeholder="Me and Elliot, my sister…">
+    </div>
+    <div class="foot"><span class="saved" id="savedLine">Changes save as you type.</span><button type="button" class="remove" id="removeBtn">Remove pin</button></div>
+  </section>
+</div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const pins = new Map();       // id -> {x, y, n, touch, who}
+  let db = null, readOnly = false, openId = null, zoom = 1;
+  const pending = new Map(), timers = new Map(), writing = new Set();
+
+  function setNotice(t) { $('notice').textContent = t; $('notice').hidden = !t; }
+  const ordered = () => [...pins.entries()].sort((a, b) => (a[1].n || 0) - (b[1].n || 0));
+
+  function render() {
+    const map = $('map');
+    map.querySelectorAll('.pin').forEach(p => p.remove());
+    ordered().forEach(([id, p]) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'pin' + (p.touch ? ' done' : '') + (id === openId ? ' active' : '');
+      b.style.left = p.x + '%'; b.style.top = p.y + '%';
+      b.textContent = p.n;
+      b.setAttribute('aria-label', 'Pin ' + p.n + (p.touch ? ': ' + p.touch : ''));
+      b.addEventListener('click', e => { e.stopPropagation(); openSheet(id); });
+      map.appendChild(b);
+    });
+    const list = $('list');
+    list.textContent = '';
+    if (!pins.size) {
+      const p = document.createElement('p'); p.className = 'empty-list';
+      p.textContent = 'No pins yet. Tap the station to add your first touch.';
+      list.appendChild(p);
+    }
+    ordered().forEach(([id, p]) => {
+      const it = document.createElement('button'); it.type = 'button'; it.className = 'item';
+      const n = document.createElement('span'); n.className = 'n'; n.textContent = p.n;
+      const t = document.createElement('span'); t.className = 't';
+      const touch = document.createElement('div'); touch.className = 'touch' + (p.touch ? '' : ' empty'); touch.textContent = p.touch || 'Nothing written yet';
+      t.appendChild(touch);
+      if (p.who) { const w = document.createElement('div'); w.className = 'who'; w.textContent = p.who; t.appendChild(w); }
+      it.append(n, t);
+      it.addEventListener('click', () => openSheet(id));
+      list.appendChild(it);
+    });
+    const done = [...pins.values()].filter(p => p.touch).length;
+    $('count').textContent = pins.size ? `${pins.size} pins, ${done} written` : 'No pins yet';
+  }
+
+  function setZoom(z) {
+    zoom = z;
+    $('map').style.width = (z * 100) + '%';
+    document.querySelectorAll('.toolbar [data-z]').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.z === z)));
+  }
+
+  // ----- writes: one at a time per pin, coalesced -----
+  function queue(id, patch, delay = 700) {
+    pending.set(id, { ...(pending.get(id) || {}), ...patch });
+    pins.set(id, { ...pins.get(id), ...patch });
+    clearTimeout(timers.get(id));
+    timers.set(id, setTimeout(() => flush(id), delay));
+    if (id === openId) $('savedLine').textContent = 'Saving…';
+  }
+  async function flush(id, retried) {
+    if (writing.has(id)) { timers.set(id, setTimeout(() => flush(id), 300)); return; }
+    const patch = pending.get(id); if (!patch) return;
+    pending.delete(id); writing.add(id);
+    try {
+      await db.doc('pins/' + id).update(patch);
+      if (id === openId && !pending.has(id)) $('savedLine').textContent = 'Saved';
+    } catch (e) {
+      if (e && e.code === 'unavailable' && !retried) { pending.set(id, { ...patch, ...(pending.get(id) || {}) }); writing.delete(id); setTimeout(() => flush(id, true), 900); return; }
+      if (e && e.code === 'invalid_argument') readOnly = true;
+      if (id === openId) $('savedLine').textContent = 'Not saved: ' + ((e && e.message) || 'try again');
+    } finally { writing.delete(id); if (pending.has(id)) { clearTimeout(timers.get(id)); timers.set(id, setTimeout(() => flush(id), 0)); } }
+  }
+
+  async function addPin(x, y) {
+    if (!db || readOnly) return;
+    const n = Math.max(0, ...[...pins.values()].map(p => p.n || 0)) + 1;
+    const id = 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+    const data = { x: +x.toFixed(2), y: +y.toFixed(2), n, touch: '', who: '' };
+    pins.set(id, data); render();
+    try { await db.doc('pins/' + id).set(data); openSheet(id); }
+    catch (e) { pins.delete(id); render(); if (e && e.code === 'invalid_argument') readOnly = true; setNotice('Could not add a pin: ' + ((e && e.message) || 'try again')); }
+  }
+
+  function openSheet(id) {
+    openId = id;
+    const p = pins.get(id);
+    $('sheetTitle').textContent = 'Pin ' + p.n;
+    const z = $('zoom');
+    z.style.backgroundImage = 'url(station.jpg)';
+    z.style.backgroundSize = '500% auto';
+    requestAnimationFrame(() => {        // centre the pinned spot in the close-up
+      const r = z.getBoundingClientRect();
+      const iw = r.width * 5, ih = iw * 1280 / 1824;
+      z.style.backgroundPosition = `${r.width / 2 - p.x / 100 * iw}px ${r.height / 2 - p.y / 100 * ih}px`;
+    });
+    $('f-touch').value = p.touch || '';
+    $('f-who').value = p.who || '';
+    $('f-touch').readOnly = $('f-who').readOnly = readOnly;
+    $('removeBtn').hidden = readOnly;
+    $('savedLine').textContent = readOnly ? 'View only' : 'Changes save as you type.';
+    resetRemove();
+    $('sheet').hidden = false;
+    document.body.style.overflow = 'hidden';
+    render();
+    setTimeout(() => $('f-touch').focus(), 50);
+  }
+  function closeSheet() {
+    if (openId) { clearTimeout(timers.get(openId)); flush(openId); }
+    openId = null; $('sheet').hidden = true; document.body.style.overflow = ''; render();
+  }
+  let rmTimer;
+  function resetRemove() { const b = $('removeBtn'); b.classList.remove('confirm'); b.textContent = 'Remove pin'; clearTimeout(rmTimer); }
+  async function removePin() {
+    const b = $('removeBtn');
+    if (!b.classList.contains('confirm')) { b.classList.add('confirm'); b.textContent = 'Tap again to remove'; rmTimer = setTimeout(resetRemove, 3000); return; }
+    const id = openId; clearTimeout(timers.get(id)); pending.delete(id);
+    closeSheet();
+    try { await db.doc('pins/' + id).delete(); } catch (e) { setNotice('Could not remove: ' + ((e && e.message) || 'try again')); }
+  }
+
+  $('map').addEventListener('click', e => {
+    if (e.target.closest('.pin')) return;
+    const r = $('station').getBoundingClientRect();
+    addPin((e.clientX - r.left) / r.width * 100, (e.clientY - r.top) / r.height * 100);
+  });
+  document.querySelectorAll('.toolbar [data-z]').forEach(b => b.addEventListener('click', () => setZoom(+b.dataset.z)));
+  ['touch', 'who'].forEach(f => $('f-' + f).addEventListener('input', e => { if (openId && !readOnly) { queue(openId, { [f]: e.target.value }); render(); } }));
+  $('doneBtn').addEventListener('click', closeSheet);
+  $('backdrop').addEventListener('click', closeSheet);
+  $('removeBtn').addEventListener('click', removePin);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && openId) closeSheet(); });
+  render();
+  $('count').textContent = 'Loading…';
+
+  (async () => {
+    db = await window.claude?.use?.('db');
+    if (!db) { $('count').textContent = 'Not connected'; setNotice('Open this page in Claude while signed in so your pins save.'); return; }
+    const user = await window.claude.use('user');
+    if (user && user.can && (await user.can('data.write')) === false) readOnly = true;
+    let loaded = false;
+    const slow = setTimeout(() => { if (!loaded) $('count').textContent = 'Still connecting…'; }, 10000);
+    db.collection('pins').onSnapshot(snap => {
+      if (!snap.metadata.fromCache) { loaded = true; clearTimeout(slow); }
+      const seen = new Set();
+      snap.docs.forEach(d => { seen.add(d.id); pins.set(d.id, { ...d.data(), ...(pending.get(d.id) || {}) }); });
+      [...pins.keys()].forEach(k => { if (!seen.has(k) && !pending.has(k) && snap.metadata.fromCache === false) pins.delete(k); });
+      if (openId && !pins.has(openId)) closeSheet();
+      if (openId) {
+        const p = pins.get(openId);
+        if (document.activeElement !== $('f-touch')) $('f-touch').value = p.touch || '';
+        if (document.activeElement !== $('f-who')) $('f-who').value = p.who || '';
+      }
+      render();
+    }, err => { clearTimeout(slow); $('count').textContent = 'Could not load'; setNotice('Pins could not load (' + ((err && err.code) || 'error') + '). Reopen the page to try again.'); });
+  })();
+})();
+</script>

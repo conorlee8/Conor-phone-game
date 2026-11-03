@@ -1,0 +1,7 @@
+{
+  "out": "raw", "model": "gpt-image-2", "quality": "high",
+  "assets": [
+    { "id": "zoom_cover", "size": "1280x1824", "images": ["guides/cover_zoom_src.png"],
+      "prompt": "This is a zoomed-in crop of a detailed painting of a cozy space station cutaway, enlarged so it looks soft. Repaint it at full resolution with crisp, clean ink linework and fine painted detail, keeping the composition exactly: every room, wall, pipe, person, dog, sign, object and colour stays where it is and as it is, only sharper and more detailed. Faces become clear and individual. Fix any misspelled lettering. Continue the deep starry space naturally into the plain dark band at the top, with nothing else added there." }
+  ]
+}

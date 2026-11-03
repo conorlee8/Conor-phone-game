@@ -55,7 +55,26 @@ Conor, girlfriend, mom, sister, 10 friends, and two boxers: **Elliot** and
   inside jokes on signs, hometown on a screen, hidden boxers, holiday
   decorations (Christmas, Halloween, Thanksgiving).
 
+## How it's made (from round 6 on)
+
+- `tools/blockout.py` grows an off-grid station layout (seed 40) with people
+  and dog markers at true scale, crawlspaces, hull pods and astronauts. No
+  sign text in the guide: shop names go in the prompt and the painter makes
+  the signs.
+- `tools/paint.mjs` paints over the guide (round 8 is the current favorite).
+- Plan for the final: lock a base painting, make the cover a sharpened zoom of
+  the open view (same pods, same people), then repaint pod by pod with edit
+  masks for personal touches and real people from character sheets.
+
+## Pages
+
+- Crew Manifest (photos and notes): https://claude.ai/artifact/FWqKHdZdffL4Uz2aHpj8ra
+- Station Inventory (picks): https://claude.ai/artifact/XSEa4SbAtH2p7jo6U8FrzD
+- Pod Planner (pins on the painting for personal touches): https://claude.ai/artifact/KPF1KShwp4EHMLBdkxrNcy
+
 ## Still open
 
-- Station name, hometown, inside jokes, pun level, who runs which shop.
+- OpenAI image credits ran out on Nov 3; painting resumes once topped up.
+- Station name, hometown, inside jokes, pun level.
 - Photos and notes for everyone.
+- Bring the room colors back from amber; fix misspelled signs.
