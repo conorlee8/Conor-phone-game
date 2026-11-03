@@ -84,3 +84,11 @@ their approved sheet (or latest sheet) and their clearest face photo, and add
 `refs: [{name, kind, looks, sheet: <path>, photo: <path>}]` to `pin.json`
 before `pod.py prep`. The job passes them as extra reference images and names
 them in the prompt; only the first image is masked and repainted.
+
+# "publish to world" messages
+
+1. Export the pins and run `python3 wallpaper/tools/master.py`.
+2. `cp wallpaper/pods/station.jpg world/assets/station.jpg`, then
+   `python3 wallpaper/tools/lights.py` (finds the lamps in the new painting).
+3. Republish the Pod Planner with the new `station.jpg`, commit and push. The
+   Station app (GitHub Pages, `world/`) picks it up on its next load.

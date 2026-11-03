@@ -159,6 +159,10 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
     <h1>Pod Planner<span class="jp">部屋</span></h1>
     <p class="lede">Tap the station to drop a pin and write what you want there, pick who's in it, and hit Generate: Claude paints that pod. Keep editing and generating until it's right; the version marked "next version builds on this" is the one placed in the station. Everything saves, so come back any time.</p>
   </header>
+  <div class="gen" id="publishBox" style="max-width:520px">
+    <button type="button" class="gen-btn" id="publishBtn">Publish to my world</button>
+    <p class="gen-status" id="publishStatus" aria-live="polite">Sends the station as it looks here, with every pod's chosen version, to your Station app.</p>
+  </div>
   <p id="notice" class="notice" hidden></p>
   <div class="toolbar">
     <span>Zoom</span>
@@ -774,6 +778,14 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
   $('doneBtn').addEventListener('click', closeSheet);
   $('backdrop').addEventListener('click', closeSheet);
   $('removeBtn').addEventListener('click', removePin);
+  $('publishBtn').addEventListener('click', async () => {
+    if (readOnly || !db) return;
+    $('publishBtn').disabled = true;
+    sendNote.delete('publish');
+    await wake('publish', 'Pod Planner: publish to world.', $('publishBtn'), 'publish to my world');
+    $('publishStatus').textContent = (sendNote.get('publish') || 'Sent.') + ' Your Station app updates a minute or two after Claude publishes.';
+    setTimeout(() => { $('publishBtn').disabled = false; }, 8000);
+  });
   $('addPerson').addEventListener('click', async () => { const pid = await addPerson('person'); if (pid) openPersonSheet(pid); });
   $('addDog').addEventListener('click', async () => { const pid = await addPerson('dog'); if (pid) openPersonSheet(pid); });
   [['p-name', 'name'], ['p-looks', 'looks'], ['p-fix', 'fix']].forEach(([el, f]) => $(el).addEventListener('input', e => {

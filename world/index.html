@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Station">
+  <meta name="theme-color" content="#05070d">
+  <title>Station</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=IBM+Plex+Mono:wght@500&family=Zen+Maru+Gothic:wght@500;700&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="view" aria-label="Your space station. Drag to look around, pinch to zoom, tap a place to take care of it."></canvas>
+
+  <header class="top">
+    <button type="button" class="title" id="stationName" aria-label="Rename your station">Conor's Station</button>
+    <span class="mood" id="mood">Loading</span>
+    <button type="button" class="cam" id="capOpen" aria-label="Capture this moment as wallpaper">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
+    </button>
+  </header>
+
+  <footer class="bottom">
+    <p class="log" id="log" aria-live="polite"></p>
+    <div class="meters" id="meters" role="group" aria-label="What the station needs"></div>
+  </footer>
+
+  <div class="toast" id="toast" hidden role="status"><b></b><span></span></div>
+
+  <div class="sheet" id="zoneSheet" hidden>
+    <section class="panel" role="dialog" aria-labelledby="zoneName">
+      <div class="phead"><h2 id="zoneName">Place</h2><button type="button" class="close" id="zoneClose">Done</button></div>
+      <div class="zneed" id="zoneNeed"></div>
+      <div class="actions" id="zoneActions"></div>
+    </section>
+  </div>
+
+  <div class="sheet modal" id="capSheet" hidden>
+    <section class="panel wide" role="dialog" aria-labelledby="capTitle">
+      <div class="phead"><h2 id="capTitle">Grab this moment</h2><button type="button" class="close" id="capClose">Close</button></div>
+      <p class="hint">The orange box is your closed-screen wallpaper. Drag it to frame it. The open screen gets the whole station, at the same instant.</p>
+      <canvas id="capPreview" aria-label="Station preview with the closed-screen frame"></canvas>
+      <div class="seg" id="capSizes" role="group" aria-label="Closed-screen framing">
+        <button type="button" data-i="0" aria-pressed="false">Closer</button>
+        <button type="button" data-i="1" aria-pressed="true">Normal</button>
+        <button type="button" data-i="2" aria-pressed="false">Wider</button>
+      </div>
+      <button type="button" class="big" id="capStart">Capture 3 seconds</button>
+      <p class="hint" id="capStatus" aria-live="polite"></p>
+      <div id="capResult" hidden>
+        <div class="files" id="capFiles"></div>
+        <button type="button" class="big alt" id="capShare" hidden>Save to Photos</button>
+        <ol class="how">
+          <li>Save both videos to Photos (Save to Photos, or Download).</li>
+          <li>Open a Live Photo maker like intoLive and turn each video into a Live Photo.</li>
+          <li>Settings → Wallpaper: set the closed one on the cover screen and the open one on the inner screen.</li>
+        </ol>
+      </div>
+    </section>
+  </div>
+
+  <div class="sheet modal" id="rename" hidden>
+    <form class="panel" id="renameForm">
+      <div class="phead"><h2>Name your station</h2></div>
+      <input id="renameInput" maxlength="40" autocomplete="off" aria-label="Station name">
+      <div class="row"><button type="button" class="close" id="renameCancel">Cancel</button><button type="submit" class="big">Save</button></div>
+    </form>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
