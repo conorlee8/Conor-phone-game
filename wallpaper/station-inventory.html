@@ -1,0 +1,266 @@
+<title>Station Inventory</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=IBM+Plex+Mono:wght@500&family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<style>
+/* Layout: one long checklist of tappable chips, one section per kind of thing on the station, each section with its own accent so the page itself is not one color. */
+:root {
+  --void: #0e1322;
+  --hull: #171e33;
+  --panel: #1f2843;
+  --line: #2f3a5e;
+  --ink: #eef1f8;
+  --muted: #9ba5c2;
+  --lantern: #ffb45e;
+  --mint: #7fdcc9;
+  --display: "Dela Gothic One", "Hiragino Sans", system-ui, sans-serif;
+  --body: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--void);
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, #ffffff55 50%, transparent 51%),
+    radial-gradient(1px 1px at 78% 9%, #ffffff44 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 64% 42%, #ffffff33 50%, transparent 51%),
+    radial-gradient(1px 1px at 30% 70%, #ffffff33 50%, transparent 51%),
+    radial-gradient(1px 1px at 90% 80%, #ffffff44 50%, transparent 51%);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 80px;
+}
+.wrap { max-width: 860px; margin: 0 auto; display: grid; gap: 28px; }
+.top { display: grid; gap: 10px; }
+.eyebrow { margin: 0; font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--mint); }
+h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(36px, 8vw, 58px); line-height: 1; text-wrap: balance; }
+h1 .jp { display: inline-block; margin-left: .3em; font-size: .38em; vertical-align: .5em; color: var(--lantern); letter-spacing: .1em; }
+.lede { margin: 0; max-width: 60ch; color: var(--muted); }
+.statusbar { display: flex; gap: 14px; flex-wrap: wrap; font-family: var(--mono); font-size: 13px; color: var(--muted); }
+.statusbar b { color: var(--ink); font-weight: 500; }
+.notice { margin: 0; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--lantern); background: var(--hull); }
+
+.section { display: grid; gap: 12px; padding: 18px; border-radius: 16px; background: var(--hull); border: 1px solid var(--line); border-top: 3px solid var(--accent); }
+.section h2 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 22px; line-height: 1.15; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.section h2 .count { font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: .06em; }
+.section .hint { margin: -6px 0 0; font-size: 14px; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  font: inherit; font-size: 15px; color: var(--ink); cursor: pointer;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 99px;
+  padding: 7px 14px; display: inline-flex; align-items: center; gap: 8px; text-align: left;
+}
+.chip:hover { border-color: var(--accent); }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--void); font-weight: 700; }
+.chip:focus-visible, .other:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent, var(--mint)); outline-offset: 2px; }
+.chip.wide { border-radius: 12px; padding: 10px 14px; flex: 1 1 240px; }
+.chip small { display: block; font-weight: 500; font-size: 13px; opacity: .8; }
+.sw { display: inline-flex; flex: none; }
+.sw i { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid var(--hull); margin-left: -4px; }
+.sw i:first-child { margin-left: 0; }
+.other, textarea {
+  width: 100%; font: inherit; font-size: 15px; color: var(--ink); background: var(--void);
+  border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px;
+}
+textarea { min-height: 96px; resize: vertical; }
+.other::placeholder, textarea::placeholder { color: #6c7593; }
+.foot { margin: 0; color: var(--muted); font-size: 14px; }
+@media (prefers-reduced-motion: no-preference) { .chip { transition: background .15s, border-color .15s, color .15s; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">Station wallpaper · stocking the shelves</p>
+    <h1>Station Inventory<span class="jp">在庫</span></h1>
+    <p class="lede">Tap everything you'd like to see somewhere on the station. The more you pick, the more variety each room gets. Add your own ideas in the box under each section.</p>
+    <div class="statusbar"><span><b id="pickCount">0</b> picked</span><span id="saveState">Loading…</span></div>
+  </header>
+  <p id="notice" class="notice" hidden></p>
+  <main id="form" class="wrap" style="gap:16px"></main>
+  <section class="section" style="--accent: var(--lantern)">
+    <h2>Anything else that's very your group?</h2>
+    <textarea id="notes" placeholder="A thing you always do together, a place you always end up, a running joke…"></textarea>
+  </section>
+  <p class="foot">Answers save as you go. Tell Claude when you're done.</p>
+</div>
+
+<script>
+(() => {
+  const Q = [
+    { id: 'era', title: 'What era is the tech?', single: true, accent: '#7fdcc9', wide: true, options: [
+      ['Retro 80s and 90s', 'CRTs, cassettes, chunky buttons'],
+      ['Y2K', 'See-through plastic, bubbly shapes'],
+      ['Sleek future', 'Holograms, glass, glowing panels'],
+      ['A cozy mix of all three', 'Old and new crammed together'] ] },
+    { id: 'palette', title: 'Which colors should lead?', hint: 'Pick one or two. These replace the all-amber look.', accent: '#f4a0b8', wide: true, options: [
+      ['Candy', 'Pink, mint, butter yellow', ['#f6a6c1', '#9be3cf', '#ffe08a']],
+      ['Retro 70s', 'Orange, mustard, teal', ['#ee7b3a', '#d9a62e', '#2f9c95']],
+      ['Neon night', 'Magenta, cyan, violet', ['#ff3fa4', '#35e0f0', '#8b5cf6']],
+      ['Natural', 'Leafy green, wood, terracotta', ['#5c9e52', '#a8774a', '#d06b4c']],
+      ['Ocean', 'Navy, aqua, coral', ['#23408e', '#4fd1c5', '#ff7f6b']],
+      ['Rainbow', 'A bit of everything', ['#ef4444', '#facc15', '#3b82f6']] ] },
+    { id: 'electronics', title: 'Electronics and gadgets', accent: '#5ec8ff', options: [
+      'CRT TVs', 'Arcade cabinets', 'Gaming PCs with RGB', 'Retro consoles and handhelds', 'Turntables and big speakers',
+      'Boomboxes and cassettes', 'DJ decks and synths', 'VR headsets', 'Holograms', 'Projectors and movie screens',
+      'Little helper robots', 'Robot vacuums', 'Drones', 'Radio and antenna rigs', 'Telescopes', 'Neon signs',
+      'Vending machines', 'Claw machines', 'Pinball', 'Lava lamps', 'Walkie-talkies', 'Polaroid cameras' ] },
+    { id: 'plants', title: 'Plants and green stuff', accent: '#7bd389', options: [
+      'Hydroponic veggies', 'Herbs in jars', 'Fruit trees', 'Cherry blossom tree', 'Bonsai', 'Monstera and big leafy plants',
+      'Hanging vines', 'Cacti and succulents', 'Moss walls', 'Bamboo', 'Mushroom farm', 'Flower stall',
+      'Glowing alien plants', 'Algae tanks', 'Pumpkin patch', 'Sunflowers', 'Tiny lawn with a sprinkler' ] },
+    { id: 'food', title: 'Food and drink', accent: '#ff8a6b', options: [
+      'Ramen and noodles', 'Dumplings', 'Sushi conveyor belt', 'Hot pot', 'Street skewers', 'Pizza', 'Tacos',
+      'Burgers and fries', 'BBQ smoker', 'Bakery and pastries', 'Donuts', 'Ice cream and soft serve', 'Candy shop',
+      'Boba tea', 'Coffee bar', 'Juice bar', 'Cereal bar', 'Space food pouches', 'Fruit stand', 'Brewery and beer taps',
+      'Breakfast diner', 'Popcorn machine' ] },
+    { id: 'places', title: 'Shops and places', accent: '#b59cff', options: [
+      'Arcade', 'Karaoke', 'Laundromat', 'Barber shop', 'Tattoo parlor', 'Gym', 'Climbing wall', 'Pool or bath house',
+      'Movie theater', 'Bowling lane', 'Record store', 'Bookshop', 'Comic shop', 'Plant nursery', 'Dog groomer and vet',
+      'Shuttle repair garage', 'Music studio', 'Pub', 'Mini golf', 'Basketball court', 'Skate ramp',
+      'Ping pong and pool tables', 'Sauna', 'Observatory', 'Post office' ] },
+    { id: 'home', title: 'Home stuff and furniture', accent: '#ffd166', options: [
+      'Loft beds and bunks', 'Beanbags', 'Hammocks', 'Kotatsu tables', 'Couches buried in blankets', 'Overflowing bookshelves',
+      'Fish tanks', 'Record collections', 'Posters and art', 'String lights', 'Hot tub', 'Fireplace',
+      'Hanging egg chairs', 'Pillow forts', 'Big windows with a view', 'Laundry lines', 'Rugs everywhere' ] },
+    { id: 'hobbies', title: 'What people are busy doing', accent: '#ff9ecb', options: [
+      'Gaming', 'Cooking', 'Gardening', 'Fixing robots', 'Jamming in a band', 'DJing', 'Painting', 'Reading',
+      'Working out', 'Board games and cards', 'Darts', 'Skateboarding', 'Yoga', 'Watching sports', 'Napping',
+      'Building models', 'Knitting', 'Stargazing', 'Throwing a party', 'Grilling', 'Doing a puzzle' ] },
+    { id: 'creatures', title: 'Other creatures, besides the boxers', accent: '#9be3cf', options: [
+      'More dogs', 'Cats', 'Fish', 'Birds', 'Robot pets', 'Friendly little aliens', 'A space whale outside', 'None, just the boxers' ] },
+    { id: 'moving', title: 'Getting around', accent: '#f6c56b', options: [
+      'Monorail around the ring', 'Glass elevators', 'Pneumatic tubes', 'Slides and fire poles', 'Ladders and catwalks',
+      'Scooters and skateboards', 'Hover bikes', 'Shuttles at the dock', 'Cargo drones', 'Zip lines' ] },
+    { id: 'hidden', title: 'Hidden details to find', hint: 'Small things people only spot on a second look.', accent: '#c4b5fd', options: [
+      'Boxers hiding in odd places', "Friends' faces on posters", 'Your hometown on a screen', 'Inside jokes on signs',
+      'A tiny copy of the station inside the station', 'One hidden object to hunt for', 'A birthday party happening',
+      'Holiday decorations' ] },
+  ];
+
+  const state = { picks: {}, other: {}, notes: '' };
+  let dirty = false, writing = false, timer = null, db = null, docRef = null, readOnly = false;
+  const $ = id => document.getElementById(id);
+
+  function count() { return Object.values(state.picks).reduce((n, a) => n + a.length, 0); }
+  function setSave(t) { $('saveState').textContent = t; }
+
+  function render() {
+    const form = $('form');
+    form.textContent = '';
+    Q.forEach(q => {
+      const sec = document.createElement('section');
+      sec.className = 'section';
+      sec.style.setProperty('--accent', q.accent);
+      const h = document.createElement('h2'); h.id = 'h-' + q.id;
+      h.append(q.title);
+      const c = document.createElement('span'); c.className = 'count'; c.id = 'c-' + q.id; h.appendChild(c);
+      sec.appendChild(h);
+      if (q.hint || q.single) { const p = document.createElement('p'); p.className = 'hint'; p.textContent = q.hint || 'Pick one.'; sec.appendChild(p); }
+      const chips = document.createElement('div'); chips.className = 'chips'; chips.setAttribute('role', 'group'); chips.setAttribute('aria-labelledby', h.id);
+      q.options.forEach(o => {
+        const [label, sub, colors] = Array.isArray(o) ? o : [o];
+        const b = document.createElement('button'); b.type = 'button'; b.className = 'chip' + (q.wide ? ' wide' : '');
+        b.dataset.q = q.id; b.dataset.v = label;
+        if (colors) { const sw = document.createElement('span'); sw.className = 'sw'; colors.forEach(col => { const i = document.createElement('i'); i.style.background = col; sw.appendChild(i); }); b.appendChild(sw); }
+        const t = document.createElement('span'); t.textContent = label;
+        if (sub) { const s = document.createElement('small'); s.textContent = sub; t.appendChild(s); }
+        b.appendChild(t);
+        b.addEventListener('click', () => toggle(q, label));
+        chips.appendChild(b);
+      });
+      sec.appendChild(chips);
+      const other = document.createElement('input'); other.className = 'other'; other.id = 'o-' + q.id; other.autocomplete = 'off';
+      other.placeholder = 'Something else? Type it here';
+      other.setAttribute('aria-label', q.title + ': something else');
+      other.addEventListener('input', () => { state.other[q.id] = other.value; queue(); });
+      sec.appendChild(other);
+      form.appendChild(sec);
+    });
+    sync();
+  }
+
+  function sync() {
+    document.querySelectorAll('.chip').forEach(b => {
+      const on = (state.picks[b.dataset.q] || []).includes(b.dataset.v);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      b.disabled = readOnly;
+    });
+    Q.forEach(q => {
+      const n = (state.picks[q.id] || []).length;
+      $('c-' + q.id).textContent = n ? n + ' picked' : '';
+      const o = $('o-' + q.id);
+      if (document.activeElement !== o) o.value = state.other[q.id] || '';
+      o.readOnly = readOnly;
+    });
+    if (document.activeElement !== $('notes')) $('notes').value = state.notes || '';
+    $('notes').readOnly = readOnly;
+    $('pickCount').textContent = count();
+  }
+
+  function toggle(q, v) {
+    if (readOnly) return;
+    let cur = state.picks[q.id] || [];
+    if (q.single) cur = cur.includes(v) ? [] : [v];
+    else cur = cur.includes(v) ? cur.filter(x => x !== v) : [...cur, v];
+    state.picks[q.id] = cur;
+    sync(); queue(400);
+  }
+
+  function queue(delay = 700) {
+    if (!docRef || readOnly) return;
+    dirty = true; setSave('Saving…');
+    clearTimeout(timer); timer = setTimeout(flush, delay);
+  }
+  async function flush(retried) {
+    if (!dirty) return;
+    if (writing) { timer = setTimeout(flush, 300); return; }
+    dirty = false; writing = true;
+    try {
+      await docRef.set({ picks: state.picks, other: state.other, notes: state.notes });
+      if (!dirty) setSave('Saved');
+    } catch (e) {
+      if (e && e.code === 'unavailable' && !retried) { dirty = true; writing = false; setTimeout(() => flush(true), 900); return; }
+      if (e && e.code === 'invalid_argument') { readOnly = true; sync(); }
+      setSave('Not saved: ' + ((e && e.message) || 'try again'));
+    } finally { writing = false; if (dirty) { clearTimeout(timer); timer = setTimeout(flush, 0); } }
+  }
+
+  $('notes').addEventListener('input', e => { state.notes = e.target.value; queue(); });
+  render();
+
+  (async () => {
+    db = await window.claude?.use?.('db');
+    if (!db) {
+      setSave('Not connected');
+      const n = $('notice'); n.hidden = false; n.textContent = 'Open this page in Claude while signed in so your picks save.';
+      return;
+    }
+    const user = await window.claude.use('user');
+    if (user && user.can && (await user.can('data.write')) === false) readOnly = true;
+    docRef = db.doc('inventory/picks');
+    let loaded = false;
+    const slow = setTimeout(() => { if (!loaded) setSave('Still connecting…'); }, 10000);
+    docRef.onSnapshot(snap => {
+      if (!snap.metadata.fromCache) { loaded = true; clearTimeout(slow); }
+      if (snap.exists && !dirty && !writing) {
+        const d = snap.data();
+        state.picks = { ...(d.picks || {}) }; state.other = { ...(d.other || {}) }; state.notes = d.notes || '';
+        sync();
+      }
+      if (!dirty && !writing) setSave(readOnly ? 'View only' : snap.exists ? 'Saved' : 'Nothing picked yet');
+    }, err => {
+      clearTimeout(slow);
+      setSave('Could not load');
+      const n = $('notice'); n.hidden = false; n.textContent = 'Your picks could not load (' + ((err && err.code) || 'error') + '). Reopen the page to try again.';
+    });
+  })();
+})();
+</script>
