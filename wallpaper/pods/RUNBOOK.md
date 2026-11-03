@@ -1,8 +1,11 @@
 # Pod Planner: handling "generate pin" messages
 
 The Pod Planner page (https://claude.ai/artifact/KPF1KShwp4EHMLBdkxrNcy) marks
-a pin `status: "queued"` and messages this session:
-`Pod Planner: generate pin <id> (#<n>).` Handle it like this.
+a pin `status: "queued"` and wakes this session with
+`Pod Planner: generate pin <id> (#<n>).`, first as a comment sent to Claude on
+the page, else through Claude Code Remote `send_message`; if both fail, Conor
+says "generate pin <n>" in chat. Any queued pin found in the store is a
+request too. Handle it like this.
 
 1. **Read the pin.** `ArtifactData get` collection `pins`, doc `<id>`, with
    `out_dir: wallpaper/pods/work/_db`. Write `{...data, id}` to

@@ -164,7 +164,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
   const SERVER = 'Claude Code Remote';
   const $ = id => document.getElementById(id);
   const pins = new Map();       // id -> pin data
-  let db = null, mcp = null, readOnly = false, openId = null, zoom = 1, viewIdx = null;
+  let db = null, mcp = null, comments = null, readOnly = false, openId = null, zoom = 1, viewIdx = null;
   const pending = new Map(), timers = new Map(), writing = new Set();
   const sendNote = new Map();   // id -> message from the last send attempt
 
@@ -258,7 +258,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
       : p.status === 'working' ? 'Claude is painting this pod. It shows up here when it\'s done.'
       : p.status === 'error' ? (p.statusNote || 'That didn\'t work. Try again.')
       : (sendNote.get(openId) || '');
-    $('resend').hidden = readOnly || p.status !== 'queued' || !mcp;
+    $('resend').hidden = readOnly || p.status !== 'queued' || !(mcp || comments);
   }
 
   function setZoom(z) {
@@ -304,9 +304,21 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
   // ----- generating: mark the pin queued, then wake Claude's session -----
   async function nudge(id) {
     const p = pins.get(id);
+    const text = `Pod Planner: generate pin ${id} (#${p.n}).`;
+    // First route: a comment sent to Claude, which wakes the session watching this page.
+    if (comments) {
+      try {
+        if ((await comments.canSendToClaude()) === 'available') {
+          const anchor = await comments.anchorFor($('genBtn'));
+          await comments.sendToClaude({ anchor, text });
+          sendNote.set(id, 'Sent to Claude. Painting takes about two minutes; it shows up here when it\'s done.');
+          renderSheet(); return;
+        }
+      } catch (e) { /* fall through to the next route */ }
+    }
     if (!mcp) { sendNote.set(id, `Queued. Couldn't reach Claude from this page, so tell Claude in chat: "generate pin ${p.n}".`); renderSheet(); return; }
     try {
-      await mcp.callTool(SERVER, 'send_message', { session_id: SESSION, message: `Pod Planner: generate pin ${id} (#${p.n}).` });
+      await mcp.callTool(SERVER, 'send_message', { session_id: SESSION, message: text });
       sendNote.set(id, 'Sent to Claude. Painting takes about two minutes; it shows up here when it\'s done.');
     } catch (e) {
       const c = e && e.code;
@@ -325,14 +337,15 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
     if (!id || readOnly || busy(p)) return;
     if (!(p.touch || '').trim()) { $('genStatus').textContent = 'Write what goes here first.'; return; }
     $('genBtn').disabled = true;
+    sendNote.delete(id);
+    const sent = nudge(id);               // send while the tap still counts as the viewer's own gesture
     try {
       await flushNow(id);
       queue(id, { status: 'queued', statusNote: '', req: (p.req || 0) + 1 }, 0);
       await flushNow(id);
     } catch (e) { renderSheet(); return; }
-    sendNote.delete(id);
     renderSheet();
-    nudge(id);
+    await sent;
   }
   function useAsBase() {
     const p = pins.get(openId); const rs = renders(p);
@@ -401,6 +414,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
     const user = await window.claude.use('user');
     if (user && user.can && (await user.can('data.write')) === false) readOnly = true;
     mcp = await window.claude.use('mcp');
+    comments = await window.claude.use('comments');
     let loaded = false;
     const slow = setTimeout(() => { if (!loaded) $('count').textContent = 'Still connecting…'; }, 10000);
     db.collection('pins').onSnapshot(snap => {
