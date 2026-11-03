@@ -51,6 +51,7 @@ h1 .jp { display: inline-block; margin-left: .3em; font-size: .38em; vertical-al
 .pin.done { background: var(--mint); box-shadow: 0 0 0 2px #7fdcc966; }
 .pin.busy { background: #b9a7ff; box-shadow: 0 0 0 3px #b9a7ff66; }
 .pin.active { background: var(--sakura); }
+.roombox { position: absolute; border: 2px dashed var(--sakura); border-radius: 3px; pointer-events: none; box-shadow: 0 0 0 1px #0e1322aa; }
 
 .list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
 .item { display: grid; grid-template-columns: 34px 1fr auto; gap: 10px; align-items: start; text-align: left; width: 100%;
@@ -177,8 +178,14 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
 
   function render() {
     const map = $('map');
-    map.querySelectorAll('.pin').forEach(p => p.remove());
+    map.querySelectorAll('.pin, .roombox').forEach(p => p.remove());
     ordered().forEach(([id, p]) => {
+      if (Array.isArray(p.room) && p.room.length === 4) {   // the pod Claude repaints for this pin
+        const box = document.createElement('div'); box.className = 'roombox';
+        box.style.left = p.room[0] / 18.24 + '%'; box.style.top = p.room[1] / 12.8 + '%';
+        box.style.width = (p.room[2] - p.room[0]) / 18.24 + '%'; box.style.height = (p.room[3] - p.room[1]) / 12.8 + '%';
+        map.appendChild(box);
+      }
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'pin' + (busy(p) ? ' busy' : p.touch ? ' done' : '') + (id === openId ? ' active' : '');
@@ -229,7 +236,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .pin:focus-vi
       const labels = rs.map(x => x.kind === 'paint' ? 'v' + (++paintNo) : 'Before');
       const baseAsset = p.base || latest(p).asset;
       $('renderCap').innerHTML = '';
-      const b = document.createElement('b'); b.textContent = labels[idx] === 'Before' ? 'Before: the painting now' : 'Version ' + labels[idx].slice(1);
+      const b = document.createElement('b'); b.textContent = labels[idx] === 'Before' ? 'Before: the pink box is the pod that gets repainted' : 'Version ' + labels[idx].slice(1);
       $('renderCap').appendChild(b);
       if (r.asset === baseAsset) $('renderCap').append(' · next version builds on this');
       img.alt = labels[idx] === 'Before' ? 'This spot in the painting before any changes' : 'Pod render, version ' + labels[idx].slice(1);
