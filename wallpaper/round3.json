@@ -1,0 +1,58 @@
+{
+  "out": "raw",
+  "model": "gpt-image-2",
+  "quality": "high",
+  "text": {
+    "refs": "Reference images: the first shows the station's design (a giant sphere with a ring and docking modules); the second shows the target painting style and how densely crammed every room should be. Do not copy either layout exactly.",
+    "style": "Style: lofi anime illustration like Studio Ghibli background paintings, combined with the dense cross-section composition and fine ink linework of a classic 1990s cutaway picture book. Soft cel shading, painterly textures, thin ink outlines. Night: warm amber lamplight, glowing paper lanterns and soft pastel neon signs inside, against the deep blue-black of space outside. People are drawn with slightly chunky storybook proportions (heads a little large, simple friendly faces).",
+    "crammed": "It must feel as crammed as a Japanese night-market alley: many small rooms and stalls squeezed on top of and beside each other, mezzanines, ladders, catwalks, glass elevators and pneumatic tubes between them, and every room overflowing with unique, sensible objects: appliances, furniture, food, snacks, jars, gadgets, tools, plants, posters, cables. Dozens of cheerful people everywhere, every single one busy with their own task: cooking, eating, fixing a robot, watering plants, doing laundry, playing arcade games, singing karaoke, reading, carrying boxes, chatting, napping. Signs are small, short and in English (NOODLES, DUMPLINGS, TEA, ARCADE, KARAOKE, LAUNDRY, REPAIRS, DOG PARK, GARDEN, BAKERY, SNACKS, BATH HOUSE). Cozy, warm, happy and high-tech: nothing scary, no weapons, no danger.",
+    "inner": "Subject: the whole giant spherical space station as a cutaway, wide framing: the front of the grey armored hull is sliced away to reveal the inside from top to bottom, with the ring around it and docking arms reaching left and right to smaller cut-away modules (a greenhouse dome, a cargo dock with a little shuttle). Two fawn-and-white boxer dogs play with a ball on a patch of artificial grass in the dog park. The station sits slightly low in the frame: the top quarter of the image is calm starry space with nothing in it. A glowing blue planet low in one corner.",
+    "cover": "Subject: a closer, taller view through the middle of the same station: a tall vertical slice of the cutaway, filling the frame edge to edge with stacked decks, as if zoomed in on the station's centre. People are larger here, each about one tenth of the image height, so their faces read clearly. Two fawn-and-white boxer dogs play on a patch of artificial grass in a dog park deck near the middle. The curved grey hull edge is visible at the top, with a strip of starry space above it filling the top quarter of the image, calm with nothing important in it.",
+    "ref_style": "The reference image shows the target painting style and how densely crammed every room should be. Do not copy its layout or its shape: this is a sphere.",
+    "denser": "Rooms are small and numerous, at least forty little rooms, stalls and nooks inside the sphere, so it reads as a packed vertical city, not a few big boxes. Signs are small."
+  },
+  "assets": [
+    {
+      "id": "r3_inner",
+      "parts": [
+        "refs",
+        "style",
+        "crammed",
+        "inner"
+      ],
+      "size": "1824x1280",
+      "images": [
+        "raw/r2_inner.png",
+        "raw/style_blend.png"
+      ]
+    },
+    {
+      "id": "r3_cover",
+      "parts": [
+        "refs",
+        "style",
+        "crammed",
+        "cover"
+      ],
+      "size": "1280x1824",
+      "images": [
+        "raw/r2_inner.png",
+        "raw/style_blend.png"
+      ]
+    },
+    {
+      "id": "r3b_inner",
+      "parts": [
+        "ref_style",
+        "style",
+        "crammed",
+        "denser",
+        "inner"
+      ],
+      "size": "1824x1280",
+      "images": [
+        "raw/style_blend.png"
+      ]
+    }
+  ]
+}
