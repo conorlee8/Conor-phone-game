@@ -47,6 +47,9 @@ SIGNS = ["Zero-G Noodle Bar", "DUMPLING ORBIT", "Hot Pot Nebula", "Conveyor Sush
          "Wax Planet Records", "Panel Hatch Comics", "Dog-Eared Books", "FADE STATION", "IRON ORBIT GYM",
          "Steam Deck Baths", "POD POST", "Good Boy Vet", "Suds & Snouts", "Bolt's Repairs",
          "The Leaky Airlock", "CARTRIDGE CLUB"]
+# Guide-drawn signs came out as flat pasted-on placards, so the guide leaves
+# signs to the painter and only the names go in the prompt.
+DRAW_SIGNS = False
 SIGN_STYLES = ["board", "hanging", "neon", "vertical", "round", "awning", "marquee", "chalk", "neon", "board"]
 FONT_DIR = "/usr/share/fonts/truetype/"
 SIGN_FONTS = ["dejavu/DejaVuSans-Bold.ttf", "dejavu/DejaVuSerif-Bold.ttf", "freefont/FreeSerifBoldItalic.ttf",
@@ -58,8 +61,10 @@ SIGN_COLORS = [("#1f3b73", "#ffd166"), ("#b23a48", "#fff3e0"), ("#2f9c95", "#fdf
                ("#8fbf6a", "#1d3016"), ("#f2e6c8", "#b23a48")]
 OUTFITS = ["#e4572e", "#29335c", "#f3a712", "#a8c686", "#669bbc", "#c1121f", "#7b2cbf", "#ff7ab6",
            "#2a9d8f", "#e9c46a", "#264653", "#f4f1de", "#3d405b", "#81b29a", "#ff9f1c", "#118ab2"]
-SKINS = ["#f5d6c6", "#e8b896", "#c68e64", "#a0663f", "#7a4a2a", "#4e2f1d", "#f1c9a5", "#d9a37a"]
-HAIRS = ["#1b1b1b", "#3b2a1e", "#6b4226", "#d9b45a", "#b5502b", "#9a9a9a", "#e8e2d0", "#3a6ea5", "#e06aa3", "#2f2f2f"]
+SKINS = ["#f8dcc8", "#f3d0b5", "#efc6a6", "#f5d6c6", "#f1c9a5", "#ecc19d", "#f8dcc8", "#f3d0b5",
+         "#e8b896", "#d9a37a", "#c68e64", "#8d5a3b", "#5e3a24"]
+HAIRS = ["#e3c770", "#d9b45a", "#c8a165", "#8a5a33", "#6b4226", "#5a3a22", "#b5502b", "#a8432a",
+         "#9a9a9a", "#e8e2d0", "#3b2a1e", "#1b1b1b", "#3a6ea5", "#e06aa3"]
 
 # Ocean, neon night and retro 70s, plus a few warm creams so it is not all neon.
 TINTS = ["#6fd3c9", "#f08a76", "#d0569b", "#4cc3e0", "#8e6ad8", "#e07a3a", "#d9a62e", "#2f9c95",
@@ -466,7 +471,7 @@ def render(layout, cam, path, show_planet=True):
         for (_, px, pz) in r["animals"]:
             if math.hypot(px, y0 + 0.5) < R_IN - 0.3:
                 draw_dog(d, cam, px, pz, y0)
-        if r["sign"] and math.hypot((x0 + x1) / 2, y1) < R_IN:
+        if DRAW_SIGNS and r["sign"] and math.hypot((x0 + x1) / 2, y1) < R_IN:
             draw_sign(img, cam, r["sign"], r["sign_style"], a, b, b[1])
             d = ImageDraw.Draw(img)
         # Slab and frame at the cut face.

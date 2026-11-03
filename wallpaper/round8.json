@@ -1,0 +1,68 @@
+{
+  "out": "raw",
+  "model": "gpt-image-2",
+  "quality": "high",
+  "text": {
+    "guide": "The first image is a layout guide: paint over it. Keep its architecture: the sphere and hull, every room's position, size, floor height, perspective depth and wall colour, the open atrium shaft with its glass elevator, bridges and zip line, the closed hull patches with portholes, the pods bolted onto the outside of the hull, the pipes and balconies, the docking modules. The rooms are deliberately different sizes at staggered levels, like a station built up piece by piece over many years by different people: keep that irregularity, never straighten it into a grid. The guide's flat shapes are placeholders only: nothing in the final painting looks flat, blocky or diagrammatic. The second image shows the target painting style and linework: match its look, not its layout.",
+    "scale": "Scale: the small coloured figures in the guide are placeholders for people at their exact size and position, and the tan shapes are dogs. Replace every one with a fully painted, unique person (or dog), never a stick figure or mannequin: adults the same height as the figures, kids shorter, dogs knee-high. The white figures outside the hull are astronauts in spacesuits on tethers. Add more people and animals freely, always at the same scale and smaller further back.",
+    "rooms": "The blue box is a two-storey saltwater reef tank, the orange-floored double-height room is a basketball court, the room with a ramp is a skate park, the large green-floored room is the dog park and the smaller one a plant nursery. Other rooms are these shops, placed wherever they fit: FADE STATION; Good Boy Vet; Steam Deck Baths; Elliot & Colenzo Park; DUMPLING ORBIT; ORBIT CINEMA; Root Bound Plants; Starlite Diner; Airlock Ales; TACO MOON; Stick It Skewers; Panel Hatch Comics; Pie in the Sky; IRON ORBIT GYM; Wax Planet Records; The Leaky Airlock; Zero-G Noodle Bar. The rest are cozy homes, lounges, a 90s game room, a band practice room, workshops and storerooms, each one different.",
+    "depth": "Depth and spontaneity: every room is full of objects at different distances, things in the foreground overlapping the cut edge, plants spilling over balconies, laundry lines, cables and fairy lights strung between rooms, stairs and ladders cutting between floors, a cat on a ledge, a robot wandering a corridor, small hand-made additions bolted on wherever there was space.",
+    "style": "Style: lofi anime night scene with a strong touch of a classic 1990s ink-and-watercolour cutaway book: crisp, clean, precise ink outlines on every object, clear readable shapes, transparent watercolour washes, no murky brown haze. Soft cel shading. People are drawn with slightly chunky storybook proportions (heads a little large, simple friendly faces).",
+    "color": "Colour: varied and lively, never one amber tone. Lead with three palettes mixed room by room: ocean (navy, aqua, coral), neon night (magenta, cyan, violet) and retro 70s (burnt orange, mustard, teal). Each room has its own light: aqua glow from fish tanks, magenta and cyan neon in the arcade, warm orange in the diner, cool white in the vet and gym, violet grow lights in the nursery, red lanterns at the dumpling stall. People wear many different colourful outfits. The grey hull and deep navy space frame all that colour.",
+    "tech": "Tech is a cozy mix of 1990s, Y2K and near-future: chunky CRT TVs and grey 90s game consoles with three-pronged controllers next to holograms, glowing glass panels, little helper robots, robot vacuums, drones, lava lamps, neon signs, vending machines, radio antenna rigs. 90s kid touches everywhere: green slime splat posters, inflatable chairs, posters of spiky-haired anime fighters with glowing auras, VHS stacks.",
+    "busy": "Dozens of cheerful people everywhere, every one busy: gaming, cooking, gardening, lifting weights, watching a game on a big screen, grilling, throwing a party, stargazing through a telescope, skateboarding, reading, jamming in a band, fixing a robot. Animals too: dogs, cats, birds, fish and a couple of friendly little green aliens. Two fawn-and-white boxer dogs play in the dog park, and tiny boxer look-alikes hide in odd places (a boxer plush, a boxer poster, a boxer peeking out of a tube). People ride glass elevators, pneumatic tubes, scooters, skateboards and a zip line across an open atrium. Cozy, warm, happy and high-tech: nothing scary, no weapons.",
+    "sky": "Above the station the sky is deep starry space, kept fairly calm near the very top for the clock, with only a few small distant things there.",
+    "fill": "There is no empty, plain or dark dead space anywhere. The brown areas between and behind rooms are crawlspaces, ducts and cable runs, and every one has something going on: rats scurrying along pipes, a cat stalking a mouse, tangled wires and dripping pipes with steam, a maintenance robot squeezing through, someone's secret hideout with a mattress and a lamp, crates and junk, a lost sock, a stash of snacks. Walls, ceilings and floors all carry detail: posters, shelves, rugs, stains, stickers, graffiti, plants. Outside, the hull has bolted-on pods with lit windows, antennas, astronauts doing repairs, and a few small ships passing.",
+    "unique": "Nothing is repeated or copy-pasted. Every room has its own furniture, lamps, posters and objects: no two rooms share the same chairs, tables or decor.",
+    "signs": "Signs: far fewer and smaller than you'd expect, and part of the architecture, never big labels across the top of every room. Only about one room in three shows its name, and each does it its own way: a small neon word glowing in a window, lettering hand-painted straight onto a wall or a door, a little wooden board on a bracket, a fabric curtain over a doorway, a menu chalkboard, a sticker on a vending machine, a lightbox above a counter. Lettering is well drawn and spelled correctly, in proportion with the room, and fits the painting style.",
+    "crowd": "The crowd: mostly white people of European background with varied, individual looks: blonde, strawberry-blonde, red, light brown, dark brown and grey hair, freckles, beards and stubble, curly and straight hair, glasses, hats; with some Black, Latino and Asian people mixed in naturally. Not everyone has black hair and not everyone has the same face: avoid a uniform anime face. Ages from kids to grandparents, different builds, and everyone in their own style of clothes. The coloured figures in the guide suggest each person's outfit, skin tone and hair."
+  },
+  "assets": [
+    {
+      "id": "r8_inner",
+      "parts": [
+        "guide",
+        "scale",
+        "rooms",
+        "signs",
+        "crowd",
+        "fill",
+        "unique",
+        "depth",
+        "style",
+        "color",
+        "tech",
+        "busy",
+        "sky"
+      ],
+      "size": "1824x1280",
+      "images": [
+        "guides/inner_guide.png",
+        "raw/r5_cover.png"
+      ]
+    },
+    {
+      "id": "r8_cover",
+      "parts": [
+        "guide",
+        "scale",
+        "rooms",
+        "signs",
+        "crowd",
+        "fill",
+        "unique",
+        "depth",
+        "style",
+        "color",
+        "tech",
+        "busy",
+        "sky"
+      ],
+      "size": "1280x1824",
+      "images": [
+        "guides/cover_guide.png",
+        "raw/r5_cover.png"
+      ]
+    }
+  ]
+}
