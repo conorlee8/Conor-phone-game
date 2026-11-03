@@ -1,0 +1,46 @@
+{
+  "out": "raw",
+  "model": "gpt-image-2",
+  "quality": "high",
+  "text": {
+    "ref": "The reference image shows the target painting style, ink linework and colour treatment. Match that look, but paint all-new rooms and a new layout from the list below.",
+    "style": "Style: lofi anime night scene with a strong touch of a classic 1990s ink-and-watercolour cutaway book: crisp, clean, precise ink outlines on every object, clear readable shapes, transparent watercolour washes, no murky brown haze. Soft cel shading. People are drawn with slightly chunky storybook proportions (heads a little large, simple friendly faces).",
+    "color": "Colour: varied and lively, never one amber tone. Lead with three palettes mixed room by room: ocean (navy, aqua, coral), neon night (magenta, cyan, violet) and retro 70s (burnt orange, mustard, teal). Each room has its own light: aqua glow from fish tanks, magenta and cyan neon in the arcade, warm orange in the diner, cool white in the vet and gym, violet grow lights in the nursery, red lanterns at the dumpling stall. People wear many different colourful outfits. The grey hull and deep navy space frame all that colour.",
+    "tech": "Tech is a cozy mix of 1990s, Y2K and near-future: chunky CRT TVs and grey 90s game consoles with three-pronged controllers next to holograms, glowing glass panels, little helper robots, robot vacuums, drones, lava lamps, neon signs, vending machines, radio antenna rigs. 90s kid touches everywhere: green slime splat posters, inflatable chairs, posters of spiky-haired anime fighters with glowing auras, VHS stacks.",
+    "busy": "Dozens of cheerful people everywhere, every one busy: gaming, cooking, gardening, lifting weights, watching a game on a big screen, grilling, throwing a party, stargazing through a telescope, skateboarding, reading, jamming in a band, fixing a robot. Animals too: dogs, cats, birds, fish and a couple of friendly little green aliens. Two fawn-and-white boxer dogs play in the dog park, and tiny boxer look-alikes hide in odd places (a boxer plush, a boxer poster, a boxer peeking out of a tube). People ride glass elevators, pneumatic tubes, scooters, skateboards and a zip line across an open atrium. Signs are small, short and in English. Cozy, warm, happy and high-tech: nothing scary, no weapons.",
+    "inner_rooms": "Subject: the whole giant spherical space station as a cutaway, wide framing, the front of the grey armored hull sliced away to reveal at least forty small rooms crammed on top of each other like a vertical night market and apartment block, with docking arms to a greenhouse dome and a shuttle repair garage. Rooms include: a dumpling and noodle stall with steaming baskets, a hot pot restaurant, a sushi conveyor bar, a street skewer grill, a pizza counter with a brick oven, a taco window, a chrome 50s-style breakfast diner, a steakhouse with a sizzling grill, a brewery pub with copper tanks and beer taps, an arcade with a claw machine, a 90s game lounge, a small movie theater with a projector, a record store, a comic shop, a bookshop, a barber shop, a gym, a basketball half court, a skate ramp, ping pong and pool tables, a bath house pool and hot tub, a plant nursery full of bonsai, monsteras, cacti, moss walls and hanging vines, hydroponic veggie racks and fruit trees, a huge saltwater reef tank and a freshwater tank, algae tanks, a post office full of parcels and pneumatic tubes, a dog groomer and vet, cozy apartments with loft beds, couches buried in blankets, hanging egg chairs, fireplaces, rugs, overflowing bookshelves and string lights, and a dog park with artificial grass. A tiny model of the station sits on one shelf. The station sits slightly low: the top quarter of the image is calm starry space with nothing in it. A glowing blue planet low in one corner.",
+    "cover_rooms": "Subject: a closer, taller view through the middle of the same station, a vertical slice of the cutaway filling the frame edge to edge with stacked rooms. People are larger here, each about one tenth of the image height, so faces read clearly. Rooms include: a 90s game lounge with a CRT TV, grey console and three-pronged controllers, slime posters and an inflatable chair; an arcade with neon and a claw machine; a chrome breakfast diner; a dumpling stall with red lanterns; a hot pot table; a huge glowing saltwater reef tank; a plant nursery with bonsai, monsteras and hanging vines; a gym and basketball hoop; a record store; a barber shop; a brewery pub; a garage band jamming; and a dog park where two fawn-and-white boxer dogs play. A zip line crosses one open room. The curved grey hull edge at the top, with a strip of starry space above it filling the top quarter of the image, calm with nothing important in it."
+  },
+  "assets": [
+    {
+      "id": "r5_inner",
+      "parts": [
+        "ref",
+        "style",
+        "color",
+        "tech",
+        "busy",
+        "inner_rooms"
+      ],
+      "size": "1824x1280",
+      "images": [
+        "raw/r4_cover.png"
+      ]
+    },
+    {
+      "id": "r5_cover",
+      "parts": [
+        "ref",
+        "style",
+        "color",
+        "tech",
+        "busy",
+        "cover_rooms"
+      ],
+      "size": "1280x1824",
+      "images": [
+        "raw/r4_cover.png"
+      ]
+    }
+  ]
+}
