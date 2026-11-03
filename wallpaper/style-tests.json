@@ -1,0 +1,19 @@
+{
+  "out": "raw",
+  "model": "gpt-image-2",
+  "size": "1536x1024",
+  "quality": "high",
+  "text": {
+    "ink": "Style: a detailed pen-and-ink and watercolour cutaway illustration in the tradition of classic 1990s cross-section picture books. Fine, precise ink linework, soft transparent watercolour washes, the structure floating on a plain cream paper background, an enormous density of tiny hand-drawn detail.",
+    "lofi": "Style: lofi anime illustration like Studio Ghibli background paintings. Soft cel shading, thin ink outlines, painterly textures, warm amber lamplight mixed with soft pastel neon, a calm cozy late-night mood.",
+    "cartoon": "Style: an early-2000s Saturday-morning TV cartoon. Bold clean black outlines, flat saturated colours with simple two-tone shading, bubbly rounded retro-futurist architecture with tubes, domes and antennae, goofy and cheerful.",
+    "blend": "Style: the dense cross-section composition and fine ink linework of a classic 1990s cutaway picture book, painted in the warm lofi anime style of Studio Ghibli background art: soft cel shading, painterly textures, glowing paper lanterns and pastel neon signs, warm amber light inside against the deep blue of space. People are drawn with slightly chunky storybook proportions (heads a little large, simple friendly faces) like a busy children's picture book where everyone is doing something.",
+    "scene": "Subject: a cutaway cross-section through one slice of a giant, cozy, futuristic space station where a whole community lives. The front of the hull is sliced away to show five decks crammed on top of each other like a bustling Japanese night-market alley stacked vertically: a noodle stall with steaming pots, paper lanterns and fabric shop curtains; a tiny ramen counter with stools; glowing vending machines; a hydroponic garden deck with tomatoes, herbs and lettuce under grow lights; a cramped cozy apartment with a loft bed, beanbags, a gaming setup and string lights; a laundromat with round washers; a little workshop where a friendly robot is being repaired; a patch of artificial grass where two fawn-and-white boxer dogs play with a ball; a kitchen with a rice cooker, a kettle and shelves stacked with snacks, jars and instant noodles. Pipes, cables, ladders, tiny elevators and pneumatic tubes connect everything. A big round window shows stars and a blue planet outside. Dozens of small cheerful people fill every room, each busy with their own task: cooking, fixing things, watering plants, shopping, napping, playing video games, carrying boxes, chatting. Every surface is packed with unique, sensible objects: appliances, furniture, food, gadgets, tools, plants. Shop signs and product packaging are the only writing. Each person is small but clearly readable, about one twelfth of the image height. Cozy, warm, happy and high-tech: nothing scary, no weapons, no danger."
+  },
+  "assets": [
+    { "id": "style_ink", "parts": ["ink", "scene"] },
+    { "id": "style_lofi", "parts": ["lofi", "scene"] },
+    { "id": "style_cartoon", "parts": ["cartoon", "scene"] },
+    { "id": "style_blend", "parts": ["blend", "scene"] }
+  ]
+}

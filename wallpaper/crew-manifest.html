@@ -1,0 +1,533 @@
+<title>Crew Manifest</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=IBM+Plex+Mono:wght@500&family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<style>
+/* Layout: a night-shift station roster. Header with crew progress, a grid of crew badges, and a bottom sheet to fill in one person. */
+:root {
+  --void: #0e1322;
+  --hull: #171e33;
+  --panel: #1f2843;
+  --line: #2f3a5e;
+  --ink: #eef1f8;
+  --muted: #9ba5c2;
+  --lantern: #ffb45e;
+  --mint: #7fdcc9;
+  --sakura: #f4a0b8;
+  --display: "Dela Gothic One", "Hiragino Sans", system-ui, sans-serif;
+  --body: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--void);
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, #ffffff55 50%, transparent 51%),
+    radial-gradient(1px 1px at 78% 9%, #ffffff44 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 64% 42%, #ffffff33 50%, transparent 51%),
+    radial-gradient(1px 1px at 30% 70%, #ffffff33 50%, transparent 51%),
+    radial-gradient(1px 1px at 90% 80%, #ffffff44 50%, transparent 51%);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 72px;
+}
+.wrap { max-width: 980px; margin: 0 auto; display: grid; gap: 24px; }
+
+.top { display: grid; gap: 10px; }
+.eyebrow { margin: 0; font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--mint); }
+h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(36px, 8vw, 60px); line-height: 1; letter-spacing: .01em; text-wrap: balance; }
+h1 .jp { display: inline-block; margin-left: .3em; font-size: .38em; vertical-align: .5em; color: var(--lantern); letter-spacing: .1em; }
+.lede { margin: 0; max-width: 60ch; color: var(--muted); }
+.progress { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; font-family: var(--mono); font-size: 13px; color: var(--muted); }
+.bar { flex: 1 1 180px; max-width: 360px; height: 8px; border-radius: 99px; background: var(--hull); border: 1px solid var(--line); overflow: hidden; }
+.bar span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--lantern), var(--sakura)); transition: width .4s ease; }
+
+.notice { margin: 0; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--lantern); color: var(--ink); background: var(--hull); }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.card {
+  position: relative; display: grid; grid-template-columns: 76px 1fr; gap: 14px; align-items: center;
+  width: 100%; padding: 12px; text-align: left; cursor: pointer;
+  font: inherit; color: inherit; background: var(--hull);
+  border: 1px solid var(--line); border-radius: 14px;
+}
+.card:hover { border-color: var(--muted); }
+.card:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+.avatar { width: 76px; height: 76px; border-radius: 10px; overflow: hidden; background: var(--panel); display: grid; place-items: center; color: var(--muted); font-family: var(--display); font-size: 28px; }
+.avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.avatar svg { width: 38px; height: 38px; fill: var(--muted); }
+.meta { display: grid; gap: 2px; min-width: 0; }
+.role { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.name { font-weight: 700; font-size: 18px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.name.empty { color: var(--muted); font-weight: 500; }
+.status { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+.dots { display: inline-flex; gap: 3px; }
+.dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--line); }
+.dots i.on { background: var(--lantern); }
+.card.ready .dots i.on { background: var(--mint); }
+.crewno { position: absolute; top: 10px; right: 12px; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+.add { justify-self: start; font: inherit; font-weight: 700; color: var(--void); background: var(--lantern); border: 0; border-radius: 99px; padding: 10px 18px; cursor: pointer; }
+.add-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.ghost { font: inherit; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 99px; padding: 10px 18px; cursor: pointer; }
+
+/* Sheet */
+.sheet { position: fixed; inset: 0; z-index: 20; display: grid; align-items: end; justify-items: center; }
+.backdrop { position: absolute; inset: 0; background: #05081299; }
+.panel {
+  position: relative; width: 100%; max-width: 620px; max-height: 92%; overflow-y: auto;
+  background: var(--hull); border: 1px solid var(--line); border-bottom: 0; border-radius: 18px 18px 0 0;
+  padding-left: max(18px, env(safe-area-inset-left, 0px));
+  padding-right: max(18px, env(safe-area-inset-right, 0px));
+  padding-top: 0;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  display: grid; gap: 18px;
+}
+.panel-head { position: sticky; top: 0; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 0 12px; background: var(--hull); border-bottom: 1px solid var(--line); }
+.panel-head h2 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 24px; line-height: 1.1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.done { font: inherit; font-weight: 700; color: var(--void); background: var(--mint); border: 0; border-radius: 99px; padding: 8px 16px; cursor: pointer; flex: none; }
+
+.photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; }
+.thumb { position: relative; aspect-ratio: 1; max-width: 100%; border-radius: 10px; overflow: hidden; background: var(--panel); }
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; color: transparent; }
+.thumb button { position: absolute; top: 4px; right: 4px; font: inherit; font-size: 12px; font-weight: 700; color: var(--ink); background: #0e1322cc; border: 1px solid var(--line); border-radius: 99px; padding: 2px 8px; cursor: pointer; }
+.thumb button.confirm { background: var(--sakura); color: var(--void); border-color: var(--sakura); }
+.addtile { aspect-ratio: 1; border-radius: 10px; border: 1.5px dashed var(--lantern); color: var(--lantern); background: transparent; font: inherit; font-weight: 700; font-size: 14px; display: grid; place-items: center; text-align: center; cursor: pointer; padding: 6px; }
+.addtile span { display: block; font-size: 28px; line-height: 1; }
+.uploadline { margin: 0; font-family: var(--mono); font-size: 13px; color: var(--lantern); min-height: 1.5em; }
+.tips { margin: 0; padding: 12px 14px; border-radius: 10px; background: var(--panel); font-size: 14px; color: var(--muted); }
+.tips b { color: var(--ink); }
+.tips ul { margin: 6px 0 0; padding-left: 18px; }
+
+.field { display: grid; gap: 6px; }
+.field label { font-weight: 700; font-size: 14px; }
+.field .hint { font-size: 13px; color: var(--muted); margin-top: -4px; }
+.field input, .field textarea {
+  width: 100%; font: inherit; color: var(--ink); background: var(--void);
+  border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px;
+}
+.field textarea { min-height: 76px; resize: vertical; }
+.field input::placeholder, .field textarea::placeholder { color: #6c7593; }
+.panel-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-top: 6px; border-top: 1px solid var(--line); }
+.saved { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.remove { font: inherit; font-size: 14px; color: var(--sakura); background: transparent; border: 1px solid var(--sakura); border-radius: 99px; padding: 6px 14px; cursor: pointer; }
+.remove.confirm { background: var(--sakura); color: var(--void); }
+
+.foot { color: var(--muted); font-size: 13px; max-width: 64ch; margin: 0; }
+
+@media (min-width: 700px) {
+  .sheet { align-items: center; }
+  .panel { border-radius: 18px; border-bottom: 1px solid var(--line); max-height: 88%; }
+}
+@media (prefers-reduced-motion: reduce) { .bar span { transition: none; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">Station residents · photo intake</p>
+    <h1>Crew Manifest<span class="jp">乗組員</span></h1>
+    <p class="lede">Everyone who lives on the station. Tap a person, add 3 to 5 photos and a few notes about them. Claude turns each one into a character for the wallpaper.</p>
+    <div class="progress"><div class="bar"><span id="barFill"></span></div><span id="progressText">Loading crew…</span></div>
+  </header>
+  <p id="notice" class="notice" hidden></p>
+  <main id="grid" class="grid" aria-live="polite"></main>
+  <div class="add-row" id="addRow" hidden>
+    <button class="add" id="addPerson" type="button">Add a person</button>
+    <button class="ghost" id="addDog" type="button">Add a dog</button>
+  </div>
+  <p class="foot">Photos stay in this page's private storage. Only people you share the page with can see them.</p>
+</div>
+
+<div class="sheet" id="sheet" hidden>
+  <div class="backdrop" id="backdrop"></div>
+  <section class="panel" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div class="panel-head">
+      <h2 id="sheetTitle">Crew member</h2>
+      <button class="done" id="doneBtn" type="button">Done</button>
+    </div>
+    <div class="photos" id="photos"></div>
+    <input type="file" id="fileInput" accept="image/*" multiple hidden>
+    <p class="uploadline" id="uploadLine"></p>
+    <div class="tips" id="tips"></div>
+    <div class="field">
+      <label for="f-name">Name</label>
+      <input id="f-name" autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="f-role">Who they are to you</label>
+      <input id="f-role" autocomplete="off" placeholder="Friend, Mom, roommate…">
+    </div>
+    <div class="field">
+      <label for="f-doing" id="l-doing">What are they doing on the station?</label>
+      <p class="hint" id="h-doing">Their job or hobby up there. This is how people spot them in the crowd.</p>
+      <textarea id="f-doing"></textarea>
+    </div>
+    <div class="field">
+      <label for="f-look" id="l-look">How to recognize them</label>
+      <textarea id="f-look"></textarea>
+    </div>
+    <div class="field">
+      <label for="f-item">Signature item</label>
+      <input id="f-item" autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="f-height" id="l-height">Height</label>
+      <input id="f-height" autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="f-notes">Anything else</label>
+      <textarea id="f-notes" placeholder="Inside jokes, favorite food, who they're always next to…"></textarea>
+    </div>
+    <div class="panel-foot">
+      <span class="saved" id="savedLine">Changes save as you type.</span>
+      <button class="remove" id="removeMember" type="button">Remove from crew</button>
+    </div>
+  </section>
+</div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const PAW = '<svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="5" ry="4.2"/><circle cx="6" cy="10" r="2.2"/><circle cx="18" cy="10" r="2.2"/><circle cx="9.3" cy="6" r="2.1"/><circle cx="14.7" cy="6" r="2.1"/></svg>';
+  const FIELDS = ['name', 'role', 'doing', 'look', 'item', 'height', 'notes'];
+  const COPY = {
+    person: {
+      tips: '<b>Best photos</b><ul><li>Face straight on, good light</li><li>Face at an angle</li><li>Full body, standing, in their usual clothes</li><li>Anything that is very them: a hat, a tattoo, a favorite jacket</li></ul>',
+      doing: 'Running the noodle stall, fixing a robot, DJing, napping in a hammock…',
+      look: 'Curly red hair, round glasses, beard, always in a green hoodie…',
+      lookLabel: 'How to recognize them',
+      doingLabel: 'What are they doing on the station?',
+      heightLabel: 'Height',
+      height: '5\'9", tallest of the group…',
+      item: 'Skateboard, guitar, giant coffee mug…',
+    },
+    dog: {
+      tips: '<b>Best photos</b><ul><li>Whole body from the side</li><li>Face straight on</li><li>Close-ups of markings (white chest, socks, face blaze)</li><li>Standing next to a person, to show size</li></ul>',
+      doing: 'Begging at the noodle stall, napping in the sunny window…',
+      look: 'Fawn with a white chest and white socks, black mask, floppy ears, red collar…',
+      lookLabel: 'Coat, markings and collar',
+      doingLabel: 'What are they up to on the station?',
+      heightLabel: 'Size',
+      height: '70 lb, tall for a boxer…',
+      item: 'Favorite toy, bandana…',
+    },
+  };
+
+  let db = null, assets = null;
+  const crew = new Map();       // id -> data, merged with this tab's unsaved edits
+  let order = [];               // ids in roster order
+  let openId = null;
+  let readOnly = false;
+
+  // ---------- writes: one at a time per document, coalesced ----------
+  const pending = new Map(), timers = new Map(), writing = new Set();
+  function queuePatch(id, patch, delay = 700) {
+    pending.set(id, { ...(pending.get(id) || {}), ...patch });
+    crew.set(id, { ...(crew.get(id) || {}), ...patch });
+    clearTimeout(timers.get(id));
+    timers.set(id, setTimeout(() => flush(id), delay));
+    if (id === openId) $('savedLine').textContent = 'Saving…';
+  }
+  async function flush(id, retried = false) {
+    if (writing.has(id)) { timers.set(id, setTimeout(() => flush(id), 300)); return; }
+    const patch = pending.get(id);
+    if (!patch) return;
+    pending.delete(id);
+    writing.add(id);
+    try {
+      await db.doc('crew/' + id).update(patch);
+      if (id === openId && !pending.has(id)) $('savedLine').textContent = 'Saved';
+    } catch (e) {
+      if (e && e.code === 'unavailable' && !retried) {
+        pending.set(id, { ...patch, ...(pending.get(id) || {}) });
+        writing.delete(id);
+        setTimeout(() => flush(id, true), 800 + Math.random() * 800);
+        return;
+      }
+      if (e && e.code === 'invalid_argument') setReadOnly();
+      if (id === openId) $('savedLine').textContent = 'Not saved: ' + ((e && e.message) || 'try again');
+    } finally {
+      writing.delete(id);
+      if (pending.has(id)) { clearTimeout(timers.get(id)); timers.set(id, setTimeout(() => flush(id), 0)); }
+    }
+  }
+  function flushNow(id) { clearTimeout(timers.get(id)); return flush(id); }
+
+  // ---------- rendering ----------
+  const photoUrl = pid => '/_blob/' + pid;
+  const kindOf = m => (m && m.kind === 'dog' ? 'dog' : 'person');
+
+  function renderProgress() {
+    const total = order.length;
+    const ready = order.filter(id => ((crew.get(id) || {}).photos || []).length >= 3).length;
+    $('barFill').style.width = total ? (ready / total) * 100 + '%' : '0';
+    $('progressText').textContent = total ? `${ready} of ${total} crew have 3+ photos` : 'No crew yet';
+  }
+
+  function avatarFor(m, el) {
+    el.textContent = '';
+    const first = (m.photos || [])[0];
+    if (first) {
+      const img = document.createElement('img');
+      img.src = photoUrl(first); img.alt = ''; img.loading = 'lazy'; img.decoding = 'async';
+      img.onerror = () => { el.textContent = ''; placeholder(m, el); };
+      el.appendChild(img);
+    } else placeholder(m, el);
+  }
+  function placeholder(m, el) {
+    if (kindOf(m) === 'dog') el.innerHTML = PAW;
+    else el.textContent = (m.name || m.role || '?').trim().charAt(0).toUpperCase() || '?';
+  }
+
+  function renderGrid() {
+    const grid = $('grid');
+    grid.textContent = '';
+    if (!order.length) {
+      const p = document.createElement('p');
+      p.className = 'notice';
+      p.textContent = 'No one on the manifest yet. Add the first person below.';
+      grid.appendChild(p);
+    }
+    order.forEach((id, i) => {
+      const m = crew.get(id) || {};
+      const n = (m.photos || []).length;
+      const card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'card' + (n >= 3 ? ' ready' : '');
+      card.addEventListener('click', () => openSheet(id));
+
+      const av = document.createElement('div'); av.className = 'avatar'; avatarFor(m, av);
+      const meta = document.createElement('div'); meta.className = 'meta';
+      const role = document.createElement('span'); role.className = 'role'; role.textContent = m.role || (kindOf(m) === 'dog' ? 'Dog' : 'Crew');
+      const name = document.createElement('span'); name.className = 'name' + (m.name ? '' : ' empty'); name.textContent = m.name || 'Add name';
+      const status = document.createElement('span'); status.className = 'status';
+      const dots = document.createElement('span'); dots.className = 'dots';
+      for (let k = 0; k < 5; k++) { const d = document.createElement('i'); if (k < n) d.className = 'on'; dots.appendChild(d); }
+      const label = document.createElement('span');
+      label.textContent = n === 0 ? 'No photos yet' : n < 3 ? `${n} photo${n > 1 ? 's' : ''}, add ${3 - n} more` : `${n} photos`;
+      status.append(dots, label);
+      meta.append(role, name, status);
+      const no = document.createElement('span'); no.className = 'crewno'; no.textContent = String(i + 1).padStart(2, '0');
+      card.append(av, meta, no);
+      grid.appendChild(card);
+    });
+    renderProgress();
+  }
+
+  function renderSheetPhotos() {
+    if (!openId) return;
+    const m = crew.get(openId) || {};
+    const box = $('photos');
+    box.textContent = '';
+    (m.photos || []).forEach(pid => {
+      const t = document.createElement('div'); t.className = 'thumb';
+      const img = document.createElement('img'); img.src = photoUrl(pid); img.alt = 'Photo of ' + (m.name || 'crew member'); img.decoding = 'async';
+      t.appendChild(img);
+      if (!readOnly && assets) {
+        const x = document.createElement('button'); x.type = 'button'; x.textContent = 'Remove';
+        x.setAttribute('aria-label', 'Remove this photo');
+        x.addEventListener('click', () => {
+          if (!x.classList.contains('confirm')) { x.classList.add('confirm'); x.textContent = 'Tap to confirm'; setTimeout(() => { x.classList.remove('confirm'); x.textContent = 'Remove'; }, 3000); return; }
+          removePhoto(openId, pid);
+        });
+        t.appendChild(x);
+      }
+      box.appendChild(t);
+    });
+    if (!readOnly && assets) {
+      const add = document.createElement('button'); add.type = 'button'; add.className = 'addtile';
+      add.innerHTML = '<div><span>+</span>Add photos</div>';
+      add.addEventListener('click', () => $('fileInput').click());
+      box.appendChild(add);
+    }
+  }
+
+  function fillFields() {
+    const m = crew.get(openId) || {};
+    const c = COPY[kindOf(m)];
+    $('sheetTitle').textContent = m.name || m.role || 'Crew member';
+    $('tips').innerHTML = c.tips;
+    $('l-doing').textContent = c.doingLabel;
+    $('l-look').textContent = c.lookLabel;
+    $('l-height').textContent = c.heightLabel;
+    $('f-doing').placeholder = c.doing;
+    $('f-look').placeholder = c.look;
+    $('f-height').placeholder = c.height;
+    $('f-item').placeholder = c.item;
+    $('h-doing').hidden = kindOf(m) === 'dog';
+    FIELDS.forEach(f => {
+      const el = $('f-' + f);
+      if (document.activeElement !== el) el.value = m[f] || '';
+      el.readOnly = readOnly;
+    });
+    $('removeMember').hidden = readOnly;
+  }
+
+  function openSheet(id) {
+    openId = id;
+    $('uploadLine').textContent = '';
+    $('savedLine').textContent = readOnly ? 'View only' : 'Changes save as you type.';
+    fillFields();
+    renderSheetPhotos();
+    $('sheet').hidden = false;
+    document.body.style.overflow = 'hidden';
+    resetRemove();
+    setTimeout(() => $('doneBtn').focus(), 0);
+  }
+  function closeSheet() {
+    if (openId) flushNow(openId);
+    openId = null;
+    $('sheet').hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  // ---------- photos ----------
+  async function shrink(file) {
+    const MAX = 2048;
+    try {
+      const bmp = await createImageBitmap(file);
+      const s = Math.min(1, MAX / Math.max(bmp.width, bmp.height));
+      const c = document.createElement('canvas');
+      c.width = Math.round(bmp.width * s); c.height = Math.round(bmp.height * s);
+      c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+      if (bmp.close) bmp.close();
+      const blob = await new Promise(r => c.toBlob(r, 'image/jpeg', 0.9));
+      if (blob) return blob;
+    } catch (e) { /* fall through to the original file */ }
+    return file;
+  }
+
+  async function addPhotos(id, files) {
+    const list = [...files];
+    let ok = 0, failed = 0;
+    for (let i = 0; i < list.length; i++) {
+      if (id === openId) $('uploadLine').textContent = `Uploading ${i + 1} of ${list.length}…`;
+      try {
+        const blob = await shrink(list[i]);
+        const type = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'].includes(blob.type) ? blob.type : 'image/jpeg';
+        const r = await assets.upload(blob, { type });
+        const photos = [...((crew.get(id) || {}).photos || []), r.id];
+        queuePatch(id, { photos }, 200);
+        ok++;
+        renderSheetPhotos(); renderGrid();
+      } catch (e) {
+        failed++;
+        const code = e && e.code;
+        const why = code === 'unsupported_type' ? 'that photo format is not supported, try a JPEG or PNG'
+          : code === 'too_large' ? 'that photo is over 20 MB'
+          : code === 'quota_or_state' ? 'the page is out of photo storage'
+          : code === 'rate_limited' ? 'too many uploads at once, wait a moment and try again'
+          : 'the upload did not go through';
+        if (id === openId) $('uploadLine').textContent = `Photo ${i + 1} not added: ${why}.`;
+        if (code === 'quota_or_state' || code === 'not_granted' || code === 'capability_disabled') break;
+      }
+    }
+    if (id === openId && !failed) $('uploadLine').textContent = ok ? `Added ${ok} photo${ok > 1 ? 's' : ''}.` : '';
+  }
+
+  async function removePhoto(id, pid) {
+    const photos = ((crew.get(id) || {}).photos || []).filter(p => p !== pid);
+    queuePatch(id, { photos }, 0);
+    renderSheetPhotos(); renderGrid();
+    try { await flushNow(id); await assets.delete(pid); } catch (e) { /* row no longer points at it either way */ }
+  }
+
+  // ---------- members ----------
+  async function addMember(kind) {
+    if (!db || readOnly) return;
+    const id = kind + '-' + Math.random().toString(36).slice(2, 8);
+    const maxOrder = Math.max(0, ...order.map(i => (crew.get(i) || {}).order || 0));
+    const data = { kind, role: kind === 'dog' ? 'Dog' : 'Friend', name: '', photos: [], order: maxOrder + 1 };
+    crew.set(id, data); order.push(id); renderGrid();
+    try { await db.doc('crew/' + id).set(data); openSheet(id); }
+    catch (e) { if (e && e.code === 'invalid_argument') setReadOnly(); showNotice('Could not add someone: ' + ((e && e.message) || 'try again')); }
+  }
+
+  let removeTimer = null;
+  function resetRemove() { const b = $('removeMember'); b.classList.remove('confirm'); b.textContent = 'Remove from crew'; clearTimeout(removeTimer); }
+  async function removeMember() {
+    const b = $('removeMember');
+    if (!b.classList.contains('confirm')) {
+      b.classList.add('confirm'); b.textContent = 'Tap again to remove';
+      removeTimer = setTimeout(resetRemove, 3000);
+      return;
+    }
+    const id = openId, m = crew.get(id) || {};
+    clearTimeout(timers.get(id)); pending.delete(id);
+    closeSheet();
+    try {
+      await db.doc('crew/' + id).delete();
+      for (const pid of m.photos || []) { try { await assets.delete(pid); } catch (e) { /* ignore */ } }
+    } catch (e) { showNotice('Could not remove: ' + ((e && e.message) || 'try again')); }
+  }
+
+  // ---------- state ----------
+  function showNotice(text) { const n = $('notice'); n.textContent = text; n.hidden = !text; }
+  function setReadOnly() {
+    readOnly = true;
+    $('addRow').hidden = true;
+    if (openId) { fillFields(); renderSheetPhotos(); $('savedLine').textContent = 'View only'; }
+  }
+
+  FIELDS.forEach(f => $('f-' + f).addEventListener('input', e => {
+    if (!openId || readOnly) return;
+    queuePatch(openId, { [f]: e.target.value });
+    if (f === 'name' || f === 'role') { $('sheetTitle').textContent = crew.get(openId).name || crew.get(openId).role || 'Crew member'; renderGrid(); }
+  }));
+  $('fileInput').addEventListener('change', e => { if (openId && e.target.files.length) addPhotos(openId, e.target.files); e.target.value = ''; });
+  $('doneBtn').addEventListener('click', closeSheet);
+  $('backdrop').addEventListener('click', closeSheet);
+  $('removeMember').addEventListener('click', removeMember);
+  $('addPerson').addEventListener('click', () => addMember('person'));
+  $('addDog').addEventListener('click', () => addMember('dog'));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && openId) closeSheet(); });
+
+  renderGrid();
+  $('progressText').textContent = 'Loading crew…';
+
+  (async () => {
+    db = await window.claude?.use?.('db');
+    if (!db) {
+      $('progressText').textContent = 'Offline';
+      showNotice('Open this page in Claude while signed in to see and edit the crew.');
+      return;
+    }
+    assets = await window.claude.use('assets');
+    if (!assets) showNotice('You can read the manifest, but only editors of this page can add photos.');
+
+    const user = await window.claude.use('user');
+    const canWrite = user && user.can ? await user.can('data.write') : null;
+    if (canWrite === false) setReadOnly(); else $('addRow').hidden = false;
+
+    let first = true;
+    const slow = setTimeout(() => { if (first) $('progressText').textContent = 'Still connecting to the station…'; }, 10000);
+    db.collection('crew').orderBy('order').onSnapshot(snap => {
+      if (!snap.metadata.fromCache) { clearTimeout(slow); first = false; }
+      const ids = [];
+      snap.docs.forEach(d => {
+        ids.push(d.id);
+        crew.set(d.id, { ...d.data(), ...(pending.get(d.id) || {}) });
+      });
+      [...crew.keys()].forEach(k => { if (!ids.includes(k) && !pending.has(k)) crew.delete(k); });
+      order = ids.concat(order.filter(k => !ids.includes(k) && crew.has(k)));
+      renderGrid();
+      if (openId) {
+        if (!crew.has(openId)) closeSheet();
+        else { fillFields(); if (!document.querySelector('.thumb button.confirm')) renderSheetPhotos(); }
+      }
+    }, err => {
+      clearTimeout(slow);
+      $('progressText').textContent = 'Could not load';
+      showNotice('The crew list could not load (' + ((err && err.code) || 'error') + '). Reopen the page to try again.');
+    });
+  })();
+})();
+</script>
