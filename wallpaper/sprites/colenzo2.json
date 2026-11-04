@@ -1,0 +1,18 @@
+{
+ "out": "raw",
+ "model": "gpt-image-1.5",
+ "quality": "high",
+ "size": "1536x1024",
+ "assets": [
+  {
+   "id": "colenzo",
+   "background": "transparent",
+   "images": [
+    "colenzo_ref.jpg",
+    "colenzo_photo.jpg",
+    "style_ref.png"
+   ],
+   "prompt": "Sprite sheet for a 2D game, in the exact painting style of the style reference image (the third image) (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm colours, slightly chunky storybook proportions). Draw Colenzo, a boxer dog. The first image is the approved drawing of this exact dog: copy the coat, markings, ears, build and tail exactly. The second image is a photo of him from behind showing his tail: a short, thick docked stub, a bit longer than a nub, sticking out backward from the rump and angled up at about 45 degrees, about as long as his ear. Draw that tail in every pose. Dark brindle coat, big white chest bib and white paws, dark mask, no forehead blaze, ears folded forward, short thick docked tail angled up and back, tall and lean. Four full-body poses of the same animal in ONE horizontal row, in four equal columns, each pose centred in its column with plenty of empty space around it, all at exactly the same size and scale, all seen from the side facing RIGHT: 1) trotting, front left leg forward; 2) trotting, front right leg forward; 3) sitting upright; 4) lying down with head up. Fully transparent background: no floor, no ground shadow, no scenery, no text, no frame. Nothing else in the image."
+  }
+ ]
+}
