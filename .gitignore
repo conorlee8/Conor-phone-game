@@ -2,3 +2,5 @@
 wallpaper/cast/
 __pycache__/
 wallpaper/pods/work/
+wallpaper/video/tiles/*.mp4
+wallpaper/video/*.mp4
