@@ -70,8 +70,11 @@ def build(pins_dir):
         print(f"  pin {pin.get('n')}: placed")
     # Rooms rebuilt in layers: the emptied room goes in, furniture and people are drawn live.
     rooms = ROOT / "rooms"
+    enabled = json.loads((rooms / "enabled.json").read_text()) if (rooms / "enabled.json").exists() else []
     for meta_f in sorted(rooms.glob("*_meta.json")):
         rid = meta_f.name[:-len("_meta.json")]
+        if rid not in enabled:
+            continue
         empty = rooms / f"{rid}_empty.png"
         if not empty.exists():
             continue

@@ -13,6 +13,7 @@ const SPEED = Math.max(1, Number(params.get('speed')) || 1);      // ?speed=3600
 const DEMO = params.get('demo');
 const HOUR = params.has('hour') ? Number(params.get('hour')) : null;   // ?hour=14 previews a time of day
 const hourNow = () => HOUR ?? new Date().getHours();
+const RESIDENTS = params.get('residents') === '1';   // the walking cutouts are off unless ?residents=1
 const BOOST = params.has('crowd') ? params.get('crowd').split(',') : [];   // ?crowd=dumpling,court sends people there                                    // ?demo=thriving|struggling|neglected
 
 // ---------- the simulation ----------
@@ -65,7 +66,7 @@ function lookFor() {
   for (const z of ZONES) zones[z.id] = { level: state.meters[z.meter], dark: isDark(z.meter) };
   const h = hourNow();
   return { power: state.meters.power, food: state.meters.food, air: state.meters.air, fun: state.meters.fun, overall: overall(), zones, night: h >= 22 || h < 6,
-           agents: scene(cast.draw(now()), PROPS), sprites };
+           agents: RESIDENTS ? scene(cast.draw(now()), PROPS) : [], sprites };
 }
 
 function act(id) {
@@ -169,7 +170,7 @@ function tapAt(px, py) {
     const w = f[2] / sp.res * (a.scale || 1), h = f[3] / sp.res * (a.scale || 1);
     return p.x > a.x - w / 2 - slop && p.x < a.x + w / 2 + slop && p.y > a.y - a.bob - h - slop && p.y < a.y + slop;
   });
-  if (hit) { openWho(hit.id); return; }
+  if (hit && RESIDENTS) { openWho(hit.id); return; }
   const z = ZONES.find(z => p.x >= z.box[0] && p.x <= z.box[2] && p.y >= z.box[1] && p.y <= z.box[3]);
   if (z) openZoneSheet(z.id);
 }
@@ -608,6 +609,7 @@ $('whoClose').addEventListener('click', closeWho);
 $('whoFollow').addEventListener('click', () => { following = following === whoId ? null : whoId; if (following) cam.s = Math.max(cam.s, fitScale() * 3); renderWho(); });
 $('whoQuiz').addEventListener('click', () => openQuiz(whoId));
 $('peopleBtn').addEventListener('click', openPeople);
+if (!RESIDENTS) $('peopleBtn').hidden = true;
 $('peopleClose').addEventListener('click', () => { $('peopleSheet').hidden = true; });
 $('quizSave').addEventListener('click', saveQuiz);
 $('quizClose').addEventListener('click', () => { $('quizSheet').hidden = true; });
