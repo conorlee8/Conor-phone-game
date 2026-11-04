@@ -1,0 +1,73 @@
+# Builds the Station iPhone app on a cloud Mac.
+# Every push: compile for the simulator (checks the native code, no Apple account needed).
+# When the App Store Connect secrets exist: archive, sign and upload to TestFlight.
+#
+# Secrets (repo Settings > Secrets and variables > Actions):
+#   APPLE_TEAM_ID   - 10-character Team ID (developer.apple.com > Membership)
+#   ASC_KEY_ID      - App Store Connect API key ID
+#   ASC_ISSUER_ID   - App Store Connect API issuer ID
+#   ASC_KEY_P8      - contents of the downloaded AuthKey_XXXX.p8 file
+name: iPhone app
+
+on:
+  push:
+    branches: [claude/iphone-game-dev-mrg5zm, main]
+    paths: [ios-app/**, world/**, .github/workflows/ios.yml]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 45
+    env:
+      HAS_ASC: ${{ secrets.ASC_KEY_ID != '' && secrets.ASC_ISSUER_ID != '' && secrets.ASC_KEY_P8 != '' && secrets.APPLE_TEAM_ID != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install and copy the Station app into the shell
+        working-directory: ios-app
+        run: |
+          npm ci --no-audit --no-fund
+          npm run sync
+      - name: Compile for the simulator
+        working-directory: ios-app/ios/App
+        run: |
+          xcodebuild -project App.xcodeproj -scheme App -configuration Debug \
+            -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO build | tail -40
+          test ${PIPESTATUS[0]} -eq 0
+      - name: Archive, sign and upload to TestFlight
+        if: env.HAS_ASC == 'true'
+        working-directory: ios-app/ios/App
+        env:
+          TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+        run: |
+          KEY_PATH="$RUNNER_TEMP/AuthKey_$KEY_ID.p8"
+          printf '%s' "$KEY_P8" > "$KEY_PATH"
+          AUTH="-allowProvisioningUpdates -authenticationKeyPath $KEY_PATH -authenticationKeyID $KEY_ID -authenticationKeyIssuerID $ISSUER_ID"
+          xcodebuild -project App.xcodeproj -scheme App -configuration Release \
+            -destination 'generic/platform=iOS' -archivePath "$RUNNER_TEMP/Station.xcarchive" \
+            DEVELOPMENT_TEAM="$TEAM_ID" CODE_SIGN_STYLE=Automatic CURRENT_PROJECT_VERSION=${{ github.run_number }} \
+            $AUTH archive | tail -40
+          test ${PIPESTATUS[0]} -eq 0
+          cat > "$RUNNER_TEMP/export.plist" <<PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0"><dict>
+            <key>method</key><string>app-store-connect</string>
+            <key>destination</key><string>upload</string>
+            <key>teamID</key><string>$TEAM_ID</string>
+            <key>signingStyle</key><string>automatic</string>
+          </dict></plist>
+          PLIST
+          xcodebuild -exportArchive -archivePath "$RUNNER_TEMP/Station.xcarchive" \
+            -exportOptionsPlist "$RUNNER_TEMP/export.plist" -exportPath "$RUNNER_TEMP/export" $AUTH | tail -40
+          test ${PIPESTATUS[0]} -eq 0
+      - name: TestFlight not set up yet
+        if: env.HAS_ASC != 'true'
+        run: echo "Simulator build passed. Add the App Store Connect secrets to upload builds to TestFlight."

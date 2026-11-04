@@ -1,0 +1,19 @@
+{
+  "name": "station-ios",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Conor's Station as a native iPhone app (Capacitor shell around ../world)",
+  "scripts": {
+    "web": "rm -rf www && cp -r ../world www && rm -f www/README.md",
+    "sync": "npm run web && npx cap sync ios"
+  },
+  "dependencies": {
+    "@capacitor/core": "8.5.3",
+    "@capacitor/ios": "8.5.3",
+    "@capacitor/local-notifications": "8.3.1",
+    "station-live-photo": "file:plugins/live-photo"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.5.3"
+  }
+}

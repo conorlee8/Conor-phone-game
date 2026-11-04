@@ -1,0 +1,9 @@
+{
+  "name": "station-live-photo",
+  "version": "1.0.0",
+  "description": "Saves a still + short video pair to Photos as a Live Photo (for wallpapers)",
+  "private": true,
+  "main": "index.js",
+  "capacitor": { "ios": { "src": "ios" } },
+  "files": ["ios/Sources", "Package.swift", "index.js"]
+}

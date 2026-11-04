@@ -1,0 +1,10 @@
+{
+  "appId": "com.conorlee.station",
+  "appName": "Station",
+  "webDir": "www",
+  "ios": {
+    "contentInset": "never",
+    "backgroundColor": "#05070d",
+    "scrollEnabled": false
+  }
+}

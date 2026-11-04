@@ -80,6 +80,7 @@ function act(id) {
   }
   state.cooldowns[id] = now + a.cooldown / SPEED;
   save();
+  askForNudges();
   toast(a.say, Object.entries(a.gives).map(([m, v]) => `+${v} ${meterName(m)}`).join(' · '));
   renderHud();
   if (openZone) renderZone();
@@ -497,6 +498,7 @@ async function recordBoth(seconds) {
   draw();
   A.rec.start(250); B.rec.start(250);
   const start = performance.now();
+  const tStart = now();
   await new Promise(resolve => {
     (function frame() {
       const el = (performance.now() - start) / 1000;
@@ -509,7 +511,7 @@ async function recordBoth(seconds) {
   await Promise.all([A.done, B.done]);
   for (const x of [A, B]) x.stream.getTracks().forEach(tr => tr.stop());
   const type = mime.split(';')[0];
-  return [new Blob(A.chunks, { type }), new Blob(B.chunks, { type })];
+  return { cover: new Blob(A.chunks, { type }), inner: new Blob(B.chunks, { type }), tStart };
 }
 let captured = [];
 async function capture() {
@@ -517,11 +519,12 @@ async function capture() {
   $('capResult').hidden = true;
   const secs = 3.2;
   try {
-    const t0 = now(), look = lookFor();         // the stills: this exact moment, both screens
-    const coverJpg = await renderStill(coverView, COVER, t0, look);
-    const innerJpg = await renderStill(innerView, INNER, t0, look);
     const clips = await recordBoth(secs);
-    const [coverClip, innerClip] = clips || [null, null];
+    const coverClip = clips && clips.cover, innerClip = clips && clips.inner;
+    // The stills are the middle of the clip: that's the frame a Live Photo rests on.
+    const tMid = clips ? clips.tStart + secs / 2 : now(), look = lookFor();
+    const coverJpg = await renderStill(coverView, COVER, tMid, look);
+    const innerJpg = await renderStill(innerView, INNER, tMid, look);
     const stamp = new Date().toISOString().slice(0, 16).replace(/[-:T]/g, '');
     const ext = coverClip ? (coverClip.type.includes('mp4') ? 'mp4' : 'webm') : '';
     captured = [
@@ -549,8 +552,60 @@ function showResult(hasVideo) {
     box.appendChild(fig);
   }
   $('capStatus').textContent = hasVideo ? 'Captured. Same moment, both screens.' : 'This browser can\'t record video, so you got the two stills.';
-  $('capShare').hidden = !(navigator.canShare && navigator.canShare({ files: captured }));
+  $('capShare').hidden = NATIVE || !(navigator.canShare && navigator.canShare({ files: captured }));
+  $('capLive').hidden = !(NATIVE && hasVideo);
+  $('capHow').hidden = NATIVE && hasVideo;
   $('capResult').hidden = false;
+}
+
+// ---------- the iPhone app: real Live Photos and notifications ----------
+const CAP = window.Capacitor;
+const NATIVE = !!(CAP && CAP.isNativePlatform && CAP.isNativePlatform());
+const plugin = name => (NATIVE && CAP.Plugins ? CAP.Plugins[name] : null);
+const toB64 = blob => new Promise((ok, bad) => { const r = new FileReader(); r.onload = () => ok(String(r.result).split(',')[1]); r.onerror = bad; r.readAsDataURL(blob); });
+async function saveLivePhotos() {
+  const LP = plugin('LivePhoto');
+  if (!LP) return;
+  $('capLive').disabled = true;
+  try {
+    for (const which of ['closed', 'open']) {
+      const video = captured.find(f => f.name.includes(which) && f.type.startsWith('video'));
+      const photo = captured.find(f => f.name.includes(which) && f.type === 'image/jpeg');
+      if (!video || !photo) continue;
+      $('capStatus').textContent = `Saving the ${which === 'closed' ? 'closed-screen' : 'open-screen'} Live Photo…`;
+      await LP.save({ photo: await toB64(photo), video: await toB64(video), videoType: video.type });
+    }
+    $('capStatus').textContent = 'Saved 2 Live Photos. Settings → Wallpaper: put "closed" on the cover screen and "open" on the inner screen.';
+  } catch (e) {
+    $('capStatus').textContent = 'Couldn\'t save: ' + ((e && e.message) || 'unknown error');
+  }
+  $('capLive').disabled = false;
+}
+
+// When the app goes to the background, schedule a nudge for when the station will need you.
+async function scheduleNudges() {
+  const LN = plugin('LocalNotifications');
+  if (!LN) return;
+  try {
+    const perm = await LN.checkPermissions();
+    if (perm.display !== 'granted') return;
+    await LN.cancel({ notifications: [{ id: 1 }, { id: 2 }] }).catch(() => {});
+    const soon = [];
+    const hoursUntil = (id, level) => {
+      const m = METERS.find(m => m.id === id), v = state.meters[id];
+      return v <= level ? 0 : (v - level) / m.decay / SPEED;
+    };
+    const boys = hoursUntil('boys', 30);
+    if (boys > 0.2) soon.push({ id: 1, title: 'Elliot and Colenzo are hungry', body: 'The boys are staring at their bowls. Come feed them.', schedule: { at: new Date(Date.now() + boys * 3600000) } });
+    const worst = METERS.filter(m => m.id !== 'boys').map(m => [m, hoursUntil(m.id, 20)]).sort((a, b) => a[1] - b[1])[0];
+    if (worst && worst[1] > 0.2) soon.push({ id: 2, title: `${state.name} needs you`, body: `${worst[0].name} is running low. Things are starting to go dark.`, schedule: { at: new Date(Date.now() + worst[1] * 3600000) } });
+    if (soon.length) await LN.schedule({ notifications: soon });
+  } catch (e) { /* notifications are a nice-to-have */ }
+}
+async function askForNudges() {
+  const LN = plugin('LocalNotifications');
+  if (!LN) return;
+  try { const p = await LN.checkPermissions(); if (p.display === 'prompt' || p.display === 'prompt-with-rationale') await LN.requestPermissions(); } catch (e) { /* fine */ }
 }
 async function shareCapture() {
   try { await navigator.share({ files: captured, title: state.name }); }
@@ -617,6 +672,7 @@ $('capOpen').addEventListener('click', openCapture);
 $('capClose').addEventListener('click', closeCapture);
 $('capStart').addEventListener('click', capture);
 $('capShare').addEventListener('click', shareCapture);
+$('capLive').addEventListener('click', saveLivePhotos);
 document.querySelectorAll('#capSizes button').forEach(b => b.addEventListener('click', () => setCoverSize(+b.dataset.i)));
 $('stationName').addEventListener('click', () => {
   const n = $('renameInput');
@@ -630,7 +686,7 @@ $('renameForm').addEventListener('submit', e => {
 });
 $('renameCancel').addEventListener('click', () => { $('rename').hidden = true; });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeZoneSheet(); closeCapture(); closeWho(); $('peopleSheet').hidden = true; $('quizSheet').hidden = true; $('rename').hidden = true; } });
-document.addEventListener('visibilitychange', () => { if (!document.hidden) { advance(); renderHud(); } });
+document.addEventListener('visibilitychange', () => { if (!document.hidden) { advance(); renderHud(); } else scheduleNudges(); });
 boot();
 
 // For checking the look in a test browser.
