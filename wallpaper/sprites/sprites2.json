@@ -1,0 +1,96 @@
+{
+ "out": "raw",
+ "model": "gpt-image-1.5",
+ "quality": "high",
+ "size": "1536x1024",
+ "assets": [
+  {
+   "id": "mike",
+   "images": [
+    "style_ref.png"
+   ],
+   "background": "transparent",
+   "prompt": "Sprite sheet for a 2D game, in the exact painting style of the style reference image (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm colours, slightly chunky storybook proportions). Draw Big Mike, the dumpling chef. A big burly white man in his forties with a full dark beard and a red bandana on his head; a white chef jacket with rolled sleeves, a stained apron, black trousers, clogs. Four full-body poses of the same character in ONE horizontal row, in four equal columns, each pose centred in its column with plenty of empty space around it, all at exactly the same size and scale, all seen from the side facing RIGHT, feet on the same baseline: 1) walking, left leg forward, mid-stride; 2) walking, right leg forward, mid-stride; 3) standing relaxed; 4) sitting on an invisible stool, knees bent, hands resting on knees. Fully transparent background: no floor, no ground shadow, no scenery, no text, no frame. Nothing else in the image."
+  },
+  {
+   "id": "theo",
+   "images": [
+    "style_ref.png"
+   ],
+   "background": "transparent",
+   "prompt": "Sprite sheet for a 2D game, in the exact painting style of the style reference image (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm colours, slightly chunky storybook proportions). Draw Theo. A tall lanky white man in his twenties with long brown hair in a bun and a light beard; a red flannel shirt open over a grey t-shirt, black jeans, hiking boots. Four full-body poses of the same character in ONE horizontal row, in four equal columns, each pose centred in its column with plenty of empty space around it, all at exactly the same size and scale, all seen from the side facing RIGHT, feet on the same baseline: 1) walking, left leg forward, mid-stride; 2) walking, right leg forward, mid-stride; 3) standing relaxed; 4) sitting on an invisible stool, knees bent, hands resting on knees. Fully transparent background: no floor, no ground shadow, no scenery, no text, no frame. Nothing else in the image."
+  },
+  {
+   "id": "ivy",
+   "images": [
+    "style_ref.png"
+   ],
+   "background": "transparent",
+   "prompt": "Sprite sheet for a 2D game, in the exact painting style of the style reference image (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm colours, slightly chunky storybook proportions). Draw Ivy. A white woman in her fifties with a sleek platinum-blonde bob and big round glasses; a teal sweater vest over a white shirt, a long plaid skirt, loafers. Four full-body poses of the same character in ONE horizontal row, in four equal columns, each pose centred in its column with plenty of empty space around it, all at exactly the same size and scale, all seen from the side facing RIGHT, feet on the same baseline: 1) walking, left leg forward, mid-stride; 2) walking, right leg forward, mid-stride; 3) standing relaxed; 4) sitting on an invisible stool, knees bent, hands resting on knees. Fully transparent background: no floor, no ground shadow, no scenery, no text, no frame. Nothing else in the image."
+  },
+  {
+   "id": "nate",
+   "images": [
+    "style_ref.png"
+   ],
+   "background": "transparent",
+   "prompt": "Sprite sheet for a 2D game, in the exact painting style of the style reference image (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm colours, slightly chunky storybook proportions). Draw Nate. A Korean-American man in his twenties with short black hair; a navy and cream varsity jacket, white t-shirt, light jeans, high-top sneakers. Four full-body poses of the same character in ONE horizontal row, in four equal columns, each pose centred in its column with plenty of empty space around it, all at exactly the same size and scale, all seen from the side facing RIGHT, feet on the same baseline: 1) walking, left leg forward, mid-stride; 2) walking, right leg forward, mid-stride; 3) standing relaxed; 4) sitting on an invisible stool, knees bent, hands resting on knees. Fully transparent background: no floor, no ground shadow, no scenery, no text, no frame. Nothing else in the image."
+  },
+  {
+   "id": "sky",
+   "images": [
+    "style_ref.png"
+   ],
+   "background": "transparent",
+   "prompt": "Sprite sheet for a 2D game, in the exact painting style of the style reference image (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm colours, slightly chunky storybook proportions). Draw Sky, a little girl. A seven-year-old white girl with two blonde pigtails and freckles; a bright yellow raincoat, red rubber boots. She is a small child, much shorter than an adult. Four full-body poses of the same character in ONE horizontal row, in four equal columns, each pose centred in its column with plenty of empty space around it, all at exactly the same size and scale, all seen from the side facing RIGHT, feet on the same baseline: 1) walking, left leg forward, mid-stride; 2) walking, right leg forward, mid-stride; 3) standing relaxed; 4) sitting on an invisible stool, knees bent, hands resting on knees. Fully transparent background: no floor, no ground shadow, no scenery, no text, no frame. Nothing else in the image."
+  },
+  {
+   "id": "biscuit",
+   "images": [
+    "style_ref.png"
+   ],
+   "background": "transparent",
+   "prompt": "Sprite sheet for a 2D game, in the exact painting style of the style reference image (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm colours, slightly chunky storybook proportions). Draw Biscuit, a corgi. A chubby orange-and-white Pembroke corgi with big upright ears, short legs and a fluffy bottom. Four full-body poses of the same character in ONE horizontal row, in four equal columns, each pose centred in its column with plenty of empty space around it, all at exactly the same size and scale, all seen from the side facing RIGHT: 1) trotting, front left leg forward; 2) trotting, front right leg forward; 3) sitting upright; 4) lying down with head up. Fully transparent background: no floor, no ground shadow, no scenery, no text, no frame. Nothing else in the image."
+  },
+  {
+   "id": "pepper",
+   "images": [
+    "style_ref.png"
+   ],
+   "background": "transparent",
+   "prompt": "Sprite sheet for a 2D game, in the exact painting style of the style reference image (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm colours, slightly chunky storybook proportions). Draw Pepper, a cat. A fluffy smoky-grey cat with yellow eyes and a big bushy tail. Draw it small and cat-sized. Four full-body poses of the same character in ONE horizontal row, in four equal columns, each pose centred in its column with plenty of empty space around it, all at exactly the same size and scale, all seen from the side facing RIGHT: 1) walking, front left leg forward; 2) walking, front right leg forward; 3) sitting upright; 4) curled up asleep. Fully transparent background: no floor, no ground shadow, no scenery, no text, no frame. Nothing else in the image."
+  },
+  {
+   "id": "kiwi",
+   "images": [
+    "style_ref.png"
+   ],
+   "background": "transparent",
+   "prompt": "Sprite sheet for a 2D game, in the exact painting style of the style reference image (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm colours, slightly chunky storybook proportions). Draw Kiwi, a parrot. A bright green parrot with a red and yellow face, a curved beak and a long tail. Draw it small and bird-sized. Four full-body poses of the same character in ONE horizontal row, in four equal columns, each pose centred in its column with plenty of empty space around it, all at exactly the same size and scale, all seen from the side facing RIGHT: 1) hopping forward, wings folded; 2) hopping forward, mid-hop; 3) standing perched; 4) flying with wings spread wide. Fully transparent background: no floor, no ground shadow, no scenery, no text, no frame. Nothing else in the image."
+  },
+  {
+   "id": "zib",
+   "images": [
+    "style_ref.png"
+   ],
+   "background": "transparent",
+   "prompt": "Sprite sheet for a 2D game, in the exact painting style of the style reference image (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm colours, slightly chunky storybook proportions). Draw Zib, a friendly little alien. A small round lime-green alien with one big eye on a short stalk, two antennae with glowing tips, stubby legs and little arms, wearing a tiny purple vest. Cute, not scary. It is about as tall as an adult's hip. Four full-body poses of the same character in ONE horizontal row, in four equal columns, each pose centred in its column with plenty of empty space around it, all at exactly the same size and scale, all seen from the side facing RIGHT: 1) walking, left foot forward; 2) walking, right foot forward; 3) standing and waving; 4) sitting on an invisible stool. Fully transparent background: no floor, no ground shadow, no scenery, no text, no frame. Nothing else in the image."
+  },
+  {
+   "id": "zorp",
+   "images": [
+    "style_ref.png"
+   ],
+   "background": "transparent",
+   "prompt": "Sprite sheet for a 2D game, in the exact painting style of the style reference image (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm colours, slightly chunky storybook proportions). Draw Zorp, a friendly little alien. A small teardrop-shaped turquoise alien with three eyes, a big friendly grin, one antenna with a glowing ball, wobbly little legs, wearing a tiny orange scarf. Cute, not scary. It is about as tall as an adult's hip. Four full-body poses of the same character in ONE horizontal row, in four equal columns, each pose centred in its column with plenty of empty space around it, all at exactly the same size and scale, all seen from the side facing RIGHT: 1) walking, left foot forward; 2) walking, right foot forward; 3) standing happily; 4) sitting on an invisible stool. Fully transparent background: no floor, no ground shadow, no scenery, no text, no frame. Nothing else in the image."
+  },
+  {
+   "id": "scrub",
+   "images": [
+    "style_ref.png"
+   ],
+   "background": "transparent",
+   "prompt": "Sprite sheet for a 2D game, in the exact painting style of the style reference image (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm colours, slightly chunky storybook proportions). Draw Scrub, a cleaning robot. A boxy little cleaning robot on one wheel: a cream body with orange stripes, a round screen face with a smile, two arms holding a mop and a spray bottle, a little light on top. Four full-body poses of the same character in ONE horizontal row, in four equal columns, each pose centred in its column with plenty of empty space around it, all at exactly the same size and scale, all seen from the side facing RIGHT: 1) rolling forward, mopping; 2) rolling forward, mop swung the other way; 3) standing still; 4) standing still, spraying. Fully transparent background: no floor, no ground shadow, no scenery, no text, no frame. Nothing else in the image."
+  }
+ ]
+}

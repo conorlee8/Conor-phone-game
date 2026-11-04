@@ -23,6 +23,9 @@
   <header class="top">
     <button type="button" class="title" id="stationName" aria-label="Rename your station">Conor's Station</button>
     <span class="mood" id="mood">Loading</span>
+    <button type="button" class="cam ghostbtn" id="peopleBtn" aria-label="Everyone on the station">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14c3 0 5 2 5 5"/></svg>
+    </button>
     <button type="button" class="cam" id="capOpen" aria-label="Capture this moment as wallpaper">
       <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
     </button>
@@ -40,6 +43,33 @@
       <div class="phead"><h2 id="zoneName">Place</h2><button type="button" class="close" id="zoneClose">Done</button></div>
       <div class="zneed" id="zoneNeed"></div>
       <div class="actions" id="zoneActions"></div>
+    </section>
+  </div>
+
+  <div class="sheet" id="whoSheet" hidden>
+    <section class="panel" role="dialog" aria-labelledby="whoName">
+      <div class="phead"><div class="who"><span id="whoPic" class="whopic"></span><div><h2 id="whoName">Someone</h2><p class="hint" id="whoDoing"></p></div></div><button type="button" class="close" id="whoClose">Done</button></div>
+      <div class="row2">
+        <button type="button" class="big alt" id="whoFollow">Follow</button>
+        <button type="button" class="big" id="whoQuiz">Take the personality quiz</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="sheet modal" id="peopleSheet" hidden>
+    <section class="panel" role="dialog" aria-labelledby="peopleTitle">
+      <div class="phead"><h2 id="peopleTitle">Everyone aboard</h2><button type="button" class="close" id="peopleClose">Close</button></div>
+      <p class="hint">Tap someone to follow them around the station.</p>
+      <div class="plist" id="peopleList"></div>
+    </section>
+  </div>
+
+  <div class="sheet modal" id="quizSheet" hidden>
+    <section class="panel" role="dialog" aria-labelledby="quizTitle">
+      <div class="phead"><h2 id="quizTitle">Personality</h2><button type="button" class="close" id="quizClose">Cancel</button></div>
+      <p class="hint">Every answer changes how they live on the station: where they go, when they sleep, how they move and what they get up to.</p>
+      <div id="quizBody" class="quiz"></div>
+      <button type="button" class="big" id="quizSave">Save personality</button>
     </section>
   </div>
 

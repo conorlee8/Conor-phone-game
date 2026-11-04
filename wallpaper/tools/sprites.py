@@ -26,12 +26,16 @@ SIZES = {
     "elliot": (2, 40), "colenzo": (2, 42),     # sitting dog, head to paws
     "ginger": (2, 17), "pixel": (2, 17),       # sitting cat
     "bolt": (2, 26),
+    "mike": (2, 86), "theo": (2, 89), "ivy": (2, 74), "nate": (2, 80), "sky": (2, 52),
+    "biscuit": (2, 25), "pepper": (2, 17), "kiwi": (2, 13), "zib": (2, 40), "zorp": (2, 38), "scrub": (2, 30),
 }
 NAMES = {
     "conor": ["walk", "walk2", "stand", "sit"], "mara": None, "gus": None, "jules": None, "dee": None,
     "elliot": ["walk", "walk2", "sit", "lie"], "colenzo": ["walk", "walk2", "sit", "lie"],
     "ginger": ["walk", "walk2", "sit", "lie"], "pixel": ["walk", "walk2", "sit", "lie"],
     "bolt": ["walk", "walk2", "stand", "carry"],
+    "biscuit": ["walk", "walk2", "sit", "lie"], "pepper": ["walk", "walk2", "sit", "lie"], "kiwi": ["walk", "walk2", "sit", "fly"],
+    "zib": ["walk", "walk2", "stand", "sit"], "zorp": ["walk", "walk2", "stand", "sit"], "scrub": ["walk", "walk2", "stand", "carry"],
 }
 
 

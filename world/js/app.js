@@ -1,6 +1,9 @@
 import { IMAGE, HULL, METERS, ZONES, ACTIONS, MOMENTS, START, DARK_BELOW, DARK_AFTER, RECOVER } from '../data/world.js';
 import { drawWorld, assignZones } from './render.js';
 import { Cast } from './cast.js';
+import { CAST } from '../data/cast.js';
+const CAST_BY_ID = Object.fromEntries(CAST.map(c => [c.id, c]));
+import { quizFor } from '../data/quiz.js';
 
 const $ = id => document.getElementById(id);
 const KEY = 'station-world-v1';
@@ -86,7 +89,8 @@ const canvas = $('view');
 const ctx = canvas.getContext('2d');
 const img = new Image();
 let lights = [];
-const cast = new Cast();
+const cast = new Cast(state.personality || {});
+let following = null;
 const sprites = {};
 let selected = null, selectedUntil = 0;
 let cam = { x: HULL.x, y: HULL.y - 40, s: 1 };       // painting point at screen centre, and zoom
@@ -125,7 +129,7 @@ canvas.addEventListener('pointermove', e => {
   const p = [...pointers.values()], s = [...gesture.pts.values()];
   if (p.length === 1 && s.length >= 1) {
     const dx = p[0].x - s[0].x, dy = p[0].y - s[0].y;
-    if (Math.abs(dx) + Math.abs(dy) > 6) moved = true;
+    if (Math.abs(dx) + Math.abs(dy) > 6) { moved = true; following = null; }
     cam.x = gesture.cam.x - dx / cam.s; cam.y = gesture.cam.y - dy / cam.s;
   } else if (p.length >= 2 && s.length >= 2) {
     moved = true;
@@ -163,11 +167,7 @@ function tapAt(px, py) {
     const w = f[2] / sp.res, h = f[3] / sp.res;
     return p.x > a.x - w / 2 - slop && p.x < a.x + w / 2 + slop && p.y > a.y - a.bob - h - slop && p.y < a.y + slop;
   });
-  if (hit) {
-    selected = hit.id; selectedUntil = performance.now() + 4000;
-    toast(hit.name, hit.doing.charAt(0).toUpperCase() + hit.doing.slice(1) + '.');
-    return;
-  }
+  if (hit) { openWho(hit.id); return; }
   const z = ZONES.find(z => p.x >= z.box[0] && p.x <= z.box[2] && p.y >= z.box[1] && p.y <= z.box[3]);
   if (z) openZoneSheet(z.id);
 }
@@ -278,6 +278,107 @@ function renderZone() {
   }
 }
 
+// ---------- residents: who's who, follow, personality quiz ----------
+let whoId = null;
+function spriteThumb(sid, frame, size = 44) {
+  const sp = sprites[sid]; const c = document.createElement('canvas');
+  c.width = c.height = size * 2; c.className = 'thumbc';
+  if (!sp) return c;
+  const draw = () => {
+    const f = sp.frames[frame] || sp.frames.stand || sp.frames.sit; if (!f) return;
+    const g = c.getContext('2d'); const k = Math.min((size * 2 - 8) / f[2], (size * 2 - 8) / f[3]);
+    g.drawImage(sp.img, f[0], f[1], f[2], f[3], (size * 2 - f[2] * k) / 2, size * 2 - 4 - f[3] * k, f[2] * k, f[3] * k);
+  };
+  sp.img.complete ? draw() : sp.img.addEventListener('load', draw, { once: true });
+  return c;
+}
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+function openWho(id) {
+  whoId = id; selected = id; selectedUntil = performance.now() + 600000;
+  renderWho();
+  $('whoSheet').hidden = false;
+}
+function closeWho() { whoId = null; selected = null; $('whoSheet').hidden = true; }
+function renderWho() {
+  const a = cast.draw(now()).find(a => a.id === whoId); if (!a) return;
+  const m = CAST_BY_ID[a.id];
+  $('whoName').textContent = a.name;
+  $('whoDoing').textContent = cap(a.doing) + '.';
+  const pic = $('whoPic'); pic.textContent = ''; pic.appendChild(spriteThumb(a.sprite, 'stand', 40));
+  $('whoFollow').textContent = following === a.id ? 'Stop following' : 'Follow';
+  const q = quizFor(m.kind);
+  $('whoQuiz').hidden = !q;
+  $('whoQuiz').textContent = (state.personality || {})[a.id] ? 'Edit personality' : 'Take the personality quiz';
+}
+function openPeople() {
+  const list = $('peopleList'); list.textContent = '';
+  const now_ = cast.draw(now());
+  for (const m of Object.values(CAST_BY_ID)) {
+    const a = now_.find(a => a.id === m.id);
+    const row = document.createElement('button'); row.type = 'button'; row.className = 'prow';
+    row.appendChild(spriteThumb(m.sprite, 'stand', 26));
+    const t = document.createElement('span'); t.className = 'pt';
+    const n = document.createElement('b'); n.textContent = m.name;
+    const d = document.createElement('span'); d.textContent = a ? cap(a.doing) : '';
+    t.append(n, d); row.appendChild(t);
+    if (quizFor(m.kind)) {
+      const chip = document.createElement('span'); chip.className = 'qchip' + ((state.personality || {})[m.id] ? ' done' : '');
+      chip.textContent = (state.personality || {})[m.id] ? 'Personality set' : 'Take quiz';
+      row.appendChild(chip);
+    }
+    row.addEventListener('click', () => { $('peopleSheet').hidden = true; openWho(m.id); following = m.id; cam.s = Math.max(cam.s, fitScale() * 3); renderWho(); });
+    list.appendChild(row);
+  }
+  $('peopleSheet').hidden = false;
+}
+
+let quizId = null, quizAnswers = {};
+function words(m) {
+  const you = m.id === 'conor';
+  return s => s.replace(/\{they\}/g, you ? 'you' : 'they').replace(/\{are\}/g, 'are').replace(/\{name\}/g, m.name);
+}
+function openQuiz(id) {
+  quizId = id;
+  const m = CAST_BY_ID[id];
+  quizAnswers = JSON.parse(JSON.stringify((state.personality || {})[id] || {}));
+  $('quizTitle').textContent = id === 'conor' ? 'Your personality' : `${m.name}'s personality`;
+  const box = $('quizBody'); box.textContent = '';
+  const w = words(m);
+  for (const q of quizFor(m.kind)) {
+    const sec = document.createElement('fieldset'); sec.className = 'qq';
+    const lg = document.createElement('legend'); lg.textContent = cap(w(q.q)); sec.appendChild(lg);
+    if (q.multi) { const h = document.createElement('p'); h.className = 'hint'; h.textContent = 'Pick all that fit.'; sec.appendChild(h); }
+    const chips = document.createElement('div'); chips.className = 'qchips';
+    for (const o of q.options) {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'qopt';
+      b.textContent = o.label;
+      if (o.note) { const sm = document.createElement('small'); sm.textContent = o.note; b.appendChild(sm); }
+      const on = () => [].concat(quizAnswers[q.id] ?? []).includes(o.label);
+      b.setAttribute('aria-pressed', String(on()));
+      b.addEventListener('click', () => {
+        const cur = [].concat(quizAnswers[q.id] ?? []);
+        quizAnswers[q.id] = q.multi ? (cur.includes(o.label) ? cur.filter(x => x !== o.label) : [...cur, o.label]) : (cur.includes(o.label) ? [] : [o.label]);
+        chips.querySelectorAll('.qopt').forEach((el, i) => el.setAttribute('aria-pressed', String([].concat(quizAnswers[q.id]).includes(q.options[i].label))));
+      });
+      chips.appendChild(b);
+    }
+    sec.appendChild(chips); box.appendChild(sec);
+  }
+  $('whoSheet').hidden = true;
+  $('quizSheet').hidden = false;
+  box.scrollTop = 0;
+}
+function saveQuiz() {
+  state.personality = { ...(state.personality || {}), [quizId]: quizAnswers };
+  save();
+  cast.setPersonalities(state.personality);
+  cast.replan(now());
+  const m = CAST_BY_ID[quizId];
+  $('quizSheet').hidden = true;
+  toast(quizId === 'conor' ? 'Got it. That\'s you now.' : `Got it. That's ${m.name} now.`, 'Their days on the station follow these answers from here on.');
+  openWho(quizId);
+}
+
 // ---------- toasts and the station log ----------
 let toastTimer;
 function toast(main, sub) {
@@ -294,8 +395,10 @@ function tickMoments(now) {
   momentAt = now;
   const h = hourNow();
   const ok = MOMENTS.map((m, i) => [m, i]).filter(([m, i]) => i !== lastMoment && m.when(state.meters, h));
-  if (!ok.length) return;
-  const [m, i] = ok[Math.floor(Math.random() * ok.length)];
+  const mine = cast.moments(state.meters).map(text => [{ text }, text]);
+  const pool = mine.length && Math.random() < 0.6 ? mine : ok;      // personality moments come up often
+  if (!pool.length) return;
+  const [m, i] = pool[Math.floor(Math.random() * pool.length)];
   lastMoment = i;
   const el = $('log');
   el.classList.remove('in'); void el.offsetWidth;
@@ -462,9 +565,14 @@ function frame(ts) {
     save();
     renderHud();
     if (openZone) renderZone();
+    if (whoId) renderWho();
     tickMoments(ts);
   }
-  cast.update(now(), { meters: state.meters, dark: Object.fromEntries(ZONES.map(z => [z.id, isDark(z.meter)])), night: (h => h >= 22 || h < 6)(hourNow()) });
+  cast.update(now(), { meters: state.meters, dark: Object.fromEntries(ZONES.map(z => [z.id, isDark(z.meter)])), hour: hourNow() });
+  if (following) {
+    const a = cast.draw(now()).find(a => a.id === following);
+    if (a) { cam.x += (a.x - cam.x) * 0.08; cam.y += (a.y - 30 - cam.y) * 0.08; clampCam(); }
+  }
   if (selected && performance.now() > selectedUntil) selected = null;
   const look = lookFor();
   ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -489,11 +597,18 @@ async function boot() {
   if (DEMO) toast(`Preview: ${DEMO}`, 'Nothing you do here is saved.');
   else if (!localStorage.getItem(KEY + '-seen')) {
     try { localStorage.setItem(KEY + '-seen', '1'); } catch (e) { /* fine */ }
-    toast('Welcome aboard.', 'The colored dots are places you can take care of. Start with Elliot & Colenzo Park: the boys are hungry. The camera grabs this moment as wallpaper.');
+    toast('Welcome aboard.', 'The colored dots are places you can take care of. Tap anyone to meet them; the people button lists everyone. The camera grabs this moment as wallpaper.');
   }
 }
 
 $('zoneClose').addEventListener('click', closeZoneSheet);
+$('whoClose').addEventListener('click', closeWho);
+$('whoFollow').addEventListener('click', () => { following = following === whoId ? null : whoId; if (following) cam.s = Math.max(cam.s, fitScale() * 3); renderWho(); });
+$('whoQuiz').addEventListener('click', () => openQuiz(whoId));
+$('peopleBtn').addEventListener('click', openPeople);
+$('peopleClose').addEventListener('click', () => { $('peopleSheet').hidden = true; });
+$('quizSave').addEventListener('click', saveQuiz);
+$('quizClose').addEventListener('click', () => { $('quizSheet').hidden = true; });
 $('capOpen').addEventListener('click', openCapture);
 $('capClose').addEventListener('click', closeCapture);
 $('capStart').addEventListener('click', capture);
@@ -510,7 +625,7 @@ $('renameForm').addEventListener('submit', e => {
   $('rename').hidden = true;
 });
 $('renameCancel').addEventListener('click', () => { $('rename').hidden = true; });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeZoneSheet(); closeCapture(); $('rename').hidden = true; } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeZoneSheet(); closeCapture(); closeWho(); $('peopleSheet').hidden = true; $('quizSheet').hidden = true; $('rename').hidden = true; } });
 document.addEventListener('visibilitychange', () => { if (!document.hidden) { advance(); renderHud(); } });
 boot();
 

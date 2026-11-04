@@ -12,7 +12,8 @@ Open `world/` on the GitHub Pages site in Safari, then Share → Add to Home Scr
 | `assets/station.jpg` | The published station painting (`wallpaper/tools/master.py`) |
 | `js/render.js` | Draws the painting plus all the motion, as a pure function of time and state |
 | `js/app.js` | Simulation (needs drain in real time, also while you're away), controls, capture |
-| `data/cast.js` | Who lives on the station, the places they go, what they do there |
+| `data/cast.js` | Who lives on the station (21 residents), the 17 places they go, what they do there |
+| `data/quiz.js` | Personality quizzes; answers change likes, sleep hours, speed, how long they stay, following, and log moments |
 | `js/cast.js` | Residents plan trips (walk, slip out, ride the glass elevator, hang out) as timed legs |
 | `assets/sprites/`, `data/sprites.json` | Painted residents cut into poses (`wallpaper/tools/sprites.py`) |
 
