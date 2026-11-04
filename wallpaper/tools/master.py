@@ -21,7 +21,15 @@ MASTER = WORK / "master.png"
 STATION = ROOT / "pods" / "station.jpg"
 
 
+LIVE = WORK / "live.json"     # {pin id: file in its work folder} to place a specific version
+
+
 def chosen_pod(pid, pin):
+    live = json.loads(LIVE.read_text()) if LIVE.exists() else {}
+    if pid in live:
+        pod, meta = WORK / pid / live[pid], WORK / pid / "meta.json"
+        if pod.exists() and meta.exists():
+            return pod, json.loads(meta.read_text())
     paints = [r for r in pin.get("renders", []) if r.get("kind") == "paint"]
     if not paints:
         return None

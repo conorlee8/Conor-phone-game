@@ -92,3 +92,9 @@ them in the prompt; only the first image is masked and repainted.
    `python3 wallpaper/tools/lights.py` (finds the lamps in the new painting).
 3. Republish the Pod Planner with the new `station.jpg`, commit and push. The
    Station app (GitHub Pages, `world/`) picks it up on its next load.
+
+# Which version goes into the station
+
+`wallpaper/pods/work/live.json` maps a pin id to the file placed in the
+station (`master.py` reads it). Pods where cast members live (Conor's office)
+use an empty version so the moving residents aren't doubled by painted ones.

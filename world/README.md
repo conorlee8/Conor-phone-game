@@ -12,9 +12,13 @@ Open `world/` on the GitHub Pages site in Safari, then Share → Add to Home Scr
 | `assets/station.jpg` | The published station painting (`wallpaper/tools/master.py`) |
 | `js/render.js` | Draws the painting plus all the motion, as a pure function of time and state |
 | `js/app.js` | Simulation (needs drain in real time, also while you're away), controls, capture |
+| `data/cast.js` | Who lives on the station, the places they go, what they do there |
+| `js/cast.js` | Residents plan trips (walk, slip out, ride the glass elevator, hang out) as timed legs |
+| `assets/sprites/`, `data/sprites.json` | Painted residents cut into poses (`wallpaper/tools/sprites.py`) |
 
 Preview moods without touching your save: `?demo=thriving`, `?demo=struggling`,
-`?demo=neglected`. `?speed=3600` makes an hour pass every second.
+`?demo=neglected`. `?speed=3600` makes an hour pass every second. `?hour=14` previews a time of day
+(at night everyone goes home to rest). Tap a resident to see who they are and what they're doing.
 
 ## Publishing from the Pod Planner
 

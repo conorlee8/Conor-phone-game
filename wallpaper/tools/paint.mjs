@@ -52,6 +52,7 @@ async function paint(a) {
       form.append('mask', new Blob([readFileSync(resolve(base, a.mask))], { type: 'image/png' }), basename(a.mask));
     }
     form.append('model', model); form.append('prompt', prompt);
+    if (a.background) form.append('background', a.background);
     form.append('size', size); form.append('quality', quality);
     return call('https://api.openai.com/v1/images/edits', { method: 'POST', body: form });
   }

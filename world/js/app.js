@@ -1,11 +1,14 @@
 import { IMAGE, HULL, METERS, ZONES, ACTIONS, MOMENTS, START, DARK_BELOW, DARK_AFTER, RECOVER } from '../data/world.js';
 import { drawWorld, assignZones } from './render.js';
+import { Cast } from './cast.js';
 
 const $ = id => document.getElementById(id);
 const KEY = 'station-world-v1';
 const params = new URLSearchParams(location.search);
 const SPEED = Math.max(1, Number(params.get('speed')) || 1);      // ?speed=3600 makes an hour pass every second
-const DEMO = params.get('demo');                                    // ?demo=thriving|struggling|neglected
+const DEMO = params.get('demo');
+const HOUR = params.has('hour') ? Number(params.get('hour')) : null;   // ?hour=14 previews a time of day
+const hourNow = () => HOUR ?? new Date().getHours();                                    // ?demo=thriving|struggling|neglected
 
 // ---------- the simulation ----------
 function fresh() {
@@ -55,8 +58,9 @@ function mood() {
 function lookFor() {
   const zones = {};
   for (const z of ZONES) zones[z.id] = { level: state.meters[z.meter], dark: isDark(z.meter) };
-  const h = new Date().getHours();
-  return { power: state.meters.power, food: state.meters.food, air: state.meters.air, fun: state.meters.fun, overall: overall(), zones, night: h >= 22 || h < 6 };
+  const h = hourNow();
+  return { power: state.meters.power, food: state.meters.food, air: state.meters.air, fun: state.meters.fun, overall: overall(), zones, night: h >= 22 || h < 6,
+           agents: cast.draw(now()), sprites };
 }
 
 function act(id) {
@@ -82,6 +86,9 @@ const canvas = $('view');
 const ctx = canvas.getContext('2d');
 const img = new Image();
 let lights = [];
+const cast = new Cast();
+const sprites = {};
+let selected = null, selectedUntil = 0;
 let cam = { x: HULL.x, y: HULL.y - 40, s: 1 };       // painting point at screen centre, and zoom
 let focus = null;
 let dpr = 1, W = 0, H = 0;
@@ -149,6 +156,18 @@ canvas.addEventListener('wheel', e => {
 
 function tapAt(px, py) {
   const p = toPaint(px, py);
+  const slop = 6 / cam.s;
+  const hit = cast.draw(now()).reverse().find(a => {
+    const sp = sprites[a.sprite]; if (!sp) return false;
+    const f = sp.frames[a.frame] || sp.frames.stand || sp.frames.sit; if (!f) return false;
+    const w = f[2] / sp.res, h = f[3] / sp.res;
+    return p.x > a.x - w / 2 - slop && p.x < a.x + w / 2 + slop && p.y > a.y - a.bob - h - slop && p.y < a.y + slop;
+  });
+  if (hit) {
+    selected = hit.id; selectedUntil = performance.now() + 4000;
+    toast(hit.name, hit.doing.charAt(0).toUpperCase() + hit.doing.slice(1) + '.');
+    return;
+  }
   const z = ZONES.find(z => p.x >= z.box[0] && p.x <= z.box[2] && p.y >= z.box[1] && p.y <= z.box[3]);
   if (z) openZoneSheet(z.id);
 }
@@ -273,7 +292,7 @@ let momentAt = 0, lastMoment = -1;
 function tickMoments(now) {
   if (now - momentAt < 11000) return;
   momentAt = now;
-  const h = new Date().getHours();
+  const h = hourNow();
   const ok = MOMENTS.map((m, i) => [m, i]).filter(([m, i]) => i !== lastMoment && m.when(state.meters, h));
   if (!ok.length) return;
   const [m, i] = ok[Math.floor(Math.random() * ok.length)];
@@ -351,44 +370,52 @@ async function renderStill(view, size, t, look) {
   drawWorld(c.getContext('2d'), img, lights, view, size, t, look);
   return new Promise(r => c.toBlob(r, 'image/jpeg', 0.92));
 }
-async function recordClip(view, size, t0, look, seconds, label) {
+async function recordBoth(seconds) {
   const mime = pickMime();
   if (!mime || !HTMLCanvasElement.prototype.captureStream) return null;
-  const c = document.createElement('canvas'); c.width = size.w; c.height = size.h;
-  const g = c.getContext('2d');
-  drawWorld(g, img, lights, view, size, t0, look);
-  const stream = c.captureStream(30);
-  const rec = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 14000000 });
-  const chunks = [];
-  rec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
-  const stopped = new Promise(r => { rec.onstop = r; });
-  rec.start(250);
+  const mk = size => {
+    const c = document.createElement('canvas'); c.width = size.w; c.height = size.h;
+    const stream = c.captureStream(30);
+    const rec = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 14000000 });
+    const chunks = [];
+    rec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+    const done = new Promise(r => { rec.onstop = r; });
+    return { c, g: c.getContext('2d'), size, stream, rec, chunks, done };
+  };
+  const A = mk(COVER), B = mk(INNER);
+  const draw = () => {
+    const look = lookFor(), t = now();       // one moment, drawn twice
+    drawWorld(A.g, img, lights, coverView, COVER, t, look);
+    drawWorld(B.g, img, lights, innerView, INNER, t, look);
+  };
+  draw();
+  A.rec.start(250); B.rec.start(250);
   const start = performance.now();
   await new Promise(resolve => {
     (function frame() {
       const el = (performance.now() - start) / 1000;
-      drawWorld(g, img, lights, view, size, t0 + el, look);
-      $('capStatus').textContent = `Recording the ${label}… ${Math.min(seconds, el).toFixed(1)}s`;
+      draw();
+      $('capStatus').textContent = `Recording both screens… ${Math.min(seconds, el).toFixed(1)}s`;
       if (el < seconds) requestAnimationFrame(frame); else resolve();
     })();
   });
-  rec.stop();
-  await stopped;
-  stream.getTracks().forEach(tr => tr.stop());
-  return new Blob(chunks, { type: mime.split(';')[0] });
+  A.rec.stop(); B.rec.stop();
+  await Promise.all([A.done, B.done]);
+  for (const x of [A, B]) x.stream.getTracks().forEach(tr => tr.stop());
+  const type = mime.split(';')[0];
+  return [new Blob(A.chunks, { type }), new Blob(B.chunks, { type })];
 }
 let captured = [];
 async function capture() {
   $('capStart').disabled = true;
   $('capResult').hidden = true;
-  const t0 = now(), look = lookFor();          // freeze this moment: both clips start from it
   const secs = 3.2;
   try {
-    const coverClip = await recordClip(coverView, COVER, t0, look, secs, 'closed screen');
-    const innerClip = await recordClip(innerView, INNER, t0, look, secs, 'open screen');
-    $('capStatus').textContent = 'Saving the stills…';
-    const coverJpg = await renderStill(coverView, COVER, t0 + 1.6, look);
-    const innerJpg = await renderStill(innerView, INNER, t0 + 1.6, look);
+    const t0 = now(), look = lookFor();         // the stills: this exact moment, both screens
+    const coverJpg = await renderStill(coverView, COVER, t0, look);
+    const innerJpg = await renderStill(innerView, INNER, t0, look);
+    const clips = await recordBoth(secs);
+    const [coverClip, innerClip] = clips || [null, null];
     const stamp = new Date().toISOString().slice(0, 16).replace(/[-:T]/g, '');
     const ext = coverClip ? (coverClip.type.includes('mp4') ? 'mp4' : 'webm') : '';
     captured = [
@@ -437,10 +464,12 @@ function frame(ts) {
     if (openZone) renderZone();
     tickMoments(ts);
   }
+  cast.update(now(), { meters: state.meters, dark: Object.fromEntries(ZONES.map(z => [z.id, isDark(z.meter)])), night: (h => h >= 22 || h < 6)(hourNow()) });
+  if (selected && performance.now() > selectedUntil) selected = null;
   const look = lookFor();
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   const view = { sx: cam.x - W / 2 / cam.s, sy: cam.y - H / 2 / cam.s, sw: W / cam.s, sh: H / cam.s };
-  if (img.complete && img.naturalWidth) drawWorld(ctx, img, lights, view, { w: canvas.width, h: canvas.height }, now(), look, { ui: true, focus, px: dpr, colors: METER_COLORS });
+  if (img.complete && img.naturalWidth) drawWorld(ctx, img, lights, view, { w: canvas.width, h: canvas.height }, now(), look, { ui: true, focus, px: dpr, colors: METER_COLORS, selected });
   requestAnimationFrame(frame);
 }
 
@@ -449,6 +478,10 @@ async function boot() {
   window.addEventListener('resize', resize);
   resize();
   try { lights = assignZones(await (await fetch('data/lights.json')).json()); } catch (e) { lights = []; }
+  try {
+    const meta = await (await fetch('data/sprites.json')).json();
+    for (const [id, m] of Object.entries(meta)) { const im = new Image(); im.src = m.src; sprites[id] = { img: im, frames: m.frames, res: m.res }; }
+  } catch (e) { /* the station still runs without residents */ }
   img.src = 'assets/station.jpg';
   await img.decode().catch(() => {});
   renderHud();
@@ -482,4 +515,4 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) { ad
 boot();
 
 // For checking the look in a test browser.
-window.__world = { state: () => state, overall, isDark, screenOf: (x, y) => ({ x: (x - cam.x) * cam.s + W / 2, y: (y - cam.y) * cam.s + H / 2 }) };
+window.__world = { state: () => state, overall, isDark, cast: () => cast.draw(now()), screenOf: (x, y) => ({ x: (x - cam.x) * cam.s + W / 2, y: (y - cam.y) * cam.s + H / 2 }) };

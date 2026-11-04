@@ -1,0 +1,91 @@
+{
+ "out": "raw",
+ "model": "gpt-image-1.5",
+ "quality": "high",
+ "size": "1536x1024",
+ "assets": [
+  {
+   "id": "conor",
+   "images": [
+    "../pods/work/people/person-tbipto/sheet_1.jpg",
+    "style_ref.png"
+   ],
+   "prompt": "Sprite sheet for a 2D game, in the exact painting style of the style reference image (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm colours, slightly chunky storybook proportions). Draw Conor. The first image is the approved character drawing: copy their face, hair, build and clothes exactly. Dark brown wavy hair swept back with volume, thick eyebrows, mustache and short goatee, light tan skin, athletic; cream sweatshirt, slim dark techwear joggers, very white sneakers with small pink and light-blue accents. Four full-body poses of the same character in ONE horizontal row, in four equal columns, each pose centred in its column with plenty of empty space around it, all at exactly the same size and scale, all seen from the side facing RIGHT, feet on the same baseline: 1) walking, left leg forward, mid-stride; 2) walking, right leg forward, mid-stride; 3) standing relaxed; 4) sitting on an invisible stool, knees bent, hands resting on knees. Fully transparent background: no floor, no ground shadow, no scenery, no text, no frame. Nothing else in the image.",
+   "background": "transparent"
+  },
+  {
+   "id": "elliot",
+   "images": [
+    "../pods/work/people/elliot/sheet_1.jpg",
+    "style_ref.png"
+   ],
+   "prompt": "Sprite sheet for a 2D game, in the exact painting style of the style reference image (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm colours, slightly chunky storybook proportions). Draw Elliot, a boxer dog. The first image is the approved drawing of this exact dog: copy the coat, markings, ears and build exactly. Fawn-red coat, white chest and white paws, narrow white blaze up the forehead, black mask, ears folded forward, short docked tail. Four full-body poses of the same animal in ONE horizontal row, in four equal columns, each pose centred in its column with plenty of empty space around it, all at exactly the same size and scale, all seen from the side facing RIGHT: 1) trotting, front left leg forward; 2) trotting, front right leg forward; 3) sitting upright; 4) lying down with head up. Fully transparent background: no floor, no ground shadow, no scenery, no text, no frame. Nothing else in the image.",
+   "background": "transparent"
+  },
+  {
+   "id": "colenzo",
+   "images": [
+    "../pods/work/people/colenzo/sheet_1.jpg",
+    "style_ref.png"
+   ],
+   "prompt": "Sprite sheet for a 2D game, in the exact painting style of the style reference image (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm colours, slightly chunky storybook proportions). Draw Colenzo, a boxer dog. The first image is the approved drawing of this exact dog: copy the coat, markings, ears and build exactly. Dark brindle coat, big white chest bib and white paws, dark mask, no forehead blaze, ears folded forward, short docked tail held up, tall and lean. Four full-body poses of the same animal in ONE horizontal row, in four equal columns, each pose centred in its column with plenty of empty space around it, all at exactly the same size and scale, all seen from the side facing RIGHT: 1) trotting, front left leg forward; 2) trotting, front right leg forward; 3) sitting upright; 4) lying down with head up. Fully transparent background: no floor, no ground shadow, no scenery, no text, no frame. Nothing else in the image.",
+   "background": "transparent"
+  },
+  {
+   "id": "mara",
+   "images": [
+    "style_ref.png"
+   ],
+   "prompt": "Sprite sheet for a 2D game, in the exact painting style of the style reference image (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm colours, slightly chunky storybook proportions). Draw Mara, a station engineer. A woman in her thirties with curly copper-red hair tied up, freckles, pale skin; mustard-yellow overalls over a navy t-shirt, a tool belt, brown work boots. Four full-body poses of the same character in ONE horizontal row, in four equal columns, each pose centred in its column with plenty of empty space around it, all at exactly the same size and scale, all seen from the side facing RIGHT, feet on the same baseline: 1) walking, left leg forward, mid-stride; 2) walking, right leg forward, mid-stride; 3) standing relaxed; 4) sitting on an invisible stool, knees bent, hands resting on knees. Fully transparent background: no floor, no ground shadow, no scenery, no text, no frame. Nothing else in the image.",
+   "background": "transparent"
+  },
+  {
+   "id": "gus",
+   "images": [
+    "style_ref.png"
+   ],
+   "prompt": "Sprite sheet for a 2D game, in the exact painting style of the style reference image (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm colours, slightly chunky storybook proportions). Draw Gus, the station's grandpa. An older white man in his seventies, bald on top with a short grey beard and round glasses, a little round in the middle; a green knit cardigan over a checked shirt, brown trousers, slippers. Four full-body poses of the same character in ONE horizontal row, in four equal columns, each pose centred in its column with plenty of empty space around it, all at exactly the same size and scale, all seen from the side facing RIGHT, feet on the same baseline: 1) walking, left leg forward, mid-stride; 2) walking, right leg forward, mid-stride; 3) standing relaxed; 4) sitting on an invisible stool, knees bent, hands resting on knees. Fully transparent background: no floor, no ground shadow, no scenery, no text, no frame. Nothing else in the image.",
+   "background": "transparent"
+  },
+  {
+   "id": "jules",
+   "images": [
+    "style_ref.png"
+   ],
+   "prompt": "Sprite sheet for a 2D game, in the exact painting style of the style reference image (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm colours, slightly chunky storybook proportions). Draw Jules, a teenager. A white teenager with messy blonde hair and big headphones around the neck; an oversized lilac hoodie, baggy cargo shorts, chunky skate shoes. Four full-body poses of the same character in ONE horizontal row, in four equal columns, each pose centred in its column with plenty of empty space around it, all at exactly the same size and scale, all seen from the side facing RIGHT, feet on the same baseline: 1) walking, left leg forward, mid-stride; 2) walking, right leg forward, mid-stride; 3) standing relaxed; 4) sitting on an invisible stool, knees bent, hands resting on knees. Fully transparent background: no floor, no ground shadow, no scenery, no text, no frame. Nothing else in the image.",
+   "background": "transparent"
+  },
+  {
+   "id": "dee",
+   "images": [
+    "style_ref.png"
+   ],
+   "prompt": "Sprite sheet for a 2D game, in the exact painting style of the style reference image (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm colours, slightly chunky storybook proportions). Draw Dee, a mechanic. A Black woman in her twenties with short natural hair and a teal bandana; a coral work jumpsuit with rolled sleeves and a patch on the chest, black boots. Four full-body poses of the same character in ONE horizontal row, in four equal columns, each pose centred in its column with plenty of empty space around it, all at exactly the same size and scale, all seen from the side facing RIGHT, feet on the same baseline: 1) walking, left leg forward, mid-stride; 2) walking, right leg forward, mid-stride; 3) standing relaxed; 4) sitting on an invisible stool, knees bent, hands resting on knees. Fully transparent background: no floor, no ground shadow, no scenery, no text, no frame. Nothing else in the image.",
+   "background": "transparent"
+  },
+  {
+   "id": "ginger",
+   "images": [
+    "style_ref.png"
+   ],
+   "prompt": "Sprite sheet for a 2D game, in the exact painting style of the style reference image (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm colours, slightly chunky storybook proportions). Draw Ginger, a cat. A plump orange tabby cat with a white chest and a long striped tail. Draw it small and cat-sized. Four full-body poses of the same animal in ONE horizontal row, in four equal columns, each pose centred in its column with plenty of empty space around it, all at exactly the same size and scale, all seen from the side facing RIGHT: 1) trotting, front left leg forward; 2) trotting, front right leg forward; 3) sitting upright; 4) curled up asleep. Fully transparent background: no floor, no ground shadow, no scenery, no text, no frame. Nothing else in the image.",
+   "background": "transparent"
+  },
+  {
+   "id": "pixel",
+   "images": [
+    "style_ref.png"
+   ],
+   "prompt": "Sprite sheet for a 2D game, in the exact painting style of the style reference image (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm colours, slightly chunky storybook proportions). Draw Pixel, a cat. A sleek black-and-white tuxedo cat with white paws and a white chin. Draw it small and cat-sized. Four full-body poses of the same animal in ONE horizontal row, in four equal columns, each pose centred in its column with plenty of empty space around it, all at exactly the same size and scale, all seen from the side facing RIGHT: 1) trotting, front left leg forward; 2) trotting, front right leg forward; 3) sitting upright; 4) curled up asleep. Fully transparent background: no floor, no ground shadow, no scenery, no text, no frame. Nothing else in the image.",
+   "background": "transparent"
+  },
+  {
+   "id": "bolt",
+   "images": [
+    "style_ref.png"
+   ],
+   "prompt": "Sprite sheet for a 2D game, in the exact painting style of the style reference image (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm colours, slightly chunky storybook proportions). Draw Bolt, a small friendly round helper robot that hovers: teal and cream body like a fat egg, one big glowing cyan eye, a little antenna with a red tip, two small arms, a soft blue glow under it. Four poses of the same robot in ONE horizontal row, in four equal columns, each centred with plenty of empty space, same size, facing RIGHT: 1) hovering forward, tilted forward; 2) hovering forward, tilted forward, arms swung the other way; 3) hovering still; 4) hovering still, holding a small cardboard box. Fully transparent background: no floor, no ground shadow, no scenery, no text, no frame. Nothing else in the image.",
+   "background": "transparent"
+  }
+ ]
+}

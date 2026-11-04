@@ -64,6 +64,7 @@ export function drawWorld(ctx, img, lights, view, out, t, look, opts = {}) {
   ctx.fillRect(0, 0, out.w, out.h);
   ctx.setTransform(k, 0, 0, k, -view.sx * k, -view.sy * k);
   ctx.drawImage(img, 0, 0);
+  if (look.agents && look.sprites) drawAgents(ctx, look.agents, look.sprites, opts.selected);
 
   const { power, overall, zones, night } = look;
 
@@ -288,4 +289,36 @@ export function assignZones(lights) {
     if (z) L.z = z.id;
   }
   return lights;
+}
+
+// The residents, drawn into the painting so the station's lighting and mood
+// fall on them like everything else.
+function drawAgents(ctx, agents, sprites, selected) {
+  ctx.globalCompositeOperation = 'source-over';
+  for (const a of agents) {
+    const sp = sprites[a.sprite];
+    if (!sp || !sp.img.complete) continue;
+    const f = sp.frames[a.frame] || sp.frames.stand || sp.frames.sit || Object.values(sp.frames)[0];
+    if (!f) continue;
+    const w = f[2] / sp.res, h = f[3] / sp.res;
+    const fx = a.x, fy = a.y - a.bob;
+    if (!a.glass && a.kind !== 'robot') {
+      ctx.globalAlpha = 0.32 * a.alpha;
+      ctx.fillStyle = '#05070d';
+      ctx.beginPath(); ctx.ellipse(a.x, a.y + 0.5, w * 0.36, 2.2, 0, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.globalAlpha = a.alpha;
+    ctx.save();
+    ctx.translate(fx, fy);
+    if (a.flip) ctx.scale(-1, 1);
+    ctx.drawImage(sp.img, f[0], f[1], f[2], f[3], -w / 2, -h, w, h);
+    ctx.restore();
+    if (selected === a.id) {
+      ctx.globalAlpha = 0.9;
+      ctx.strokeStyle = '#7fdcc9';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.ellipse(a.x, a.y + 1, w * 0.5, 4, 0, 0, Math.PI * 2); ctx.stroke();
+    }
+  }
+  ctx.globalAlpha = 1;
 }
