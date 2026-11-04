@@ -1,0 +1,40 @@
+{
+ "out": "props",
+ "model": "gpt-image-1.5",
+ "quality": "high",
+ "size": "1024x1024",
+ "assets": [
+  {
+   "id": "table",
+   "images": [
+    "dumpling_style.png"
+   ],
+   "background": "transparent",
+   "prompt": "A single piece of furniture for a 2D game, in the exact painting style of the reference image (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm lamplight colours). Seen from the front and slightly above, about 20 degrees, the same camera as the reference room. Centred, whole object visible, nothing cut off. Fully transparent background: no floor, no shadow, no wall, no text, no people. Subject: a small round red-lacquered restaurant table on a single pedestal, with three stacked bamboo steamer baskets of dumplings, a teapot, two small cups and chopsticks on it."
+  },
+  {
+   "id": "stool",
+   "images": [
+    "dumpling_style.png"
+   ],
+   "background": "transparent",
+   "prompt": "A single piece of furniture for a 2D game, in the exact painting style of the reference image (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm lamplight colours). Seen from the front and slightly above, about 20 degrees, the same camera as the reference room. Centred, whole object visible, nothing cut off. Fully transparent background: no floor, no shadow, no wall, no text, no people. Subject: one round bar stool with a red cushioned seat and four thin dark wooden legs with a foot ring."
+  },
+  {
+   "id": "bench",
+   "images": [
+    "court_style.png"
+   ],
+   "background": "transparent",
+   "prompt": "A single piece of furniture for a 2D game, in the exact painting style of the reference image (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm lamplight colours). Seen from the front and slightly above, about 20 degrees, the same camera as the reference room. Centred, whole object visible, nothing cut off. Fully transparent background: no floor, no shadow, no wall, no text, no people. Subject: a long low wooden locker-room bench on metal legs with a folded white towel and a water bottle on it, seen from the front, long and wide."
+  },
+  {
+   "id": "balls",
+   "images": [
+    "court_style.png"
+   ],
+   "background": "transparent",
+   "prompt": "A single piece of furniture for a 2D game, in the exact painting style of the reference image (a lofi anime night painting of a cozy space station: clean dark ink outlines, soft painted cel shading, warm lamplight colours). Seen from the front and slightly above, about 20 degrees, the same camera as the reference room. Centred, whole object visible, nothing cut off. Fully transparent background: no floor, no shadow, no wall, no text, no people. Subject: a small black metal rolling rack holding six orange basketballs in two rows."
+  }
+ ]
+}

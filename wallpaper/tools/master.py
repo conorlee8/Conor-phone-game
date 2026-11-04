@@ -68,6 +68,20 @@ def build(pins_dir):
         master.paste(tile, (c[0], c[1]), m)
         placed += 1
         print(f"  pin {pin.get('n')}: placed")
+    # Rooms rebuilt in layers: the emptied room goes in, furniture and people are drawn live.
+    rooms = ROOT / "rooms"
+    for meta_f in sorted(rooms.glob("*_meta.json")):
+        rid = meta_f.name[:-len("_meta.json")]
+        empty = rooms / f"{rid}_empty.png"
+        if not empty.exists():
+            continue
+        meta = json.loads(meta_f.read_text())
+        c, (x0, y0, x1, y1) = meta["crop"], meta["room"]
+        tile = Image.open(empty).convert("RGB").resize((c[2] - c[0], c[3] - c[1]), Image.LANCZOS)
+        m = Image.new("L", tile.size, 0)
+        ImageDraw.Draw(m).rectangle([x0 - c[0] + 1, y0 - c[1] + 1, x1 - c[0] - 1, y1 - c[1] - 1], fill=255)
+        master.paste(tile, (c[0], c[1]), m.filter(ImageFilter.GaussianBlur(1.2)))
+        print(f"  room {rid}: emptied")
     master.save(MASTER)
     master.save(STATION, quality=88)
     print(f"{placed} pods in the station -> {STATION.relative_to(ROOT.parent)}")

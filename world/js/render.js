@@ -300,9 +300,10 @@ function drawAgents(ctx, agents, sprites, selected) {
     if (!sp || !sp.img.complete) continue;
     const f = sp.frames[a.frame] || sp.frames.stand || sp.frames.sit || Object.values(sp.frames)[0];
     if (!f) continue;
-    const w = f[2] / sp.res, h = f[3] / sp.res;
+    const sc = a.scale || 1;
+    const w = f[2] / sp.res * sc, h = f[3] / sp.res * sc;
     const fx = a.x, fy = a.y - a.bob;
-    if (!a.glass && a.kind !== 'robot') {
+    if (!a.glass && a.kind !== 'robot' && a.kind !== 'prop') {
       ctx.globalAlpha = 0.32 * a.alpha;
       ctx.fillStyle = '#05070d';
       ctx.beginPath(); ctx.ellipse(a.x, a.y + 0.5, w * 0.36, 2.2, 0, 0, Math.PI * 2); ctx.fill();
@@ -313,7 +314,7 @@ function drawAgents(ctx, agents, sprites, selected) {
     if (a.flip) ctx.scale(-1, 1);
     ctx.drawImage(sp.img, f[0], f[1], f[2], f[3], -w / 2, -h, w, h);
     ctx.restore();
-    if (selected === a.id) {
+    if (selected && selected === a.id) {
       ctx.globalAlpha = 0.9;
       ctx.strokeStyle = '#7fdcc9';
       ctx.lineWidth = 1.5;

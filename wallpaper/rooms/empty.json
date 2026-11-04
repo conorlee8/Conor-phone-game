@@ -1,0 +1,26 @@
+{
+ "out": ".",
+ "quality": "high",
+ "assets": [
+  {
+   "id": "dumpling_empty",
+   "model": "gpt-image-2",
+   "size": "1024x1024",
+   "images": [
+    "dumpling_input.png"
+   ],
+   "mask": "dumpling_mask.png",
+   "prompt": "Repaint ONLY the inside of the one room in the transparent area of the mask as the exact same room, completely empty: no people, no animals, no tables, no chairs, no stools, no food on tables. Keep its back wall, the DUMPLING ORBIT sign, the red paper lanterns, shelves, the kitchen hatch and steamers on the back counter, the lighting and colours, and continue the wooden floor where the furniture was, so the floor is clear and walkable from wall to wall. Everything outside the room stays exactly as it is."
+  },
+  {
+   "id": "court_empty",
+   "model": "gpt-image-2",
+   "size": "1024x1024",
+   "images": [
+    "court_input.png"
+   ],
+   "mask": "court_mask.png",
+   "prompt": "Repaint ONLY the inside of the one room in the transparent area of the mask as the exact same indoor basketball court, completely empty: no people, no animals, no benches, no cones, no loose objects. Keep the back wall with its posters and lights, the basketball hoop and backboard, the orange court floor with its white lines, the lighting and colours, and continue the floor and lines where people were. Everything outside the room stays exactly as it is."
+  }
+ ]
+}

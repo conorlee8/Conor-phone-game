@@ -1,6 +1,7 @@
 import { IMAGE, HULL, METERS, ZONES, ACTIONS, MOMENTS, START, DARK_BELOW, DARK_AFTER, RECOVER } from '../data/world.js';
 import { drawWorld, assignZones } from './render.js';
-import { Cast } from './cast.js';
+import { Cast, scene } from './cast.js';
+import { PROPS } from '../data/props.js';
 import { CAST } from '../data/cast.js';
 const CAST_BY_ID = Object.fromEntries(CAST.map(c => [c.id, c]));
 import { quizFor } from '../data/quiz.js';
@@ -11,7 +12,8 @@ const params = new URLSearchParams(location.search);
 const SPEED = Math.max(1, Number(params.get('speed')) || 1);      // ?speed=3600 makes an hour pass every second
 const DEMO = params.get('demo');
 const HOUR = params.has('hour') ? Number(params.get('hour')) : null;   // ?hour=14 previews a time of day
-const hourNow = () => HOUR ?? new Date().getHours();                                    // ?demo=thriving|struggling|neglected
+const hourNow = () => HOUR ?? new Date().getHours();
+const BOOST = params.has('crowd') ? params.get('crowd').split(',') : [];   // ?crowd=dumpling,court sends people there                                    // ?demo=thriving|struggling|neglected
 
 // ---------- the simulation ----------
 function fresh() {
@@ -63,7 +65,7 @@ function lookFor() {
   for (const z of ZONES) zones[z.id] = { level: state.meters[z.meter], dark: isDark(z.meter) };
   const h = hourNow();
   return { power: state.meters.power, food: state.meters.food, air: state.meters.air, fun: state.meters.fun, overall: overall(), zones, night: h >= 22 || h < 6,
-           agents: cast.draw(now()), sprites };
+           agents: scene(cast.draw(now()), PROPS), sprites };
 }
 
 function act(id) {
@@ -164,7 +166,7 @@ function tapAt(px, py) {
   const hit = cast.draw(now()).reverse().find(a => {
     const sp = sprites[a.sprite]; if (!sp) return false;
     const f = sp.frames[a.frame] || sp.frames.stand || sp.frames.sit; if (!f) return false;
-    const w = f[2] / sp.res, h = f[3] / sp.res;
+    const w = f[2] / sp.res * (a.scale || 1), h = f[3] / sp.res * (a.scale || 1);
     return p.x > a.x - w / 2 - slop && p.x < a.x + w / 2 + slop && p.y > a.y - a.bob - h - slop && p.y < a.y + slop;
   });
   if (hit) { openWho(hit.id); return; }
@@ -568,7 +570,7 @@ function frame(ts) {
     if (whoId) renderWho();
     tickMoments(ts);
   }
-  cast.update(now(), { meters: state.meters, dark: Object.fromEntries(ZONES.map(z => [z.id, isDark(z.meter)])), hour: hourNow() });
+  cast.update(now(), { meters: state.meters, dark: Object.fromEntries(ZONES.map(z => [z.id, isDark(z.meter)])), hour: hourNow(), boost: BOOST });
   if (following) {
     const a = cast.draw(now()).find(a => a.id === following);
     if (a) { cam.x += (a.x - cam.x) * 0.08; cam.y += (a.y - 30 - cam.y) * 0.08; clampCam(); }

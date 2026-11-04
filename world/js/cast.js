@@ -6,8 +6,9 @@
 // A personality (from the quiz) changes where someone likes to go, when they
 // sleep, how fast they move, how long they hang around, how closely they
 // follow Conor, and what the station log says about them.
-import { CAST, PLACES, SHAFT_X, RIDE_SPEED, doingAt } from '../data/cast.js';
+import { CAST, PLACES, SHAFT_X, RIDE_SPEED, doingAt, SEATED_DOING } from '../data/cast.js';
 import { profileFrom } from '../data/quiz.js';
+import { SEATS } from '../data/props.js';
 
 const rand = (a, b) => a + Math.random() * (b - a);
 function pick(weights) {
@@ -20,11 +21,21 @@ const exitX = p => (PLACES[p].x0 + PLACES[p].x1) / 2 < SHAFT_X ? PLACES[p].x1 - 
 const upright = k => k === 'person' || k === 'robot' || k === 'alien';
 const restPose = k => k === 'person' || k === 'alien' ? 'sit' : k === 'robot' ? 'stand' : k === 'bird' ? 'sit' : 'lie';
 const idlePose = k => upright(k) ? 'stand' : 'sit';
+// Rooms rebuilt in layers have a depth band: people stand anywhere from the
+// back wall (yb) to the front edge (yf), and shrink a little toward the back.
+const laneY = P => (P.yb != null ? rand(P.yb, P.yf) : P.y);
+const frontY = P => (P.yf ?? P.y);
+export function depthScale(place, y) {
+  const P = PLACES[place];
+  if (!P || P.yb == null) return 1;
+  return 1 - Math.max(0, Math.min(1, (P.yf - y) / (P.yf - P.yb))) * 0.16;
+}
 
 export class Cast {
   constructor(personalities = {}) {
     this.people = CAST.map((c, i) => ({ ...c, base: c, legs: [], at: null, lane: ((i * 7) % 13 - 6) * 2, depth: -((i * 5) % 9) }));
     this.world = { meters: {}, dark: {}, hour: 12 };
+    this.seats = SEATS.map(s => ({ ...s, until: 0 }));
     this.setPersonalities(personalities);
   }
 
@@ -86,7 +97,7 @@ export class Cast {
     const P = PLACES[place];
     const x = rand(P.x0 + 12, P.x1 - 12);
     p.at = place;
-    p.legs.push({ k: 'pose', pose: idlePose(p.kind), x, y: P.y, face: 1, t0: t, t1: t + rand(1, 5), place });
+    p.legs.push({ k: 'pose', pose: idlePose(p.kind), x, y: laneY(P), face: 1, t0: t, t1: t + rand(1, 5), place });
   }
 
   chooseNext(p) {
@@ -100,6 +111,7 @@ export class Cast {
     const likes = { ...p.likes };
     for (const k of Object.keys(likes)) if (!this.allowed(k)) likes[k] = 0;
     if (p.homebody) likes[p.home] = (likes[p.home] || 0) + p.homebody;
+    for (const b of this.world.boost || []) if (this.allowed(b)) likes[b] = (likes[b] || 0) + 12;   // ?crowd= preview
     if ((m.fun ?? 100) < 35 && p.kind === 'person') likes[p.home] = (likes[p.home] || 0) + 6;   // low morale: people stay in
     return pick(likes) || p.at;
   }
@@ -113,47 +125,55 @@ export class Cast {
     p.target = dest;
     if (dest !== p.at && last.k !== 'ride') {
       // Walk to the room's edge, slip out, ride the glass elevator, come in on the other floor.
-      const ex = exitX(p.at);
-      t = this.walk(p, x, ex, y, t, p.at);
+      const ex = exitX(p.at), ey = frontY(PLACES[p.at]);
+      t = this.walk(p, x, ex, y, ey, t, p.at); y = ey;
       p.legs.push({ k: 'fade', out: true, x: ex, y, face: ex > x ? 1 : -1, t0: t, t1: t + 0.45, place: p.at }); t += 0.45;
       const sx = SHAFT_X + p.lane;
-      const dt = 0.5 + Math.abs(P.y - y) / RIDE_SPEED;
-      p.legs.push({ k: 'ride', x: sx, y0: y, y1: P.y, t0: t, t1: t + dt, place: null }); t += dt;
+      const ty = frontY(P);
+      const dt = 0.5 + Math.abs(ty - y) / RIDE_SPEED;
+      p.legs.push({ k: 'ride', x: sx, y0: y, y1: ty, t0: t, t1: t + dt, place: null }); t += dt;
       const ix = exitX(dest);
-      p.legs.push({ k: 'fade', out: false, x: ix, y: P.y, face: ix < SHAFT_X ? -1 : 1, t0: t, t1: t + 0.45, place: dest }); t += 0.45;
-      x = ix; y = P.y;
+      p.legs.push({ k: 'fade', out: false, x: ix, y: ty, face: ix < SHAFT_X ? -1 : 1, t0: t, t1: t + 0.45, place: dest }); t += 0.45;
+      x = ix; y = ty;
       p.at = dest;
     }
     const sleeping = this.asleep(p), low = (this.world.meters.fun ?? 100) < 35;
     const lead = p.follows && this.people.find(q => q.id === p.follows);
     const stops = sleeping ? 1 : 1 + Math.floor(rand(1, low ? 2 : 4));
     for (let i = 0; i < stops; i++) {
-      let to = rand(P.x0 + 10, P.x1 - 10);
+      let to = rand(P.x0 + 10, P.x1 - 10), ty = laneY(P), seatObj = null;
       if (lead && lead.at === dest) {
         const lx = lead.legs[lead.legs.length - 1].x ?? to;
         to = Math.max(P.x0 + 8, Math.min(P.x1 - 8, lx + (p.lane < 0 ? -26 : 30) + rand(-6, 6)));
       }
       const seat = P.seats && P.seats[p.id];
       if (seat && (i === 0 || Math.random() < 0.6)) to = seat;      // their own chair
-      t = this.walk(p, x, to, P.y, t, dest);
-      x = to;
+      if (p.kind === 'person' && !sleeping && Math.random() < 0.6) {  // take a free stool or bench spot
+        const free = this.seats.filter(s => s.place === dest && s.until < t);
+        if (free.length) { seatObj = free[Math.floor(Math.random() * free.length)]; to = seatObj.x; ty = seatObj.y; }
+      }
+      t = this.walk(p, x, to, y, ty, t, dest);
+      x = to; y = ty;
       const sitty = p.kind === 'person' ? (['cinema', 'dumpling', 'office', 'diner', 'noodle', 'ales', 'lounge'].includes(dest) ? 0.75 : 0.25)
         : p.kind === 'dog' || p.kind === 'cat' ? p.lieP : 0.3;
-      let pose = (seat && to === seat) || Math.random() < sitty ? restPose(p.kind) : idlePose(p.kind);
+      let pose = seatObj || (seat && to === seat) || (!P.layered && Math.random() < sitty) ? restPose(p.kind) : idlePose(p.kind);
+      if (!seatObj && P.layered && p.kind !== 'person' && Math.random() < sitty) pose = restPose(p.kind);
       if (p.kind === 'dog' && p.follows === 'conor' && (this.world.meters.boys ?? 100) < 35) pose = 'lie';
       if (sleeping) pose = restPose(p.kind);
       if (p.kind === 'robot' && Math.random() < 0.4) pose = 'carry';
       if (p.kind === 'bird' && Math.random() < 0.25) pose = 'fly';
       const stay = sleeping ? rand(40, 90) : rand(5, 16) * p.stayMul * (low ? 1.6 : 1);
-      p.legs.push({ k: 'pose', pose, x, y: P.y, face: Math.random() < 0.5 ? 1 : -1, t0: t, t1: t + stay, place: dest, asleep: sleeping });
+      if (seatObj) seatObj.until = t + stay + 1;
+      p.legs.push({ k: 'pose', pose, x, y, face: seatObj ? seatObj.face : (Math.random() < 0.5 ? 1 : -1), t0: t, t1: t + stay, place: dest, asleep: sleeping, seated: !!seatObj });
       t += stay;
     }
   }
 
-  walk(p, x0, x1, y, t, place) {
-    if (Math.abs(x1 - x0) < 2) return t;
-    const dt = Math.abs(x1 - x0) / p.speedNow;
-    p.legs.push({ k: 'walk', x0, x1, y, t0: t, t1: t + dt, place });
+  walk(p, x0, x1, y0, y1, t, place) {
+    const d = Math.hypot(x1 - x0, (y1 - y0) * 2);
+    if (d < 2) return t;
+    const dt = d / p.speedNow;
+    p.legs.push({ k: 'walk', x0, x1, y0, y1, t0: t, t1: t + dt, place });
     return t + dt;
   }
 
@@ -183,7 +203,7 @@ export class Cast {
       const still = upright(p.kind) ? 'stand' : 'sit';
       let item;
       if (L.k === 'walk') {
-        item = { x: L.x0 + (L.x1 - L.x0) * u, y: L.y, frame: walkFrame, flip: L.x1 < L.x0, alpha: 1, bob: Math.abs(Math.sin(t / step * Math.PI)) * (p.kind === 'bird' ? 3 : 1.1) };
+        item = { x: L.x0 + (L.x1 - L.x0) * u, y: L.y0 + (L.y1 - L.y0) * u, frame: walkFrame, flip: Math.abs(L.x1 - L.x0) < 1 ? L.y1 > L.y0 : L.x1 < L.x0, alpha: 1, bob: Math.abs(Math.sin(t / step * Math.PI)) * (p.kind === 'bird' ? 3 : 1.1) };
       } else if (L.k === 'pose') {
         item = { x: L.x, y: L.y, frame: L.pose, flip: L.face < 0, alpha: 1, bob: L.pose === 'fly' ? 18 + Math.sin(t * 4) * 4 : 0 };
       } else if (L.k === 'fade') {
@@ -192,11 +212,19 @@ export class Cast {
         item = { x: L.x, y: L.y0 + (L.y1 - L.y0) * u, frame: still, flip: false, alpha: 0.9, bob: 0, glass: true };
       }
       if (p.kind === 'robot') item.bob += 6 + Math.sin(t * 3 + p.lane) * 2;
-      item.y += L.k === 'ride' ? 0 : p.depth * 0.6;
+      const layered = L.place && PLACES[L.place] && PLACES[L.place].layered;
+      item.y += L.k === 'ride' || layered ? 0 : p.depth * 0.6;
+      item.scale = layered ? depthScale(L.place, item.y) : 1;
       const doing = L.k === 'ride' ? 'riding the elevator' : L.k === 'fade' ? (L.out ? 'heading out' : 'arriving')
-        : L.asleep ? (p.kind === 'robot' ? 'recharging' : 'asleep') : doingAt(p.kind, L.place);
+        : L.asleep ? (p.kind === 'robot' ? 'recharging' : 'asleep') : L.seated ? (SEATED_DOING[L.place] || doingAt(p.kind, L.place)) : doingAt(p.kind, L.place);
       out.push({ ...item, id: p.id, name: p.name, sprite: p.sprite, kind: p.kind, doing, place: L.place, quiz: !!p.base.quiz });
     }
     return out.sort((a, b) => a.y - b.y);
   }
+}
+
+// Residents and furniture together, back to front.
+export function scene(agents, props) {
+  return agents.concat(props.map(pr => ({ ...pr, frame: 'stand', flip: false, alpha: 1, bob: 0, kind: 'prop', id: null,
+    scale: depthScale(pr.place, pr.y) }))).sort((a, b) => a.y - b.y);
 }

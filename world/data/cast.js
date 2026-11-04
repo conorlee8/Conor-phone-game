@@ -7,9 +7,9 @@ export const RIDE_SPEED = 170;               // painting px per second
 export const PLACES = {
   office: { name: "Conor's office", y: 646, x0: 1178, x1: 1368, zone: 'office', seats: { conor: 1292 } },
   park: { name: 'Elliot & Colenzo Park', y: 708, x0: 668, x1: 878, zone: 'park' },
-  court: { name: 'the court', y: 798, x0: 1014, x1: 1392, zone: 'court' },
+  court: { name: 'the court', y: 798, yb: 752, yf: 800, x0: 1018, x1: 1392, zone: 'court', layered: true },
   cinema: { name: 'Orbit Cinema', y: 344, x0: 994, x1: 1144, zone: 'cinema' },
-  dumpling: { name: 'Dumpling Orbit', y: 496, x0: 1160, x1: 1292, zone: 'dumpling' },
+  dumpling: { name: 'Dumpling Orbit', y: 496, yb: 470, yf: 498, x0: 1156, x1: 1296, zone: 'dumpling', layered: true },
   snus: { name: 'the snus shop', y: 384, x0: 554, x1: 672, zone: 'snus' },
   nursery: { name: 'Root Bound Plants', y: 1002, x0: 570, x1: 752, zone: 'nursery' },
   vet: { name: 'Good Boy Vet', y: 517, x0: 488, x1: 594, zone: 'vet' },
@@ -49,6 +49,7 @@ const SPECIFIC = {
   alien: { cinema: 'learning about Earth from movies', court: 'trying to dribble', park: 'examining a dandelion', records: 'listening to vinyl for the first time' },
   bird: { park: 'pecking at seeds', court: 'shouting the score', nursery: 'eating the seedlings', cinema: 'repeating movie lines' },
 };
+export const SEATED_DOING = { dumpling: 'eating dumplings', court: 'resting on the bench' };
 export function doingAt(kind, place) {
   return (SPECIFIC[kind] && SPECIFIC[kind][place]) || `hanging out at ${PLACES[place] ? PLACES[place].name : 'the station'}`;
 }

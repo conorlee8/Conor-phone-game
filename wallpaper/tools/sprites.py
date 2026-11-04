@@ -87,6 +87,23 @@ def grade(img):
     return out
 
 
+PROPS = ROOT / "wallpaper" / "rooms" / "props"
+PROP_SIZES = {"table": 38, "stool": 23, "bench": 20, "balls": 30}
+
+
+def cut_props(meta):
+    for pid, size in PROP_SIZES.items():
+        src = PROPS / f"{pid}.png"
+        if not src.exists():
+            continue
+        f = frames_of(Image.open(src).convert("RGBA"), want=1)[0]
+        k = size * RES / f.height
+        f = grade(f.resize((max(1, round(f.width * k)), max(1, round(f.height * k))), Image.LANCZOS))
+        f.save(OUT / f"prop_{pid}.png", optimize=True)
+        meta["prop_" + pid] = {"src": f"assets/sprites/prop_{pid}.png", "res": RES, "frames": {"stand": [0, 0, f.width, f.height]}}
+        print(f"prop {pid}: {f.width}x{f.height}")
+
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     meta = {}
@@ -113,6 +130,7 @@ def main():
         meta[sid] = {"src": f"assets/sprites/{sid}.png", "res": RES,
                      "frames": {n: b for n, b in zip(names, boxes)}}
         print(f"{sid}: {len(fr)} poses, {W}x{H}")
+    cut_props(meta)
     META.write_text(json.dumps(meta))
 
 
