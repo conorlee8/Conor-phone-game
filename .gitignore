@@ -6,3 +6,4 @@ wallpaper/video/*.mp4
 wallpaper/video/tiles/*.json
 !wallpaper/video/tiles/tiles.json
 wallpaper/video/tiles/*.test.mp4
+wallpaper/video/tiles/rejected/
