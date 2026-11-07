@@ -4,3 +4,6 @@ __pycache__/
 wallpaper/pods/work/
 wallpaper/video/tiles/*.mp4
 wallpaper/video/*.mp4
+wallpaper/video/tiles/*.json
+!wallpaper/video/tiles/tiles.json
+wallpaper/video/tiles/*.test.mp4

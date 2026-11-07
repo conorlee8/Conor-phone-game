@@ -79,6 +79,8 @@ def stitch(seconds, test=False):
     clips = {}
     for t in meta["tiles"]:
         mp4 = OUT / f"{t['id']}.mp4"
+        if test:
+            mp4 = OUT / f"{t['id']}.test.mp4"
         if test and not mp4.exists():
             subprocess.run(["ffmpeg", "-v", "error", "-y", "-loop", "1", "-i", str(OUT / f"{t['id']}.png"), "-t", str(seconds),
                             "-r", str(FPS), "-pix_fmt", "yuv420p", str(mp4)], check=True)
