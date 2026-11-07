@@ -92,6 +92,12 @@ const meterName = id => METERS.find(m => m.id === id).name.toLowerCase();
 const canvas = $('view');
 const ctx = canvas.getContext('2d');
 const img = new Image();
+// The living station: an animated loop of the painting. Until it can play
+// (or if it can't), the still painting is drawn instead.
+const video = Object.assign(document.createElement('video'), { muted: true, loop: true, playsInline: true, autoplay: true, preload: 'auto' });
+video.setAttribute('playsinline', ''); video.setAttribute('muted', '');
+let videoReady = false;
+const base = () => (videoReady ? video : img);
 let lights = [];
 const cast = new Cast(state.personality || {});
 let following = null;
@@ -443,14 +449,14 @@ function drawCapPreview() {
   const w = c.clientWidth || 320;
   c.width = Math.round(w * dpr); c.height = Math.round(w * IMAGE.h / IMAGE.w * dpr);
   const g = c.getContext('2d');
-  drawWorld(g, img, lights, { sx: 0, sy: 0, sw: IMAGE.w, sh: IMAGE.h }, { w: c.width, h: c.height }, now() , lookFor());
+  drawWorld(g, base(), lights, { sx: 0, sy: 0, sw: IMAGE.w, sh: IMAGE.h }, { w: c.width, h: c.height }, now() , lookFor());
   const k = c.width / IMAGE.w;
   g.setTransform(1, 0, 0, 1, 0, 0);
   g.fillStyle = 'rgba(5,7,13,0.45)';
   g.fillRect(0, 0, c.width, c.height);
   g.save();
   g.beginPath(); g.rect(coverView.sx * k, coverView.sy * k, coverView.sw * k, coverView.sh * k); g.clip();
-  drawWorld(g, img, lights, { sx: 0, sy: 0, sw: IMAGE.w, sh: IMAGE.h }, { w: c.width, h: c.height }, now(), lookFor());
+  drawWorld(g, base(), lights, { sx: 0, sy: 0, sw: IMAGE.w, sh: IMAGE.h }, { w: c.width, h: c.height }, now(), lookFor());
   g.restore();
   g.setTransform(1, 0, 0, 1, 0, 0);
   g.strokeStyle = '#ffb45e'; g.lineWidth = 2 * dpr;
@@ -474,7 +480,7 @@ function pickMime() {
 }
 async function renderStill(view, size, t, look) {
   const c = document.createElement('canvas'); c.width = size.w; c.height = size.h;
-  drawWorld(c.getContext('2d'), img, lights, view, size, t, look);
+  drawWorld(c.getContext('2d'), base(), lights, view, size, t, look);
   return new Promise(r => c.toBlob(r, 'image/jpeg', 0.92));
 }
 async function recordBoth(seconds) {
@@ -492,8 +498,8 @@ async function recordBoth(seconds) {
   const A = mk(COVER), B = mk(INNER);
   const draw = () => {
     const look = lookFor(), t = now();       // one moment, drawn twice
-    drawWorld(A.g, img, lights, coverView, COVER, t, look);
-    drawWorld(B.g, img, lights, innerView, INNER, t, look);
+    drawWorld(A.g, base(), lights, coverView, COVER, t, look);
+    drawWorld(B.g, base(), lights, innerView, INNER, t, look);
   };
   draw();
   A.rec.start(250); B.rec.start(250);
@@ -635,7 +641,7 @@ function frame(ts) {
   const look = lookFor();
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   const view = { sx: cam.x - W / 2 / cam.s, sy: cam.y - H / 2 / cam.s, sw: W / cam.s, sh: H / cam.s };
-  if (img.complete && img.naturalWidth) drawWorld(ctx, img, lights, view, { w: canvas.width, h: canvas.height }, now(), look, { ui: true, focus, px: dpr, colors: METER_COLORS, selected });
+  if (videoReady || (img.complete && img.naturalWidth)) drawWorld(ctx, base(), lights, view, { w: canvas.width, h: canvas.height }, now(), look, { ui: true, focus, px: dpr, colors: METER_COLORS, selected });
   requestAnimationFrame(frame);
 }
 
@@ -650,6 +656,13 @@ async function boot() {
   } catch (e) { /* the station still runs without residents */ }
   img.src = 'assets/station.jpg';
   await img.decode().catch(() => {});
+  video.addEventListener('playing', () => { videoReady = true; }, { once: true });
+  video.addEventListener('error', () => { videoReady = false; });
+  video.src = 'assets/station.mp4';
+  const kick = () => video.play().catch(() => {});
+  kick();
+  document.addEventListener('pointerdown', kick, { once: true });   // some browsers wait for a first tap
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) kick(); });
   renderHud();
   requestAnimationFrame(frame);
   if (DEMO) toast(`Preview: ${DEMO}`, 'Nothing you do here is saved.');

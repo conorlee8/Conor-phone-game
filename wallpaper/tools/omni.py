@@ -26,7 +26,7 @@ PROMPT = (
     "The people and animals move naturally inside their own rooms the whole time: they eat, drink and chat at tables, "
     "cooks cook, people play basketball, lift weights, play games and skate, people work, fix things and stock shelves, "
     "doors slide open and closed as people come and go, dogs and cats wander and sniff around, lights and screens flicker gently. "
-    "Nobody walks through walls. Keep exactly the same hand-painted lofi anime style, ink linework, colours and warm lighting. "
+    "Nobody walks through walls. Do not add anything new to the scene: no new buildings, pods, modules, ships or objects appear, and the empty starry space stays empty apart from twinkling stars and what is already painted there. Keep exactly the same hand-painted lofi anime style, ink linework, colours and warm lighting. "
     "Sound: soft ambient station hum and distant chatter. No music, no dialogue, no on-screen text."
 )
 
