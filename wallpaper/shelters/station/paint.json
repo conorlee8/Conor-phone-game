@@ -1,0 +1,16 @@
+{
+  "out": ".",
+  "model": "gpt-image-2",
+  "quality": "high",
+  "size": "1824x1280",
+  "assets": [
+    {
+      "id": "painted",
+      "images": [
+        "guide.png",
+        "style_ref.jpg"
+      ],
+      "prompt": "The first image is a layout guide: paint over it. The second image shows the target painting style, linework and colour: match its look, not its layout. Paint a giant spherical space station in space at night as a cutaway, in a lofi anime night painting style with crisp ink linework, warm lamplight and rich detail. CRITICAL: every bright green rectangle in the guide must stay exactly as it is, filled with flat, pure, solid green (#00FF00), perfectly rectangular, untouched, with no painting, texture, shading, people or objects inside it: they are empty slots that rooms will be inserted into later. Each green rectangle is the wide-open doorway of a room. Keep every green rectangle exactly the same size and in exactly the same place as in the guide. Around the OUTSIDE of each one paint only a slim riveted metal door frame (a thin rim, never thicker than the floor slab), with a short warning stripe and a tiny status light on the frame above it. The pod doors are fully open, slid away into the wall out of sight: no door, hatch, panel, railing or anything else covers any part of the green. Paint the floor slabs below each row as thick metal decks with railings. The glass elevator shaft runs down the middle with a lit elevator car. Everywhere between and around the slots, fill the station's interior structure with dense crawlspace detail: pipes, cables, ducts, ladders, catwalks, vents, crates, small maintenance lights, steam. The outer hull is grey armored plating with antennas, blinking beacons, small bolted-on pods with lit windows, and docking arms to cylindrical modules on both sides. Deep blue starry space around it and a glowing blue planet in the lower left. No people, no text, no signs."
+    }
+  ]
+}
