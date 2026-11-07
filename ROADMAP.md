@@ -13,6 +13,17 @@ Decided with Conor:
   building; growing the station ring by ring is the long-term goal.
 - **Wallpaper:** both. Snap any moment yourself, plus an automatic daily
   "station today" pair for the closed and open screens.
+- **Money:** free to play with catalog pods; credit packs (Apple in-app
+  purchase) pay for custom AI pods.
+- **Start:** small. A core of about six pods and empty slots; grow ring by
+  ring (or floor by floor, car by car).
+- **Safe spaces, not just the station:** four shelters at launch, the
+  space station, the prepper bunker, the train car, and the water tower /
+  raft. Players start with one and unlock more; each is its own living
+  wallpaper world. (These come from Last Haven's shelters.)
+- **Danger:** light. Storms, cold nights or wanderers outside that the
+  shelter keeps out; the real threat is still neglect.
+- **Name:** Station.
 
 ## The three modes
 
@@ -25,9 +36,24 @@ Decided with Conor:
 3. **Wallpaper:** capture the same moment for both screens and save it as a
    pair of Live Photos (native app plugin already written).
 
+## How shelters are built (modular)
+
+Every shelter is a **shell** plus **bays**:
+- The shell is painted once per shelter: hull, frame, floor slabs, pipes,
+  pod doors. Its bays are cut out as transparent holes.
+- A pod is a painted room made to the bay's exact size, with a little bleed
+  past the edges, plus its own seamless loop video. All bays are 16:9 at one
+  floor height, so people stay the same size everywhere and the video model
+  (16:9 only) can animate each pod on its own.
+- Draw order: shell background, then pods (video or still), then the shell
+  frame on top, which hides every pod edge. No seams, no cut-off rooms.
+- Empty bays show a construction bay; locked rings show closed hull plating.
+- The shell's guide paints bays as flat green, which is keyed out to make
+  the holes, so the holes match the painted frame exactly.
+
 ## What has to change technically
 
-- **Modular station.** Today the station is one painting and one stitched
+- **Modular shelters.** Today the station is one painting and one stitched
   video. A builder needs slots: an empty station shell with numbered slots,
   and per-pod assets (still + seamless loop clip) composited into it. The
   per-room repaint (`wallpaper/tools/pod.py`) and the first-and-last-frame
