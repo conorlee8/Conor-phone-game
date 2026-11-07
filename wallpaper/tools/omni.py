@@ -71,6 +71,8 @@ def main():
         r = json.loads(raw)
     except json.JSONDecodeError:
         sys.exit("FAILED: " + raw.decode()[:600])
+    if isinstance(r, list):                      # errors can come back wrapped in a list
+        r = r[0] if r else {}
     if "error" in r:
         sys.exit("FAILED: " + json.dumps(r["error"])[:600])
     iid = r.get("id") or r.get("name", "").split("/")[-1]

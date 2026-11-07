@@ -85,6 +85,16 @@ Every shelter is a **shell** plus **bays**:
 
 ## Where things are now
 
+- **Modular station (phase 2) is in the app.** A painted shell with 23 bays
+  in three rings (`wallpaper/shelters/station/`, `wallpaper/tools/shell.py`),
+  23 catalog rooms (`wallpaper/pods/catalog/`, `wallpaper/tools/pods.py`),
+  20 of them animated as seamless loops. The app draws every room from one
+  atlas video (`world/assets/station/pods.mp4`), the shell on top. You start
+  with the 6 core rooms; ring 1 is open to build in (2-minute builds), and
+  ring 2 opens once ring 1 is full. `?classic=1` shows the original painting.
+- Med Bay, Tea House and Shuttle Garage are still paintings: the Google
+  credit ran out. Top up, then `python3 wallpaper/tools/pods.py animate`
+  and `python3 wallpaper/tools/pods.py export`.
 - `world/`: the Station app (Safari, home screen) with the living video,
   needs, care and wallpaper capture.
 - `ios-app/`: the native iPhone shell (Capacitor) with the Live Photo

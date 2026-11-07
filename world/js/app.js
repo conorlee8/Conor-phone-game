@@ -1,4 +1,5 @@
-import { IMAGE, HULL, METERS, ZONES, ACTIONS, MOMENTS, START, DARK_BELOW, DARK_AFTER, RECOVER } from '../data/world.js';
+import { IMAGE, HULL, SHAFT, METERS, ZONES, ACTIONS, MOMENTS, STATION_MOMENTS, START, DARK_BELOW, DARK_AFTER, RECOVER } from '../data/world.js';
+import { Station, BUILD_MS } from './station.js';
 import { drawWorld, assignZones } from './render.js';
 import { Cast, scene } from './cast.js';
 import { PROPS } from '../data/props.js';
@@ -14,6 +15,8 @@ const DEMO = params.get('demo');
 const HOUR = params.has('hour') ? Number(params.get('hour')) : null;   // ?hour=14 previews a time of day
 const hourNow = () => HOUR ?? new Date().getHours();
 const RESIDENTS = params.get('residents') === '1';   // the walking cutouts are off unless ?residents=1
+// The modular station (shell + rooms you build) is the game; ?classic=1 shows the original single painting.
+const MODULAR = !params.has('classic');
 const BOOST = params.has('crowd') ? params.get('crowd').split(',') : [];   // ?crowd=dumpling,court sends people there                                    // ?demo=thriving|struggling|neglected
 
 // ---------- the simulation ----------
@@ -65,7 +68,7 @@ function lookFor() {
   const zones = {};
   for (const z of ZONES) zones[z.id] = { level: state.meters[z.meter], dark: isDark(z.meter) };
   const h = hourNow();
-  return { power: state.meters.power, food: state.meters.food, air: state.meters.air, fun: state.meters.fun, overall: overall(), zones, night: h >= 22 || h < 6,
+  return { power: state.meters.power, food: state.meters.food, air: state.meters.air, fun: state.meters.fun, overall: overall(), zones, night: h >= 22 || h < 6, classic: !MODULAR, sky: station ? '#0c0f23' : null,
            agents: RESIDENTS ? scene(cast.draw(now()), PROPS) : [], sprites };
 }
 
@@ -85,6 +88,66 @@ function act(id) {
   renderHud();
   if (openZone) renderZone();
 }
+// ---------- building: rooms in the modular station's bays ----------
+// Each built room is a place to look after (a zone), at its bay's hole.
+function rebuildZones() {
+  if (!station) return;
+  ZONES.length = 0;
+  for (const [bay, pid] of Object.entries(state.station.bays)) {
+    const b = station.bays[bay], p = station.d.pods[pid];
+    if (b && p) ZONES.push({ id: bay, pod: pid, name: p.name, box: b.hole, meter: p.meter, actions: p.actions });
+  }
+}
+function startBuild(bay, pod) {
+  state.station.builds[bay] = { pod, until: Date.now() + BUILD_MS / SPEED };
+  save();
+  toast(`Building ${station.d.pods[pod].name}.`, 'It opens in about two minutes. Watch it come together.');
+  renderZone();
+}
+function finishBuilds() {
+  const t = Date.now();
+  for (const [bay, job] of Object.entries(state.station.builds)) {
+    if (job.until > t) continue;
+    delete state.station.builds[bay];
+    state.station.bays[bay] = job.pod;
+    rebuildZones();
+    save();
+    toast(`${station.d.pods[job.pod].name} is open!`, 'Tap it to look after it.');
+    if (openZone === 'bay:' + bay) openZone = bay;
+  }
+}
+const ringFull = r => station.d.bays.filter(b => b.ring === r).every(b => state.station.bays[b.id] || state.station.builds[b.id]);
+const canOpenRing = () => ringFull(state.station.ring) && station.d.bays.some(b => b.ring === state.station.ring + 1);
+function openRing() {
+  state.station.ring += 1;
+  save();
+  toast(`Ring ${state.station.ring} is open.`, 'New bays are ready to build in.');
+  closeZoneSheet();
+}
+// On screen only: a plus on every bay you can build in, a progress bar on rooms being built.
+function drawBayHints(g, px) {
+  if (!station) return;
+  const t = now(), nowMs = Date.now();
+  for (const b of station.d.bays) {
+    const st = station.status(state.station, b.id, nowMs);
+    const [x0, y0, x1, y1] = b.hole;
+    if (st === 'building') {
+      const job = state.station.builds[b.id];
+      const p = Math.max(0, Math.min(1, 1 - (job.until - nowMs) / (BUILD_MS / SPEED)));
+      const bw = x1 - x0 - 24 * px, bx = x0 + 12 * px, by = y1 - 12 * px;
+      g.globalAlpha = 0.9; g.fillStyle = 'rgba(5,7,13,0.8)'; g.fillRect(bx, by, bw, 5 * px);
+      g.fillStyle = '#7fdcc9'; g.fillRect(bx, by, bw * p, 5 * px);
+    } else if (st === 'empty' || (st === 'locked' && b.ring === state.station.ring + 1 && canOpenRing())) {
+      const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, r = 13 * px;
+      g.globalAlpha = 0.75 + 0.2 * Math.sin(t * 3 + b.pod[0]);
+      g.fillStyle = st === 'empty' ? '#7fdcc9' : '#ffd166';
+      g.beginPath(); g.arc(cx, cy, r, 0, Math.PI * 2); g.fill();
+      g.lineWidth = 2 * px; g.strokeStyle = 'rgba(5,7,13,0.9)'; g.stroke();
+      g.beginPath(); g.moveTo(cx - r * 0.5, cy); g.lineTo(cx + r * 0.5, cy); g.moveTo(cx, cy - r * 0.5); g.lineTo(cx, cy + r * 0.5); g.stroke();
+    }
+  }
+  g.globalAlpha = 1;
+}
 const METER_COLORS = Object.fromEntries(METERS.map(m => [m.id, m.color]));
 const meterName = id => METERS.find(m => m.id === id).name.toLowerCase();
 
@@ -97,7 +160,8 @@ const img = new Image();
 const video = Object.assign(document.createElement('video'), { muted: true, loop: true, playsInline: true, autoplay: true, preload: 'auto' });
 video.setAttribute('playsinline', ''); video.setAttribute('muted', '');
 let videoReady = false;
-const base = () => (videoReady ? video : img);
+let station = null;                // the modular station, once its data is loaded
+const base = () => (station ? station.canvas : videoReady ? video : img);
 let lights = [];
 const cast = new Cast(state.personality || {});
 let following = null;
@@ -179,7 +243,9 @@ function tapAt(px, py) {
   });
   if (hit && RESIDENTS) { openWho(hit.id); return; }
   const z = ZONES.find(z => p.x >= z.box[0] && p.x <= z.box[2] && p.y >= z.box[1] && p.y <= z.box[3]);
-  if (z) openZoneSheet(z.id);
+  if (z) { openZoneSheet(z.id); return; }
+  const b = station && station.d.bays.find(b => p.x >= b.hole[0] && p.x <= b.hole[2] && p.y >= b.hole[1] && p.y <= b.hole[3]);
+  if (b) openZoneSheet('bay:' + b.id);
 }
 function flyTo(x, y, s) {
   const from = { ...cam }, to = { x, y, s: s || Math.max(cam.s, fitScale() * 2.2) };
@@ -234,6 +300,7 @@ function focusMeter(id) {
   renderHud();
   if (!focus) return;
   const zs = ZONES.filter(z => z.meter === id);
+  if (!zs.length) { toast(`Nothing on the station helps ${meterName(id)} yet.`, 'Tap an empty bay and build a room for it.'); return; }
   const worst = zs[0];
   flyTo((worst.box[0] + worst.box[2]) / 2, (worst.box[1] + worst.box[3]) / 2);
   const m = METERS.find(m => m.id === id);
@@ -246,15 +313,64 @@ function openZoneSheet(id) {
   openZone = id;
   renderZone();
   $('zoneSheet').hidden = false;
-  const z = ZONES.find(z => z.id === id);
-  flyTo((z.box[0] + z.box[2]) / 2, (z.box[1] + z.box[3]) / 2 + (z.box[3] - z.box[1]) * 0.6);
+  const box = id.startsWith('bay:') ? station.bays[id.slice(4)].hole : ZONES.find(z => z.id === id).box;
+  flyTo((box[0] + box[2]) / 2, (box[1] + box[3]) / 2 + (box[3] - box[1]) * 0.6);
 }
 function closeZoneSheet() { openZone = null; $('zoneSheet').hidden = true; }
 function fmtWait(ms) {
   const m = Math.ceil(ms / 60000);
   return m >= 60 ? `${Math.floor(m / 60)}h ${m % 60 ? (m % 60) + 'm' : ''}`.trim() : `${m}m`;
 }
+function podThumb(pod) {
+  const c = document.createElement('canvas');
+  c.className = 'thumb'; c.width = 96; c.height = 54;
+  const [x, y, w, h] = pod.cell;
+  c.getContext('2d').drawImage(station.still, x, y, w, h, 0, 0, 96, 54);
+  return c;
+}
+function renderBay(id) {
+  const st = station.status(state.station, id);
+  const b = station.bays[id];
+  const list = $('zoneActions'); list.textContent = '';
+  $('zoneNeed').innerHTML = '';
+  const note = document.createElement('span');
+  note.className = 'note';
+  if (st === 'building') {
+    const job = state.station.builds[id];
+    $('zoneName').textContent = `Building ${station.d.pods[job.pod].name}`;
+    note.textContent = `Opens in ${fmtWait(job.until - Date.now())}.`;
+  } else if (st === 'locked') {
+    $('zoneName').textContent = `Ring ${b.ring} is closed`;
+    if (b.ring === state.station.ring + 1 && canOpenRing()) {
+      note.textContent = `Ring ${state.station.ring} is full. Open the next ring to keep growing.`;
+      const btn = document.createElement('button');
+      btn.type = 'button'; btn.className = 'action';
+      btn.innerHTML = `<span class="alabel">Open ring ${b.ring}</span><span class="ameta">${station.d.bays.filter(x => x.ring === b.ring).length} new bays</span>`;
+      btn.addEventListener('click', openRing);
+      list.appendChild(btn);
+    } else note.textContent = `Fill every bay in ring ${state.station.ring} to open ring ${b.ring}.`;
+  } else {
+    $('zoneName').textContent = 'Empty bay';
+    const options = station.choices(state.station, id);
+    note.textContent = options.length ? 'Pick a room to build here.' : 'Every room that fits here is already on your station.';
+    for (const p of options) {
+      const m = METERS.find(m => m.id === p.meter);
+      const btn = document.createElement('button');
+      btn.type = 'button'; btn.className = 'action build';
+      btn.appendChild(podThumb(p));
+      const txt = document.createElement('span');
+      txt.innerHTML = `<span class="alabel"></span><span class="ameta"></span>`;
+      txt.querySelector('.alabel').textContent = p.name;
+      txt.querySelector('.ameta').textContent = `Helps ${m.name.toLowerCase()} · ${Math.round(BUILD_MS / 60000)} min build`;
+      btn.appendChild(txt);
+      btn.addEventListener('click', () => startBuild(id, p.id));
+      list.appendChild(btn);
+    }
+  }
+  $('zoneNeed').appendChild(note);
+}
 function renderZone() {
+  if (openZone && openZone.startsWith('bay:')) { renderBay(openZone.slice(4)); return; }
   const z = ZONES.find(z => z.id === openZone);
   if (!z) return;
   const m = METERS.find(m => m.id === z.meter);
@@ -404,8 +520,10 @@ function tickMoments(now) {
   if (now - momentAt < 11000) return;
   momentAt = now;
   const h = hourNow();
-  const ok = MOMENTS.map((m, i) => [m, i]).filter(([m, i]) => i !== lastMoment && m.when(state.meters, h));
-  const mine = cast.moments(state.meters).map(text => [{ text }, text]);
+  const built = station ? new Set(Object.values(state.station.bays)) : null;
+  const list = station ? STATION_MOMENTS.filter(m => !m.pod || built.has(m.pod)) : MOMENTS;
+  const ok = list.map((m, i) => [m, i]).filter(([m, i]) => i !== lastMoment && m.when(state.meters, h));
+  const mine = station ? [] : cast.moments(state.meters).map(text => [{ text }, text]);
   const pool = mine.length && Math.random() < 0.6 ? mine : ok;      // personality moments come up often
   if (!pool.length) return;
   const [m, i] = pool[Math.floor(Math.random() * pool.length)];
@@ -630,8 +748,10 @@ function frame(ts) {
     renderHud();
     if (openZone) renderZone();
     if (whoId) renderWho();
+    if (station) finishBuilds();
     tickMoments(ts);
   }
+  if (station) station.compose(state.station, now());
   cast.update(now(), { meters: state.meters, dark: Object.fromEntries(ZONES.map(z => [z.id, isDark(z.meter)])), hour: hourNow(), boost: BOOST });
   if (following) {
     const a = cast.draw(now()).find(a => a.id === following);
@@ -641,25 +761,40 @@ function frame(ts) {
   const look = lookFor();
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   const view = { sx: cam.x - W / 2 / cam.s, sy: cam.y - H / 2 / cam.s, sw: W / cam.s, sh: H / cam.s };
-  if (videoReady || (img.complete && img.naturalWidth)) drawWorld(ctx, base(), lights, view, { w: canvas.width, h: canvas.height }, now(), look, { ui: true, focus, px: dpr, colors: METER_COLORS, selected });
+  if (station ? station.ready() : videoReady || (img.complete && img.naturalWidth)) drawWorld(ctx, base(), lights, view, { w: canvas.width, h: canvas.height }, now(), look, { ui: true, focus, px: dpr, colors: METER_COLORS, selected, after: drawBayHints });
   requestAnimationFrame(frame);
 }
 
 async function boot() {
   advance();
   window.addEventListener('resize', resize);
+  if (MODULAR) {
+    try {
+      const data = await (await fetch('data/station.json')).json();
+      Object.assign(HULL, data.hull);
+      Object.assign(SHAFT, { x0: data.hull.x - 28, x1: data.hull.x + 28, y0: data.hull.y - data.hull.r + 40, y1: data.hull.y + data.hull.r - 40 });
+      METERS.find(m => m.id === 'boys').name = 'Pets';
+      station = new Station(data);
+      if (!state.station) { state.station = { bays: { ...data.start }, builds: {}, ring: 1 }; save(); }
+      rebuildZones();
+      cam = { x: HULL.x, y: HULL.y, s: 1 };
+      await station.load();
+    } catch (e) { station = null; }        // falls back to the original painting
+  }
   resize();
-  try { lights = assignZones(await (await fetch('data/lights.json')).json()); } catch (e) { lights = []; }
-  try {
-    const meta = await (await fetch('data/sprites.json')).json();
-    for (const [id, m] of Object.entries(meta)) { const im = new Image(); im.src = m.src; sprites[id] = { img: im, frames: m.frames, res: m.res }; }
-  } catch (e) { /* the station still runs without residents */ }
-  img.src = 'assets/station.jpg';
-  await img.decode().catch(() => {});
-  video.addEventListener('playing', () => { videoReady = true; }, { once: true });
-  video.addEventListener('error', () => { videoReady = false; });
-  video.src = 'assets/station.mp4';
-  const kick = () => video.play().catch(() => {});
+  if (!station) {
+    try { lights = assignZones(await (await fetch('data/lights.json')).json()); } catch (e) { lights = []; }
+    try {
+      const meta = await (await fetch('data/sprites.json')).json();
+      for (const [id, m] of Object.entries(meta)) { const im = new Image(); im.src = m.src; sprites[id] = { img: im, frames: m.frames, res: m.res }; }
+    } catch (e) { /* the station still runs without residents */ }
+    img.src = 'assets/station.jpg';
+    await img.decode().catch(() => {});
+    video.addEventListener('playing', () => { videoReady = true; }, { once: true });
+    video.addEventListener('error', () => { videoReady = false; });
+    video.src = 'assets/station.mp4';
+  }
+  const kick = () => (station ? station.play() : video.play().catch(() => {}));
   kick();
   document.addEventListener('pointerdown', kick, { once: true });   // some browsers wait for a first tap
   document.addEventListener('visibilitychange', () => { if (!document.hidden) kick(); });
@@ -668,7 +803,8 @@ async function boot() {
   if (DEMO) toast(`Preview: ${DEMO}`, 'Nothing you do here is saved.');
   else if (!localStorage.getItem(KEY + '-seen')) {
     try { localStorage.setItem(KEY + '-seen', '1'); } catch (e) { /* fine */ }
-    toast('Welcome aboard.', 'The colored dots are places you can take care of. Tap anyone to meet them; the people button lists everyone. The camera grabs this moment as wallpaper.');
+    toast('Welcome aboard.', station ? 'Tap a room to look after it, and a glowing plus to build a new one. The camera turns this moment into wallpaper.'
+      : 'The colored dots are places you can take care of. Tap anyone to meet them; the people button lists everyone. The camera grabs this moment as wallpaper.');
   }
 }
 

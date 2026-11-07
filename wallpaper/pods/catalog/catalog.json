@@ -1,28 +1,239 @@
 {
  "shelter": "station",
  "pods": [
-  {"id": "market", "bay": "b08", "name": "Night Market Hall", "meter": "food", "scene": "Night Market Hall, a two-storey food hall with a mezzanine walkway across the middle: noodle and dumpling stalls with steam and paper lanterns, a skewer grill, a bubble tea counter, long shared tables full of people eating and laughing, a tiny arcade corner, hanging plants, string lights, crates of fruit, a cat asleep on a stool."},
-  {"id": "reactor", "bay": "b06", "name": "Reactor Room", "meter": "power", "scene": "Reactor Room: a glowing blue fusion core in a cage of pipes, gauges and valves, one engineer in coveralls up a ladder tightening a pipe, another reading a clipboard at a console of chunky switches, a coffee mug, a tool chest, a few sparks, warning stripes, a little robot vacuum asleep in the corner."},
-  {"id": "garden", "bay": "b09", "name": "Hydro Garden", "meter": "air", "scene": "Hydro Garden: shelves of hydroponic lettuce, tomatoes and herbs under purple grow lights, water tanks with bubbling pipes, a gardener misting plants, a kid picking strawberries, a box fan, seed packets, watering cans, a frog in a terrarium."},
-  {"id": "pets", "bay": "b11", "name": "Pet Lounge", "meter": "boys", "scene": "Pet Lounge: a small indoor dog park with fake grass, a fire hydrant and a ball pit, dogs of different breeds playing tug and sniffing around, a cat on a climbing tower, a person filling food bowls, a dog-wash tub, leashes on hooks, treat jars."},
-  {"id": "arcade", "bay": "b13", "name": "Arcade Lounge", "meter": "fun", "scene": "Arcade Lounge: a row of glowing retro arcade cabinets, friends on a couch playing a console game on a big old CRT TV, a claw machine, a pinball machine, neon tubes, beanbags, a snack shelf, cables everywhere."},
-  {"id": "bunks", "bay": "b15", "name": "Bunk Quarters", "meter": "fun", "scene": "Bunk Quarters: stacked sleeping capsules with curtains, each made personal with posters, fairy lights and plushies, someone reading in their bunk, someone climbing a ladder with a towel, a laundry basket, a sleepy cat, a small round window of stars."},
-  {"id": "ramen", "bay": "b02", "name": "Ramen Counter", "meter": "food", "scene": "Ramen Counter: a narrow ramen bar with stools, a chef ladling broth behind steaming pots, customers slurping noodles, a short noren curtain, menu boards on wooden tags, a cat begging for scraps."},
-  {"id": "gym", "bay": "b04", "name": "Low-G Gym", "meter": "fun", "scene": "Low-G Gym: weight racks, a treadmill facing a star window, someone spotting a friend on the bench press, a punching bag, a pull-up bar, chalk dust, water bottles, a motivational poster."},
-  {"id": "cinema", "bay": "b10", "name": "Tiny Cinema", "meter": "fun", "scene": "Tiny Cinema: a few rows of plush seats facing a glowing screen showing a space adventure, a projector beam through dust, a popcorn machine, people sharing snacks and laughing."},
-  {"id": "laundry", "bay": "b12", "name": "Laundromat", "meter": "air", "scene": "Laundromat: a wall of round washing machines spinning, someone folding shirts, a basket of socks, a vending machine, a person asleep in a plastic chair, a dog waiting by a dryer."},
-  {"id": "records", "bay": "b14", "name": "Record Shop", "meter": "fun", "scene": "Record Shop and Listening Bar: crates of vinyl, a turntable with headphones, a listening booth, a DJ behind the counter, gig posters, a couple browsing records."},
-  {"id": "library", "bay": "b17", "name": "Book Nook", "meter": "fun", "scene": "Book Nook: floor-to-ceiling bookshelves with a rolling ladder, armchairs, reading lamps, someone asleep under an open book, a kid on a beanbag, a tea trolley."},
-  {"id": "workshop", "bay": "b19", "name": "Repair Workshop", "meter": "power", "scene": "Repair Workshop: a workbench with a half-built robot, someone soldering, a pegboard of tools, bins of spare parts, a mechanic under a hover scooter, sparks, an old radio."},
-  {"id": "aquarium", "bay": "b20", "name": "Aquarium Room", "meter": "air", "scene": "Aquarium Room: big glowing fish tanks with tropical fish, a jellyfish column, a coral tank, someone cleaning a tank, kids pressed to the glass, bubbling filters."},
-  {"id": "bathhouse", "bay": "b00", "name": "Bathhouse", "meter": "air", "scene": "Bathhouse: a steaming tiled hot-spring pool with people relaxing in it, towels on racks, wooden buckets, bamboo, a mural of mountains, a rubber duck."},
-  {"id": "observatory", "bay": "b01", "name": "Observatory", "meter": "fun", "scene": "Observatory: a big brass telescope pointed through a round viewport, star charts, an astronomer at a messy desk, a kid looking through the eyepiece, a model of the planet."},
-  {"id": "medbay", "bay": "b03", "name": "Med Bay", "meter": "air", "scene": "Med Bay: a small clean clinic with a bed, a doctor checking a patient's pulse, a scanner arm, medicine cabinets, a potted plant, a sticker chart."},
-  {"id": "bakery", "bay": "b05", "name": "Bakery", "meter": "food", "scene": "Bakery: glowing ovens, bread racks, a baker pulling out a tray of croissants, a short queue at the counter, a cake in a glass case, flour on the floor."},
-  {"id": "nursery", "bay": "b07", "name": "Plant Nursery", "meter": "air", "scene": "Plant Nursery: hanging pots, succulents, bags of soil, someone repotting a big monstera, a watering hose, a shop cat curled up in an empty pot."},
-  {"id": "band", "bay": "b16", "name": "Band Room", "meter": "fun", "scene": "Band Room: a drummer, a guitarist and a keyboard player rehearsing, amps, foam on the walls, cables, a setlist taped to the wall, a friend filming on a phone."},
-  {"id": "tea", "bay": "b18", "name": "Tea House", "meter": "food", "scene": "Tea House: low tables and cushions, people pouring tea, a kettle on a little stove, shelves of tea tins, paper lanterns, a bonsai."},
-  {"id": "garage", "bay": "b21", "name": "Shuttle Garage", "meter": "power", "scene": "Shuttle Garage: a small shuttle with its hatch open, a mechanic on a creeper underneath it, fuel lines, a tool cart, a cat asleep on the wing."},
-  {"id": "cargo", "bay": "b22", "name": "Cargo & Mail", "meter": "food", "scene": "Cargo and Mail Room: parcels on shelves, a conveyor belt, a postal worker sorting letters, a little drone forklift, a dog carrying a parcel in its mouth."}
+  {
+   "id": "market",
+   "bay": "b08",
+   "name": "Night Market Hall",
+   "meter": "food",
+   "scene": "Night Market Hall, a two-storey food hall with a mezzanine walkway across the middle: noodle and dumpling stalls with steam and paper lanterns, a skewer grill, a bubble tea counter, long shared tables full of people eating and laughing, a tiny arcade corner, hanging plants, string lights, crates of fruit, a cat asleep on a stool.",
+   "actions": [
+    "stalls"
+   ]
+  },
+  {
+   "id": "reactor",
+   "bay": "b06",
+   "name": "Reactor Room",
+   "meter": "power",
+   "scene": "Reactor Room: a glowing blue fusion core in a cage of pipes, gauges and valves, one engineer in coveralls up a ladder tightening a pipe, another reading a clipboard at a console of chunky switches, a coffee mug, a tool chest, a few sparks, warning stripes, a little robot vacuum asleep in the corner.",
+   "actions": [
+    "fix",
+    "refuel"
+   ]
+  },
+  {
+   "id": "garden",
+   "bay": "b09",
+   "name": "Hydro Garden",
+   "meter": "air",
+   "scene": "Hydro Garden: shelves of hydroponic lettuce, tomatoes and herbs under purple grow lights, water tanks with bubbling pipes, a gardener misting plants, a kid picking strawberries, a box fan, seed packets, watering cans, a frog in a terrarium.",
+   "actions": [
+    "harvest"
+   ]
+  },
+  {
+   "id": "pets",
+   "bay": "b11",
+   "name": "Pet Lounge",
+   "meter": "boys",
+   "scene": "Pet Lounge: a small indoor dog park with fake grass, a fire hydrant and a ball pit, dogs of different breeds playing tug and sniffing around, a cat on a climbing tower, a person filling food bowls, a dog-wash tub, leashes on hooks, treat jars.",
+   "actions": [
+    "petfeed",
+    "petplay",
+    "petwash"
+   ]
+  },
+  {
+   "id": "arcade",
+   "bay": "b13",
+   "name": "Arcade Lounge",
+   "meter": "fun",
+   "scene": "Arcade Lounge: a row of glowing retro arcade cabinets, friends on a couch playing a console game on a big old CRT TV, a claw machine, a pinball machine, neon tubes, beanbags, a snack shelf, cables everywhere.",
+   "actions": [
+    "tournament"
+   ]
+  },
+  {
+   "id": "bunks",
+   "bay": "b15",
+   "name": "Bunk Quarters",
+   "meter": "fun",
+   "scene": "Bunk Quarters: stacked sleeping capsules with curtains, each made personal with posters, fairy lights and plushies, someone reading in their bunk, someone climbing a ladder with a towel, a laundry basket, a sleepy cat, a small round window of stars.",
+   "actions": [
+    "lightsout"
+   ]
+  },
+  {
+   "id": "ramen",
+   "bay": "b02",
+   "name": "Ramen Counter",
+   "meter": "food",
+   "scene": "Ramen Counter: a narrow ramen bar with stools, a chef ladling broth behind steaming pots, customers slurping noodles, a short noren curtain, menu boards on wooden tags, a cat begging for scraps.",
+   "actions": [
+    "ramen"
+   ]
+  },
+  {
+   "id": "gym",
+   "bay": "b04",
+   "name": "Low-G Gym",
+   "meter": "fun",
+   "scene": "Low-G Gym: weight racks, a treadmill facing a star window, someone spotting a friend on the bench press, a punching bag, a pull-up bar, chalk dust, water bottles, a motivational poster.",
+   "actions": [
+    "workout"
+   ]
+  },
+  {
+   "id": "cinema",
+   "bay": "b10",
+   "name": "Tiny Cinema",
+   "meter": "fun",
+   "scene": "Tiny Cinema: a few rows of plush seats facing a glowing screen showing a space adventure, a projector beam through dust, a popcorn machine, people sharing snacks and laughing.",
+   "actions": [
+    "movie",
+    "party"
+   ]
+  },
+  {
+   "id": "laundry",
+   "bay": "b12",
+   "name": "Laundromat",
+   "meter": "air",
+   "scene": "Laundromat: a wall of round washing machines spinning, someone folding shirts, a basket of socks, a vending machine, a person asleep in a plastic chair, a dog waiting by a dryer.",
+   "actions": [
+    "laundry"
+   ]
+  },
+  {
+   "id": "records",
+   "bay": "b14",
+   "name": "Record Shop",
+   "meter": "fun",
+   "scene": "Record Shop and Listening Bar: crates of vinyl, a turntable with headphones, a listening booth, a DJ behind the counter, gig posters, a couple browsing records.",
+   "actions": [
+    "records"
+   ]
+  },
+  {
+   "id": "library",
+   "bay": "b17",
+   "name": "Book Nook",
+   "meter": "fun",
+   "scene": "Book Nook: floor-to-ceiling bookshelves with a rolling ladder, armchairs, reading lamps, someone asleep under an open book, a kid on a beanbag, a tea trolley.",
+   "actions": [
+    "read"
+   ]
+  },
+  {
+   "id": "workshop",
+   "bay": "b19",
+   "name": "Repair Workshop",
+   "meter": "power",
+   "scene": "Repair Workshop: a workbench with a half-built robot, someone soldering, a pegboard of tools, bins of spare parts, a mechanic under a hover scooter, sparks, an old radio.",
+   "actions": [
+    "repair"
+   ]
+  },
+  {
+   "id": "aquarium",
+   "bay": "b20",
+   "name": "Aquarium Room",
+   "meter": "air",
+   "scene": "Aquarium Room: big glowing fish tanks with tropical fish, a jellyfish column, a coral tank, someone cleaning a tank, kids pressed to the glass, bubbling filters.",
+   "actions": [
+    "tanks"
+   ]
+  },
+  {
+   "id": "bathhouse",
+   "bay": "b00",
+   "name": "Bathhouse",
+   "meter": "air",
+   "scene": "Bathhouse: a steaming tiled hot-spring pool with people relaxing in it, towels on racks, wooden buckets, bamboo, a mural of mountains, a rubber duck.",
+   "actions": [
+    "soak"
+   ]
+  },
+  {
+   "id": "observatory",
+   "bay": "b01",
+   "name": "Observatory",
+   "meter": "fun",
+   "scene": "Observatory: a big brass telescope pointed through a round viewport, star charts, an astronomer at a messy desk, a kid looking through the eyepiece, a model of the planet.",
+   "actions": [
+    "stargaze"
+   ]
+  },
+  {
+   "id": "medbay",
+   "bay": "b03",
+   "name": "Med Bay",
+   "meter": "air",
+   "scene": "Med Bay: a small clean clinic with a bed, a doctor checking a patient's pulse, a scanner arm, medicine cabinets, a potted plant, a sticker chart.",
+   "actions": [
+    "clinic"
+   ]
+  },
+  {
+   "id": "bakery",
+   "bay": "b05",
+   "name": "Bakery",
+   "meter": "food",
+   "scene": "Bakery: glowing ovens, bread racks, a baker pulling out a tray of croissants, a short queue at the counter, a cake in a glass case, flour on the floor.",
+   "actions": [
+    "bake"
+   ]
+  },
+  {
+   "id": "nursery",
+   "bay": "b07",
+   "name": "Plant Nursery",
+   "meter": "air",
+   "scene": "Plant Nursery: hanging pots, succulents, bags of soil, someone repotting a big monstera, a watering hose, a shop cat curled up in an empty pot.",
+   "actions": [
+    "repot"
+   ]
+  },
+  {
+   "id": "band",
+   "bay": "b16",
+   "name": "Band Room",
+   "meter": "fun",
+   "scene": "Band Room: a drummer, a guitarist and a keyboard player rehearsing, amps, foam on the walls, cables, a setlist taped to the wall, a friend filming on a phone.",
+   "actions": [
+    "gig"
+   ]
+  },
+  {
+   "id": "tea",
+   "bay": "b18",
+   "name": "Tea House",
+   "meter": "food",
+   "scene": "Tea House: low tables and cushions, people pouring tea, a kettle on a little stove, shelves of tea tins, paper lanterns, a bonsai.",
+   "actions": [
+    "tea"
+   ]
+  },
+  {
+   "id": "garage",
+   "bay": "b21",
+   "name": "Shuttle Garage",
+   "meter": "power",
+   "scene": "Shuttle Garage: a small shuttle with its hatch open, a mechanic on a creeper underneath it, fuel lines, a tool cart, a cat asleep on the wing.",
+   "actions": [
+    "shuttle"
+   ]
+  },
+  {
+   "id": "cargo",
+   "bay": "b22",
+   "name": "Cargo & Mail",
+   "meter": "food",
+   "scene": "Cargo and Mail Room: parcels on shelves, a conveyor belt, a postal worker sorting letters, a little drone forklift, a dog carrying a parcel in its mouth.",
+   "actions": [
+    "deliveries"
+   ]
+  }
  ]
 }

@@ -1,0 +1,798 @@
+{
+ "shelter": "station",
+ "size": [
+  1824,
+  1280
+ ],
+ "hull": {
+  "x": 912,
+  "y": 640,
+  "r": 622
+ },
+ "shell": "assets/station/shell.webp",
+ "atlas": {
+  "still": "assets/station/pods.jpg",
+  "video": "assets/station/pods.mp4",
+  "size": [
+   2304,
+   1080
+  ]
+ },
+ "bays": [
+  {
+   "id": "b00",
+   "ring": 2,
+   "size": "single",
+   "hole": [
+    664,
+    217,
+    836,
+    306
+   ],
+   "pod": [
+    658,
+    210,
+    842,
+    313
+   ]
+  },
+  {
+   "id": "b01",
+   "ring": 2,
+   "size": "single",
+   "hole": [
+    991,
+    217,
+    1163,
+    306
+   ],
+   "pod": [
+    985,
+    210,
+    1169,
+    313
+   ]
+  },
+  {
+   "id": "b02",
+   "ring": 1,
+   "size": "single",
+   "hole": [
+    694,
+    336,
+    865,
+    426
+   ],
+   "pod": [
+    688,
+    330,
+    871,
+    432
+   ]
+  },
+  {
+   "id": "b03",
+   "ring": 2,
+   "size": "single",
+   "hole": [
+    468,
+    336,
+    639,
+    425
+   ],
+   "pod": [
+    462,
+    329,
+    645,
+    432
+   ]
+  },
+  {
+   "id": "b04",
+   "ring": 1,
+   "size": "single",
+   "hole": [
+    968,
+    336,
+    1138,
+    426
+   ],
+   "pod": [
+    962,
+    330,
+    1144,
+    432
+   ]
+  },
+  {
+   "id": "b05",
+   "ring": 2,
+   "size": "single",
+   "hole": [
+    1192,
+    336,
+    1363,
+    425
+   ],
+   "pod": [
+    1186,
+    329,
+    1369,
+    432
+   ]
+  },
+  {
+   "id": "b06",
+   "ring": 0,
+   "size": "single",
+   "hole": [
+    675,
+    454,
+    845,
+    544
+   ],
+   "pod": [
+    669,
+    448,
+    851,
+    550
+   ]
+  },
+  {
+   "id": "b07",
+   "ring": 2,
+   "size": "single",
+   "hole": [
+    449,
+    454,
+    620,
+    544
+   ],
+   "pod": [
+    443,
+    448,
+    626,
+    550
+   ]
+  },
+  {
+   "id": "b08",
+   "ring": 0,
+   "size": "double",
+   "hole": [
+    968,
+    456,
+    1333,
+    663
+   ],
+   "pod": [
+    956,
+    450,
+    1345,
+    669
+   ]
+  },
+  {
+   "id": "b09",
+   "ring": 0,
+   "size": "single",
+   "hole": [
+    692,
+    574,
+    862,
+    663
+   ],
+   "pod": [
+    686,
+    567,
+    868,
+    670
+   ]
+  },
+  {
+   "id": "b10",
+   "ring": 1,
+   "size": "single",
+   "hole": [
+    465,
+    574,
+    634,
+    663
+   ],
+   "pod": [
+    459,
+    568,
+    640,
+    669
+   ]
+  },
+  {
+   "id": "b11",
+   "ring": 0,
+   "size": "single",
+   "hole": [
+    695,
+    692,
+    865,
+    781
+   ],
+   "pod": [
+    689,
+    685,
+    871,
+    788
+   ]
+  },
+  {
+   "id": "b12",
+   "ring": 1,
+   "size": "single",
+   "hole": [
+    485,
+    692,
+    654,
+    781
+   ],
+   "pod": [
+    479,
+    686,
+    660,
+    787
+   ]
+  },
+  {
+   "id": "b13",
+   "ring": 0,
+   "size": "single",
+   "hole": [
+    972,
+    692,
+    1141,
+    781
+   ],
+   "pod": [
+    966,
+    686,
+    1147,
+    787
+   ]
+  },
+  {
+   "id": "b14",
+   "ring": 1,
+   "size": "single",
+   "hole": [
+    1197,
+    692,
+    1366,
+    781
+   ],
+   "pod": [
+    1191,
+    686,
+    1372,
+    787
+   ]
+  },
+  {
+   "id": "b15",
+   "ring": 0,
+   "size": "single",
+   "hole": [
+    689,
+    810,
+    858,
+    899
+   ],
+   "pod": [
+    683,
+    804,
+    864,
+    905
+   ]
+  },
+  {
+   "id": "b16",
+   "ring": 2,
+   "size": "single",
+   "hole": [
+    468,
+    810,
+    636,
+    899
+   ],
+   "pod": [
+    462,
+    804,
+    642,
+    905
+   ]
+  },
+  {
+   "id": "b17",
+   "ring": 1,
+   "size": "single",
+   "hole": [
+    989,
+    809,
+    1157,
+    899
+   ],
+   "pod": [
+    982,
+    803,
+    1164,
+    905
+   ]
+  },
+  {
+   "id": "b18",
+   "ring": 2,
+   "size": "single",
+   "hole": [
+    1213,
+    810,
+    1381,
+    899
+   ],
+   "pod": [
+    1207,
+    804,
+    1387,
+    905
+   ]
+  },
+  {
+   "id": "b19",
+   "ring": 1,
+   "size": "single",
+   "hole": [
+    673,
+    928,
+    841,
+    1016
+   ],
+   "pod": [
+    667,
+    921,
+    847,
+    1023
+   ]
+  },
+  {
+   "id": "b20",
+   "ring": 1,
+   "size": "single",
+   "hole": [
+    987,
+    928,
+    1155,
+    1016
+   ],
+   "pod": [
+    981,
+    921,
+    1161,
+    1023
+   ]
+  },
+  {
+   "id": "b21",
+   "ring": 2,
+   "size": "single",
+   "hole": [
+    680,
+    1045,
+    847,
+    1134
+   ],
+   "pod": [
+    674,
+    1039,
+    853,
+    1140
+   ]
+  },
+  {
+   "id": "b22",
+   "ring": 2,
+   "size": "single",
+   "hole": [
+    985,
+    1045,
+    1152,
+    1134
+   ],
+   "pod": [
+    979,
+    1039,
+    1158,
+    1140
+   ]
+  }
+ ],
+ "pods": {
+  "market": {
+   "name": "Night Market Hall",
+   "meter": "food",
+   "actions": [
+    "stalls"
+   ],
+   "size": "double",
+   "cell": [
+    0,
+    0,
+    768,
+    432
+   ],
+   "animated": true
+  },
+  "reactor": {
+   "name": "Reactor Room",
+   "meter": "power",
+   "actions": [
+    "fix",
+    "refuel"
+   ],
+   "size": "single",
+   "cell": [
+    768,
+    0,
+    384,
+    216
+   ],
+   "animated": true
+  },
+  "garden": {
+   "name": "Hydro Garden",
+   "meter": "air",
+   "actions": [
+    "harvest"
+   ],
+   "size": "single",
+   "cell": [
+    1152,
+    0,
+    384,
+    216
+   ],
+   "animated": true
+  },
+  "pets": {
+   "name": "Pet Lounge",
+   "meter": "boys",
+   "actions": [
+    "petfeed",
+    "petplay",
+    "petwash"
+   ],
+   "size": "single",
+   "cell": [
+    1536,
+    0,
+    384,
+    216
+   ],
+   "animated": true
+  },
+  "arcade": {
+   "name": "Arcade Lounge",
+   "meter": "fun",
+   "actions": [
+    "tournament"
+   ],
+   "size": "single",
+   "cell": [
+    1920,
+    0,
+    384,
+    216
+   ],
+   "animated": true
+  },
+  "bunks": {
+   "name": "Bunk Quarters",
+   "meter": "fun",
+   "actions": [
+    "lightsout"
+   ],
+   "size": "single",
+   "cell": [
+    768,
+    216,
+    384,
+    216
+   ],
+   "animated": true
+  },
+  "ramen": {
+   "name": "Ramen Counter",
+   "meter": "food",
+   "actions": [
+    "ramen"
+   ],
+   "size": "single",
+   "cell": [
+    1152,
+    216,
+    384,
+    216
+   ],
+   "animated": true
+  },
+  "gym": {
+   "name": "Low-G Gym",
+   "meter": "fun",
+   "actions": [
+    "workout"
+   ],
+   "size": "single",
+   "cell": [
+    1536,
+    216,
+    384,
+    216
+   ],
+   "animated": true
+  },
+  "cinema": {
+   "name": "Tiny Cinema",
+   "meter": "fun",
+   "actions": [
+    "movie",
+    "party"
+   ],
+   "size": "single",
+   "cell": [
+    1920,
+    216,
+    384,
+    216
+   ],
+   "animated": true
+  },
+  "laundry": {
+   "name": "Laundromat",
+   "meter": "air",
+   "actions": [
+    "laundry"
+   ],
+   "size": "single",
+   "cell": [
+    0,
+    432,
+    384,
+    216
+   ],
+   "animated": true
+  },
+  "records": {
+   "name": "Record Shop",
+   "meter": "fun",
+   "actions": [
+    "records"
+   ],
+   "size": "single",
+   "cell": [
+    384,
+    432,
+    384,
+    216
+   ],
+   "animated": true
+  },
+  "library": {
+   "name": "Book Nook",
+   "meter": "fun",
+   "actions": [
+    "read"
+   ],
+   "size": "single",
+   "cell": [
+    768,
+    432,
+    384,
+    216
+   ],
+   "animated": true
+  },
+  "workshop": {
+   "name": "Repair Workshop",
+   "meter": "power",
+   "actions": [
+    "repair"
+   ],
+   "size": "single",
+   "cell": [
+    1152,
+    432,
+    384,
+    216
+   ],
+   "animated": true
+  },
+  "aquarium": {
+   "name": "Aquarium Room",
+   "meter": "air",
+   "actions": [
+    "tanks"
+   ],
+   "size": "single",
+   "cell": [
+    1536,
+    432,
+    384,
+    216
+   ],
+   "animated": true
+  },
+  "bathhouse": {
+   "name": "Bathhouse",
+   "meter": "air",
+   "actions": [
+    "soak"
+   ],
+   "size": "single",
+   "cell": [
+    1920,
+    432,
+    384,
+    216
+   ],
+   "animated": true
+  },
+  "observatory": {
+   "name": "Observatory",
+   "meter": "fun",
+   "actions": [
+    "stargaze"
+   ],
+   "size": "single",
+   "cell": [
+    0,
+    648,
+    384,
+    216
+   ],
+   "animated": true
+  },
+  "medbay": {
+   "name": "Med Bay",
+   "meter": "air",
+   "actions": [
+    "clinic"
+   ],
+   "size": "single",
+   "cell": [
+    384,
+    648,
+    384,
+    216
+   ],
+   "animated": false
+  },
+  "bakery": {
+   "name": "Bakery",
+   "meter": "food",
+   "actions": [
+    "bake"
+   ],
+   "size": "single",
+   "cell": [
+    768,
+    648,
+    384,
+    216
+   ],
+   "animated": true
+  },
+  "nursery": {
+   "name": "Plant Nursery",
+   "meter": "air",
+   "actions": [
+    "repot"
+   ],
+   "size": "single",
+   "cell": [
+    1152,
+    648,
+    384,
+    216
+   ],
+   "animated": true
+  },
+  "band": {
+   "name": "Band Room",
+   "meter": "fun",
+   "actions": [
+    "gig"
+   ],
+   "size": "single",
+   "cell": [
+    1536,
+    648,
+    384,
+    216
+   ],
+   "animated": true
+  },
+  "tea": {
+   "name": "Tea House",
+   "meter": "food",
+   "actions": [
+    "tea"
+   ],
+   "size": "single",
+   "cell": [
+    1920,
+    648,
+    384,
+    216
+   ],
+   "animated": false
+  },
+  "garage": {
+   "name": "Shuttle Garage",
+   "meter": "power",
+   "actions": [
+    "shuttle"
+   ],
+   "size": "single",
+   "cell": [
+    0,
+    864,
+    384,
+    216
+   ],
+   "animated": false
+  },
+  "cargo": {
+   "name": "Cargo & Mail",
+   "meter": "food",
+   "actions": [
+    "deliveries"
+   ],
+   "size": "single",
+   "cell": [
+    384,
+    864,
+    384,
+    216
+   ],
+   "animated": true
+  }
+ },
+ "start": {
+  "b08": "market",
+  "b06": "reactor",
+  "b09": "garden",
+  "b11": "pets",
+  "b13": "arcade",
+  "b15": "bunks"
+ },
+ "home": {
+  "market": "b08",
+  "reactor": "b06",
+  "garden": "b09",
+  "pets": "b11",
+  "arcade": "b13",
+  "bunks": "b15",
+  "ramen": "b02",
+  "gym": "b04",
+  "cinema": "b10",
+  "laundry": "b12",
+  "records": "b14",
+  "library": "b17",
+  "workshop": "b19",
+  "aquarium": "b20",
+  "bathhouse": "b00",
+  "observatory": "b01",
+  "medbay": "b03",
+  "bakery": "b05",
+  "nursery": "b07",
+  "band": "b16",
+  "tea": "b18",
+  "garage": "b21",
+  "cargo": "b22"
+ }
+}

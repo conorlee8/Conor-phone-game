@@ -120,7 +120,9 @@ def animate(ids):
                                   str(CAT / f"{p['id']}.mp4"), "--prompt", ANIM.format(scene=p["scene"])],
                                  capture_output=True, text=True)
             last = (res.stdout.strip().splitlines() or [""])[-1]
-            print(f"  {p['id']}: {last or res.stderr.strip()[-300:]}", flush=True)
+            print(f"  {p['id']}: {last} {res.stderr.strip()[-300:]}", flush=True)
+            if "depleted" in res.stderr:             # out of Google credit: no point retrying
+                return
             if res.returncode == 0:
                 return
     with ThreadPoolExecutor(4) as ex:
@@ -144,5 +146,105 @@ def preview():
     print("wrote", (sdir / "preview.jpg").relative_to(ROOT.parent))
 
 
+CELL = (384, 216)       # one single pod in the atlas (about 2x its size on the station); a double pod takes 2x2 cells
+COLS = 6
+FPS, SECONDS, FADE = 24, 8, 24
+
+
+def cell_clip(src, size, dst):
+    """Decode a pod's loop at its atlas size and cross-fade its last second into its first: a seamless loop."""
+    import subprocess
+    w, h = size
+    n = FPS * SECONDS
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str(src), "-vf", f"fps={FPS},scale={w}:{h}:flags=lanczos",
+                          "-frames:v", str(n), "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], capture_output=True, check=True).stdout
+    fr = np.frombuffer(raw, np.uint8).reshape(-1, h, w, 3)
+    if len(fr) < n:
+        fr = np.concatenate([fr, np.repeat(fr[-1:], n - len(fr), axis=0)])
+    enc = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{w}x{h}", "-r", str(FPS),
+                            "-i", "-", "-c:v", "libx264", "-crf", "12", "-pix_fmt", "yuv420p", str(dst)], stdin=subprocess.PIPE)
+    for f in range(n - FADE):
+        x = fr[f]
+        if f < FADE:
+            a = f / FADE
+            x = (fr[n - FADE + f].astype(np.float32) * (1 - a) + x.astype(np.float32) * a).astype(np.uint8)
+        enc.stdin.write(x.tobytes())
+    enc.stdin.close()
+    enc.wait()
+
+
+def export():
+    """Everything the app needs for this shelter: the shell, one atlas image and one atlas video
+    holding every pod (one video to decode instead of one per pod), and station.json."""
+    import subprocess
+    cat = json.loads((CAT / "catalog.json").read_text())
+    sdir = ROOT / "shelters" / cat["shelter"]
+    shell = json.loads((sdir / "shell.json").read_text())
+    bays = {b["id"]: b for b in shell["bays"]}
+    app = ROOT.parent / "world"
+    out = app / "assets" / cat["shelter"]
+    out.mkdir(parents=True, exist_ok=True)
+    work = ROOT / "pods" / "work" / "atlas"
+    work.mkdir(parents=True, exist_ok=True)
+
+    Image.open(sdir / "shell.png").save(out / "shell.webp", quality=90, method=6)
+
+    # Pack the atlas: the double pods first (2x2 cells), then the singles.
+    taken = set()
+    def place(cw, ch):
+        for r in range(50):
+            for c in range(COLS - cw + 1):
+                if all((r + j, c + i) not in taken for j in range(ch) for i in range(cw)):
+                    taken.update((r + j, c + i) for j in range(ch) for i in range(cw))
+                    return [c * CELL[0], r * CELL[1], cw * CELL[0], ch * CELL[1]]
+    pods = sorted(cat["pods"], key=lambda p: bays[p["bay"]]["size"] != "double")
+    cells = {p["id"]: place(*((2, 2) if bays[p["bay"]]["size"] == "double" else (1, 1))) for p in pods}
+    rows = max(r for r, _ in taken) + 1
+    AW, AH = COLS * CELL[0], rows * CELL[1]
+
+    still = Image.new("RGB", (AW, AH), (20, 18, 22))
+    for p in pods:
+        x, y, w, h = cells[p["id"]]
+        still.paste(Image.open(CAT / f"{p['id']}.png").convert("RGB").resize((w, h), Image.LANCZOS), (x, y))
+    still.save(out / "pods.jpg", quality=86)
+
+    # The atlas video: every animated pod's seamless loop in its cell, the rest held still.
+    inputs, layout, animated = [], [], []
+    for p in pods:
+        x, y, w, h = cells[p["id"]]
+        mp4 = CAT / f"{p['id']}.mp4"
+        if mp4.exists():
+            cell = work / f"{p['id']}.mp4"
+            if not cell.exists() or cell.stat().st_mtime < mp4.stat().st_mtime:
+                cell_clip(mp4, (w, h), cell)
+            inputs += ["-i", str(cell)]
+            animated.append(p["id"])
+        else:
+            inputs += ["-loop", "1", "-framerate", str(FPS), "-t", str(SECONDS - FADE / FPS), "-i", str(CAT / f"{p['id']}.png")]
+        layout.append(f"{x}_{y}")
+    n = len(pods)
+    scale = "".join(f"[{i}:v]scale={cells[p['id']][2]}:{cells[p['id']][3]},format=yuv420p,setsar=1[v{i}];" for i, p in enumerate(pods))
+    graph = scale + "".join(f"[v{i}]" for i in range(n)) + f"xstack=inputs={n}:layout={'|'.join(layout)}:fill=0x141216[out]"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", *inputs, "-filter_complex", graph, "-map", "[out]", "-r", str(FPS),
+                    "-t", str(SECONDS - FADE / FPS), "-c:v", "libx264", "-preset", "slow", "-crf", "25", "-g", str(FPS * 2),
+                    "-pix_fmt", "yuv420p", "-movflags", "+faststart", "-an", str(out / "pods.mp4")], check=True)
+
+    data = {
+        "shelter": cat["shelter"],
+        "size": shell["size"],
+        "hull": dict(zip("xyr", shell["hull"])),
+        "shell": f"assets/{cat['shelter']}/shell.webp",
+        "atlas": {"still": f"assets/{cat['shelter']}/pods.jpg", "video": f"assets/{cat['shelter']}/pods.mp4", "size": [AW, AH]},
+        "bays": [{k: b[k] for k in ("id", "ring", "size", "hole", "pod")} for b in shell["bays"]],
+        "pods": {p["id"]: {"name": p["name"], "meter": p["meter"], "actions": p["actions"], "size": bays[p["bay"]]["size"],
+                           "cell": cells[p["id"]], "animated": p["id"] in animated} for p in cat["pods"]},
+        "start": {p["bay"]: p["id"] for p in cat["pods"] if bays[p["bay"]]["ring"] == 0},
+        "home": {p["id"]: p["bay"] for p in cat["pods"]},
+    }
+    (app / "data" / f"{cat['shelter']}.json").write_text(json.dumps(data, indent=1))
+    mb = lambda f: f"{f.stat().st_size / 1e6:.1f} MB"
+    print(f"atlas {AW}x{AH}, {len(animated)}/{n} animated; shell {mb(out / 'shell.webp')}, pods.jpg {mb(out / 'pods.jpg')}, pods.mp4 {mb(out / 'pods.mp4')}")
+
+
 if __name__ == "__main__":
-    {"paint": paint, "animate": animate, "preview": lambda _: preview()}[sys.argv[1]](sys.argv[2:])
+    {"paint": paint, "animate": animate, "preview": lambda _: preview(), "export": lambda _: export()}[sys.argv[1]](sys.argv[2:])

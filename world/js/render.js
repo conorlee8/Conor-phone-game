@@ -31,16 +31,32 @@ function glowSprite(rgb) {
   return c;
 }
 
+// Twinkling stars, over the painting and the open sky past its edges (a tall
+// phone screen shows more sky than the painting holds).
+const SKY = { x0: -700, y0: -1500, x1: 2524, y1: 2780 };
 let skyStars = null;
 function stars() {
   if (skyStars) return skyStars;
   skyStars = [];
-  for (let i = 0; skyStars.length < 170 && i < 4000; i++) {
-    const x = hash(i, 1) * 1824, y = hash(i, 2) * 1280;
+  for (let i = 0; skyStars.length < 420 && i < 8000; i++) {
+    const x = SKY.x0 + hash(i, 1) * (SKY.x1 - SKY.x0), y = SKY.y0 + hash(i, 2) * (SKY.y1 - SKY.y0);
     if (Math.hypot(x - HULL.x, y - HULL.y) < HULL.r + 8) continue;
     skyStars.push({ x, y, ph: hash(i, 3) * TAU, sp: 0.4 + hash(i, 4) * 1.6, big: hash(i, 5) > 0.85 });
   }
   return skyStars;
+}
+
+// Faint still stars beyond the painting, like the painted ones.
+let outerStars = null;
+function farStars() {
+  if (outerStars) return outerStars;
+  outerStars = [];
+  for (let i = 0; outerStars.length < 900 && i < 20000; i++) {
+    const x = SKY.x0 + hash(i, 71) * (SKY.x1 - SKY.x0), y = SKY.y0 + hash(i, 72) * (SKY.y1 - SKY.y0);
+    if (x >= 0 && x <= 1824 && y >= 0 && y <= 1280) continue;
+    outerStars.push({ x, y, a: 0.25 + hash(i, 73) * 0.6, s: hash(i, 74) > 0.9 ? 2 : 1.2 });
+  }
+  return outerStars;
 }
 
 function hullPath(ctx, r = HULL.r - 26) {
@@ -60,9 +76,18 @@ export function drawWorld(ctx, img, lights, view, out, t, look, opts = {}) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.globalCompositeOperation = 'source-over';
   ctx.globalAlpha = 1;
-  ctx.fillStyle = '#05070d';
+  ctx.fillStyle = look.sky || '#05070d';
   ctx.fillRect(0, 0, out.w, out.h);
   ctx.setTransform(k, 0, 0, k, -view.sx * k, -view.sy * k);
+  if (look.sky) {
+    ctx.fillStyle = '#dfe4f2';
+    for (const s of farStars()) {
+      if (s.x < view.sx - 4 || s.x > view.sx + view.sw + 4 || s.y < view.sy - 4 || s.y > view.sy + view.sh + 4) continue;
+      ctx.globalAlpha = s.a;
+      ctx.fillRect(s.x, s.y, s.s, s.s);
+    }
+    ctx.globalAlpha = 1;
+  }
   ctx.drawImage(img, 0, 0);
   if (look.agents && look.sprites) drawAgents(ctx, look.agents, look.sprites, opts.selected);
 
@@ -142,8 +167,8 @@ export function drawWorld(ctx, img, lights, view, out, t, look, opts = {}) {
     ctx.drawImage(glowSprite([170, 220, 255]), x - 30, y - 46, 60, 92);
   }
 
-  // Bubbles in the office fish tanks.
-  if (!(zones.office && zones.office.dark)) {
+  // Bubbles in the office fish tanks (the original painting only).
+  if (look.classic && !(zones.office && zones.office.dark)) {
     ctx.globalCompositeOperation = 'source-over';
     const [bx0, by0, bx1, by1] = TANKS;
     for (let i = 0; i < 16; i++) {
@@ -159,7 +184,7 @@ export function drawWorld(ctx, img, lights, view, out, t, look, opts = {}) {
   }
 
   // Steam over the dumpling baskets, only while there's food to cook.
-  if (look.food > 25 && !(zones.dumpling && zones.dumpling.dark)) {
+  if (look.classic && look.food > 25 && !(zones.dumpling && zones.dumpling.dark)) {
     ctx.globalCompositeOperation = 'lighter';
     const [sx0, sy0, sx1] = STEAM;
     for (let i = 0; i < 12; i++) {
@@ -277,6 +302,7 @@ export function drawWorld(ctx, img, lights, view, out, t, look, opts = {}) {
         ctx.strokeRect(x0 + 2, y0 + 2, x1 - x0 - 4, y1 - y0 - 4);
       }
     }
+    if (opts.after) { ctx.globalCompositeOperation = 'source-over'; opts.after(ctx, px); }
   }
   ctx.globalAlpha = 1;
   ctx.globalCompositeOperation = 'source-over';

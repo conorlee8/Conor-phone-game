@@ -49,6 +49,29 @@ export const ACTIONS = {
   movie: { label: 'Movie night', gives: { fun: 30 }, costs: { food: 5 }, cooldown: 6 * HOUR, say: 'Popcorn everywhere. Elliot ate most of it.' },
   party: { label: 'Throw a station party', gives: { fun: 45 }, costs: { food: 15, power: 5 }, cooldown: 12 * HOUR, say: 'The whole station is dancing.' },
   pickup: { label: 'Pickup basketball game', gives: { fun: 20 }, cooldown: 3 * HOUR, say: 'Shirts beat skins by two.' },
+  // The catalog pods of the modular station.
+  stalls: { label: 'Open the night market', gives: { food: 40, fun: 5 }, cooldown: 4 * HOUR, say: 'Every stall is steaming and the long tables are packed.' },
+  harvest: { label: 'Harvest the garden', gives: { air: 30, food: 8 }, cooldown: 4 * HOUR, say: 'Baskets of lettuce and strawberries. The frog approves.' },
+  petfeed: { label: 'Feed the pets', gives: { boys: 40 }, cooldown: 4 * HOUR, say: 'Every bowl in the Pet Lounge is licked clean.' },
+  petplay: { label: 'Ball pit time', gives: { boys: 20, fun: 8 }, cooldown: 1 * HOUR, say: 'The ball pit erupts. One corgi refuses to leave.' },
+  petwash: { label: 'Bath day', gives: { boys: 15, air: 5 }, cooldown: 12 * HOUR, say: 'Wet dogs everywhere. The cat watches from the top of the tower.' },
+  tournament: { label: 'Arcade tournament', gives: { fun: 30 }, costs: { power: 4 }, cooldown: 3 * HOUR, say: 'New high score on the pinball machine.' },
+  lightsout: { label: 'Lights out, everyone', gives: { fun: 12, power: 8 }, cooldown: 12 * HOUR, say: 'Curtains drawn, fairy lights on. The whole deck sleeps well.' },
+  ramen: { label: 'Fire up the ramen pots', gives: { food: 30 }, cooldown: 3 * HOUR, say: 'Steam fogs the counter. Every stool is taken.' },
+  workout: { label: 'Group workout', gives: { fun: 15, air: 4 }, cooldown: 3 * HOUR, say: 'Low gravity makes everyone a personal best.' },
+  laundry: { label: 'Laundry day', gives: { air: 18 }, cooldown: 8 * HOUR, say: 'Warm towels for everyone. One sock is still missing.' },
+  records: { label: 'Spin some records', gives: { fun: 20 }, cooldown: 3 * HOUR, say: 'Someone found a rare pressing in the bargain crate.' },
+  read: { label: 'Reading hour', gives: { fun: 15 }, cooldown: 4 * HOUR, say: 'Quiet pages, warm lamps, one snore.' },
+  repair: { label: 'Repair day', gives: { power: 25 }, cooldown: 6 * HOUR, say: 'The robot walks. Mostly in circles, but it walks.' },
+  soak: { label: 'Hot bath', gives: { air: 20, fun: 8 }, cooldown: 6 * HOUR, say: 'Everyone comes out pink and relaxed.' },
+  stargaze: { label: 'Stargazing night', gives: { fun: 20 }, cooldown: 6 * HOUR, say: 'A comet tonight. The kid saw it first.' },
+  clinic: { label: 'Health check', gives: { air: 15, fun: 5 }, cooldown: 12 * HOUR, say: 'Clean bills of health and a sticker each.' },
+  bake: { label: 'Bake a fresh batch', gives: { food: 30 }, cooldown: 4 * HOUR, say: 'Croissants, still warm. The queue is out the door.' },
+  repot: { label: 'Repot the plants', gives: { air: 25 }, cooldown: 6 * HOUR, say: 'The monstera finally has room to grow.' },
+  gig: { label: 'Band night', gives: { fun: 30 }, costs: { power: 5 }, cooldown: 8 * HOUR, say: 'An encore. Then another encore.' },
+  tea: { label: 'Tea ceremony', gives: { food: 12, fun: 10 }, cooldown: 4 * HOUR, say: 'The kettle sings and the room goes quiet.' },
+  shuttle: { label: 'Service the shuttle', gives: { power: 20 }, cooldown: 8 * HOUR, say: 'The shuttle purrs. The cat on the wing does not move.' },
+  deliveries: { label: 'Sort the deliveries', gives: { food: 25 }, cooldown: 6 * HOUR, say: 'Fresh supplies are in. The dog carried one parcel all by himself.' },
 };
 
 // Neglect, in between: things look sad as soon as a need drops, and a place
@@ -80,3 +103,36 @@ export const MOMENTS = [
 ];
 
 export const START = { power: 82, food: 70, air: 78, fun: 74, boys: 55 };
+
+// Little things happening on the modular station; `pod` means it only comes
+// up once that room is built.
+export const STATION_MOMENTS = [
+  { pod: 'market', when: m => m.food > 60, text: 'The night market is packed. There is a queue at the dumpling stall.' },
+  { pod: 'market', when: m => m.food < 35, text: 'Half the market stalls have their shutters down.' },
+  { pod: 'reactor', when: m => m.power > 60, text: 'The reactor is humming a happy blue.' },
+  { pod: 'reactor', when: m => m.power < 35, text: 'The engineers are arguing over the reactor gauges.' },
+  { pod: 'garden', when: m => m.air > 60, text: 'The tomatoes in the Hydro Garden are huge this week.' },
+  { pod: 'garden', when: m => m.air < 35, text: 'It is getting stuffy. The garden lights are flickering.' },
+  { pod: 'pets', when: m => m.boys > 60, text: 'A corgi has claimed the whole ball pit.' },
+  { pod: 'pets', when: m => m.boys < 35, text: 'The dogs are staring at their empty bowls.' },
+  { pod: 'arcade', when: m => m.fun > 60, text: 'Someone just set a new pinball high score.' },
+  { pod: 'arcade', when: m => m.fun < 35, text: 'The arcade is quiet. One cabinet is stuck on the title screen.' },
+  { pod: 'bunks', when: (m, h) => h >= 22 || h < 6, text: 'The bunk curtains are drawn. Fairy lights glow down the deck.' },
+  { pod: 'ramen', when: m => m.food > 50, text: 'Steam is fogging up the ramen counter.' },
+  { pod: 'gym', when: () => true, text: 'Someone in the gym is attempting a one-handed pull-up.' },
+  { pod: 'cinema', when: m => m.fun > 50, text: 'The Tiny Cinema is cheering at the space battle.' },
+  { pod: 'laundry', when: () => true, text: 'A single sock is going round and round in the laundromat.' },
+  { pod: 'records', when: () => true, text: 'The record shop is playing something with a lot of saxophone.' },
+  { pod: 'library', when: () => true, text: 'Someone fell asleep under a book in the Book Nook again.' },
+  { pod: 'workshop', when: m => m.power > 40, text: 'The half-built robot in the workshop took its first step.' },
+  { pod: 'aquarium', when: (m, h) => h >= 22 || h < 6, text: 'Most of the station is asleep. The aquarium glows.' },
+  { pod: 'bathhouse', when: () => true, text: 'The bathhouse has steamed up every window on the deck.' },
+  { pod: 'observatory', when: (m, h) => h >= 20 || h < 5, text: 'A kid in the observatory just spotted a comet.' },
+  { pod: 'bakery', when: (m, h) => h >= 6 && h < 11, text: 'The breakfast rush is on at the bakery.' },
+  { pod: 'band', when: m => m.fun > 50, text: 'The band is rehearsing the same chorus for the ninth time.' },
+  { pod: 'tea', when: () => true, text: 'The kettle is singing in the Tea House.' },
+  { pod: 'cargo', when: () => true, text: 'A dog is delivering a parcel to the wrong deck.' },
+  { when: () => true, text: 'An astronaut is patching a panel on the hull.' },
+  { when: () => true, text: 'A shuttle is docking at the side module.' },
+  { when: m => Math.min(m.power, m.food, m.air, m.fun, m.boys) > 70, text: 'Everyone on the station seems to be in a good mood.' },
+];
