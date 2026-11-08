@@ -102,3 +102,12 @@ Every shelter is a **shell** plus **bays**:
   enrollment.
 - `wallpaper/`: the art and video pipeline (see `wallpaper/BRIEF.md`,
   `wallpaper/VIDEO_PLAN.md`, `wallpaper/pods/RUNBOOK.md`).
+
+## Parked questions (ask Conor after the wallpaper test run)
+
+1. **The building station:** how does it feel? (Love it, keep going · Rooms
+   too small, repaint the shell with bigger rooms · Haven't tried yet)
+2. **Google credit:** top up to animate Med Bay, Tea House and Shuttle
+   Garage? (Add $10 · Leave them still)
+3. **Next build:** (Your personal rooms: office, the boys' park, Evan's
+   shop · Earn credits to build · Second shelter, the prepper bunker)

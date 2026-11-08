@@ -1,0 +1,543 @@
+<title>Top Ten Rooms</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=IBM+Plex+Mono:wght@500&family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<style>
+/* Layout: one ranked column of room cards on the station's night sky; #1 is drawn biggest. One dark look, like the game. */
+:root {
+  --void: #070a14;
+  --panel: #131a2e;
+  --panel-2: #1b2440;
+  --line: rgba(130, 150, 210, 0.26);
+  --ink: #eef1f8;
+  --muted: #9ba5c2;
+  --lantern: #ffb45e;
+  --mint: #7fdcc9;
+  --sakura: #f4a0b8;
+  --danger: #ff8a7a;
+  --display: "Dela Gothic One", "Hiragino Sans", system-ui, sans-serif;
+  --body: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--void) radial-gradient(1200px 500px at 70% -10%, #1a2550 0%, transparent 60%) no-repeat;
+  color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 64px;
+}
+main { max-width: 760px; margin: 0 auto; display: grid; gap: 22px; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+
+.top { display: grid; gap: 10px; }
+.eyebrow { margin: 0; font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--lantern); }
+h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(30px, 7vw, 46px); line-height: 1.05; text-wrap: balance; }
+.lede { margin: 0; color: var(--muted); max-width: 62ch; }
+.key { display: flex; flex-wrap: wrap; gap: 8px; }
+.key span { font-family: var(--mono); font-size: 12px; padding: 4px 10px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); }
+.key b { color: var(--lantern); font-weight: 500; }
+.progress { margin: 0; font-family: var(--mono); font-size: 13px; color: var(--mint); }
+.notice { margin: 0; padding: 10px 12px; border-radius: 10px; background: rgba(255, 138, 122, .12); border: 1px solid rgba(255, 138, 122, .4); color: var(--ink); font-size: 14px; }
+
+.rooms { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.room { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+.room.first { border-color: rgba(255, 180, 94, .6); box-shadow: 0 0 0 1px rgba(255, 180, 94, .25), 0 10px 40px rgba(255, 180, 94, .08); }
+.rhead { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; padding: 12px 12px 12px 14px; }
+.rank { font-family: var(--display); font-size: 26px; line-height: 1; width: 44px; text-align: center; color: var(--muted); }
+.first .rank { font-size: 38px; color: var(--lantern); width: 56px; }
+.rtoggle { background: none; border: 0; padding: 4px 0; text-align: left; display: grid; gap: 2px; min-width: 0; }
+.rname { font-weight: 700; font-size: 18px; overflow-wrap: anywhere; }
+.first .rname { font-size: 22px; }
+.rmeta { font-family: var(--mono); font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
+.rmeta .ok { color: var(--mint); }
+.move { display: flex; gap: 6px; }
+.move button { width: 38px; height: 38px; border-radius: 10px; background: var(--panel-2); border: 1px solid var(--line); display: grid; place-items: center; }
+.move button:disabled { opacity: .3; cursor: default; }
+.move svg { width: 18px; height: 18px; }
+
+.rbody { border-top: 1px solid var(--line); padding: 16px 14px 18px; display: grid; gap: 22px; }
+.block { display: grid; gap: 10px; }
+.block h3 { margin: 0; font-size: 15px; font-weight: 700; }
+.block h3 small { font-weight: 500; color: var(--muted); font-size: 13px; margin-left: 6px; }
+.field { display: grid; gap: 6px; }
+.field > span { font-size: 14px; color: var(--muted); }
+input[type="text"], textarea, select { width: 100%; background: var(--void); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+textarea { min-height: 76px; resize: vertical; }
+
+.members { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.member { background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px; display: grid; gap: 10px; }
+.mrow { display: grid; grid-template-columns: 1fr 120px auto; gap: 8px; align-items: center; }
+.mrow .x { width: 38px; height: 38px; border-radius: 10px; background: none; border: 1px solid var(--line); color: var(--muted); }
+.photos { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.ph { position: relative; width: 64px; height: 64px; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); }
+.ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ph button { position: absolute; top: 2px; right: 2px; width: 22px; height: 22px; border-radius: 50%; border: 0; background: rgba(7, 10, 20, .8); color: var(--ink); font-size: 13px; line-height: 1; }
+.addph { width: 64px; height: 64px; border-radius: 10px; border: 1px dashed var(--mint); color: var(--mint); display: grid; place-items: center; text-align: center; font-size: 12px; line-height: 1.2; cursor: pointer; }
+.addph input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.addph:focus-within { outline: 2px solid var(--mint); outline-offset: 2px; }
+.saved { font-size: 13px; color: var(--mint); }
+.upnote { font-size: 13px; color: var(--muted); }
+.adds { display: flex; flex-wrap: wrap; gap: 8px; }
+.ghost { background: none; border: 1px solid var(--line); border-radius: 99px; padding: 8px 14px; font-size: 14px; }
+
+fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 8px; min-width: 0; }
+legend { padding: 0; font-weight: 700; font-size: 15px; margin-bottom: 8px; }
+legend small { font-weight: 500; color: var(--muted); font-size: 13px; margin-left: 6px; }
+.qn { font-family: var(--mono); color: var(--lantern); font-weight: 500; margin-right: 6px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { border: 1px solid var(--line); background: var(--void); border-radius: 99px; padding: 7px 13px; font-size: 14px; }
+.chip[aria-pressed="true"] { background: var(--mint); border-color: var(--mint); color: var(--void); font-weight: 700; }
+.other { margin-top: 2px; }
+
+.render { display: grid; gap: 8px; }
+.render img { width: 100%; border-radius: 12px; border: 1px solid var(--line); display: block; }
+.vers { display: flex; flex-wrap: wrap; gap: 6px; }
+.vers button { font-family: var(--mono); font-size: 12px; padding: 4px 10px; border-radius: 99px; border: 1px solid var(--line); background: none; }
+.vers button[aria-pressed="true"] { border-color: var(--lantern); color: var(--lantern); }
+.chosen { color: var(--lantern); font-family: var(--mono); font-size: 12px; }
+
+.send { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.primary { background: var(--lantern); color: var(--void); border: 0; border-radius: 12px; padding: 12px 18px; font-weight: 700; }
+.primary:disabled { opacity: .5; cursor: default; }
+.status { font-size: 14px; color: var(--muted); min-width: 0; flex: 1 1 220px; }
+.status.good { color: var(--mint); }
+.saving { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+@media (max-width: 520px) {
+  .mrow { grid-template-columns: 1fr auto; }
+  .mrow select { grid-column: 1 / -1; grid-row: 2; }
+  .move button { width: 34px; height: 34px; }
+  .rank { width: 32px; font-size: 22px; }
+  .first .rank { width: 44px; font-size: 32px; }
+}
+@media (prefers-reduced-motion: no-preference) { .chip, .primary, .move button { transition: transform .12s ease, background-color .12s ease; } .chip:active, .primary:active { transform: scale(.97); } }
+</style>
+
+<main>
+  <header class="top">
+    <p class="eyebrow">Station · Duo wallpaper test</p>
+    <h1>Top Ten Rooms</h1>
+    <p class="lede">Rank your ten rooms with the arrows. Number 1 gets the big hall in the middle of the station. Open each room, add photos of everyone in it (pets too), answer five quick questions, then send it to Claude to paint.</p>
+    <div class="key" aria-label="Where each rank goes">
+      <span><b>#1</b> big center hall</span>
+      <span><b>#2–6</b> core rooms by the elevator</span>
+      <span><b>#7–10</b> first ring</span>
+    </div>
+    <p id="notice" class="notice" hidden></p>
+    <p id="progress" class="progress">Loading your rooms…</p>
+  </header>
+  <ol id="rooms" class="rooms" aria-label="Rooms, ranked"></ol>
+</main>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const QUESTIONS = [
+    { key: 'type', title: 'What kind of room is it?', multi: false,
+      options: ['Hangout or game room', 'Shop or business', 'Bar or restaurant', 'Workshop or studio', 'Apartment or bedroom', 'Gym or sports'] },
+    { key: 'into', title: 'What are they into?', hint: 'pick up to 3', multi: 3,
+      options: ['Video games', 'Cooking and food', 'Music', 'Sports and fitness', 'Cars and bikes', 'Plants and animals', 'Movies and TV', 'Art and making things', 'Tech and gadgets', 'Partying'] },
+    { key: 'vibe', title: 'What does it feel like?', multi: false,
+      options: ['Cozy and lived-in', 'Clean and high-tech', 'Retro and vintage', 'Neon party', 'Green and natural', 'Messy and chaotic'] },
+    { key: 'scene', title: 'What is going on in there right now?', multi: false,
+      options: ['Friends hanging out', 'Busy with customers', 'Working on a project', 'Chilling solo', 'A party', 'Pets running wild'] },
+    { key: 'details', title: 'Must-have details', hint: 'pick any', multi: true,
+      options: ['Big TV and consoles', 'Fish tanks', 'Plants everywhere', 'Bar or full fridge', 'Posters and trophies', 'Pool table or games', 'Couch or bed', 'Workbench and tools', 'Pet beds and toys', 'Neon signs'] },
+  ];
+  const KINDS = ['Person', 'Dog', 'Cat', 'Other pet'];
+  const placeOf = rank => rank === 1 ? 'Big center hall' : rank <= 6 ? 'Core room by the elevator' : 'First ring';
+  const ICON_UP = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>';
+  const ICON_DOWN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+
+  let db = null, assets = null, comments = null, readOnly = false;
+  const rooms = new Map();          // id -> room doc (with local pending edits merged in)
+  const open = new Set();           // rooms expanded on screen
+  const notes = new Map();          // id -> status line after a send
+  const viewing = new Map();        // id -> which painted version is shown
+  const cards = new Map();          // id -> <li>
+  const sigs = new Map();           // id -> members signature, so typing never rebuilds the list
+
+  const members = r => (r && Array.isArray(r.people) ? r.people : []);
+  const answers = r => (r && r.answers && typeof r.answers === 'object' ? r.answers : {});
+  const renders = r => (r && Array.isArray(r.renders) ? r.renders : []);
+  const answeredCount = r => QUESTIONS.filter(q => { const v = answers(r)[q.key]; return Array.isArray(v) ? v.length : !!v; }).length;
+  const roomTitle = r => (r.owner && r.owner.trim() ? `${r.owner.trim()}'s room` : `Room ${r.rank}`);
+  const uid = () => 'm' + Math.random().toString(36).slice(2, 9);
+  const notice = text => { const n = $('notice'); n.hidden = !text; n.textContent = text || ''; };
+
+  // ----- saving: one write at a time per room, coalesced -----
+  const pending = new Map(), timers = new Map(), writing = new Set();
+  async function flush(id) {
+    if (writing.has(id)) { await new Promise(r => setTimeout(r, 250)); return flush(id); }
+    const patch = pending.get(id); if (!patch) return;
+    pending.delete(id); writing.add(id);
+    setSaving(id, 'Saving…');
+    try {
+      await db.doc('rooms/' + id).update(patch);
+      if (!pending.has(id)) setSaving(id, 'Saved');
+    } catch (e) {
+      setSaving(id, 'Not saved: ' + ((e && e.message) || 'try again'));
+      throw e;
+    } finally { writing.delete(id); }
+  }
+  function queue(id, patch, delay = 650) {
+    if (readOnly || !db) return;
+    pending.set(id, { ...(pending.get(id) || {}), ...patch });
+    rooms.set(id, { ...rooms.get(id), ...patch });
+    clearTimeout(timers.get(id));
+    timers.set(id, setTimeout(() => flush(id).catch(() => {}), delay));
+    setSaving(id, 'Saving…');
+  }
+  async function saveNow(id) { clearTimeout(timers.get(id)); while (pending.has(id) || writing.has(id)) await flush(id); }
+  function setSaving(id, text) { const li = cards.get(id); const el = li && li.querySelector('.saving'); if (el) el.textContent = text; }
+
+  // ----- the list -----
+  function sorted() { return [...rooms.values()].sort((a, b) => (a.rank || 99) - (b.rank || 99)); }
+  function renderAll() {
+    const list = sorted();
+    const done = list.filter(r => r.status && r.status !== 'draft').length;
+    $('progress').textContent = list.length ? `${done} of ${list.length} rooms sent to Claude` : 'No rooms yet. They will appear here in a moment.';
+    const ol = $('rooms');
+    list.forEach((r, i) => {
+      let li = cards.get(r.id);
+      if (!li) { li = buildCard(r.id); cards.set(r.id, li); }
+      if (ol.children[i] !== li) ol.insertBefore(li, ol.children[i] || null);
+      fillCard(li, r, i, list.length);
+    });
+    for (const [id, li] of cards) if (!rooms.has(id)) { li.remove(); cards.delete(id); }
+  }
+
+  function buildCard(id) {
+    const li = document.createElement('li');
+    li.className = 'room';
+    li.innerHTML = `
+      <div class="rhead">
+        <span class="rank"></span>
+        <button type="button" class="rtoggle" aria-expanded="false"><span class="rname"></span><span class="rmeta"></span></button>
+        <div class="move"><button type="button" class="up" aria-label="Move up">${ICON_UP}</button><button type="button" class="down" aria-label="Move down">${ICON_DOWN}</button></div>
+      </div>
+      <div class="rbody" hidden>
+        <div class="render" hidden></div>
+        <label class="field"><span>Whose room is it?</span><input type="text" class="owner" maxlength="40" placeholder="Name"></label>
+        <section class="block">
+          <h3>Who's in it<small>add a few clear photos of each, face and full body</small></h3>
+          <ul class="members"></ul>
+          <div class="adds"><button type="button" class="ghost addperson">+ Add a person</button><button type="button" class="ghost addpet">+ Add a pet</button></div>
+        </section>
+        <div class="qs block"></div>
+        <label class="field"><span>Anything else? Inside jokes, signs, favorite things</span><textarea class="notes" maxlength="1500"></textarea></label>
+        <div class="send"><button type="button" class="primary sendbtn">Send room to Claude</button><span class="status"></span></div>
+        <span class="saving"></span>
+      </div>`;
+    li.querySelector('.owner').id = 'owner-' + id;
+    li.querySelector('.notes').id = 'notes-' + id;
+    li.querySelector('.rtoggle').addEventListener('click', () => { open.has(id) ? open.delete(id) : open.add(id); renderAll(); });
+    li.querySelector('.up').addEventListener('click', () => move(id, -1));
+    li.querySelector('.down').addEventListener('click', () => move(id, 1));
+    li.querySelector('.owner').addEventListener('input', e => { queue(id, { owner: e.target.value }); fillHead(li, rooms.get(id)); });
+    li.querySelector('.notes').addEventListener('input', e => queue(id, { notes: e.target.value }));
+    li.querySelector('.addperson').addEventListener('click', () => addMember(id, 'Person'));
+    li.querySelector('.addpet').addEventListener('click', () => addMember(id, 'Dog'));
+    li.querySelector('.sendbtn').addEventListener('click', e => send(id, e.currentTarget));
+    const qs = li.querySelector('.qs');
+    QUESTIONS.forEach((q, qi) => {
+      const fs = document.createElement('fieldset');
+      fs.innerHTML = `<legend><span class="qn">${qi + 1}</span></legend><div class="chips"></div><input type="text" class="other" maxlength="200" hidden>`;
+      fs.querySelector('legend').append(q.title);
+      if (q.hint) { const s = document.createElement('small'); s.textContent = q.hint; fs.querySelector('legend').append(s); }
+      const chips = fs.querySelector('.chips');
+      for (const opt of [...q.options, 'Other']) {
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'chip'; b.textContent = opt; b.dataset.opt = opt;
+        b.addEventListener('click', () => pick(id, q, opt));
+        chips.appendChild(b);
+      }
+      const other = fs.querySelector('.other');
+      other.id = `other-${id}-${q.key}`;
+      other.placeholder = 'Tell me…';
+      other.setAttribute('aria-label', q.title + ': other');
+      other.addEventListener('input', e => queue(id, { answers: { ...answers(rooms.get(id)), [q.key + 'Other']: e.target.value } }));
+      fs.dataset.key = q.key;
+      qs.appendChild(fs);
+    });
+    return li;
+  }
+
+  function fillHead(li, r) {
+    const n = members(r).length;
+    li.querySelector('.rname').textContent = roomTitle(r);
+    const meta = li.querySelector('.rmeta');
+    const sent = r.status === 'done' ? '<span class="ok">painted</span>' : r.status === 'working' ? '<span class="ok">painting…</span>' : r.status === 'sent' ? '<span class="ok">sent</span>' : '';
+    meta.innerHTML = '';
+    meta.append(`${placeOf(r.rank)} · ${n} ${n === 1 ? 'resident' : 'residents'} · ${answeredCount(r)} of 5 answered`);
+    if (sent) { meta.append(' · '); meta.insertAdjacentHTML('beforeend', sent); }
+  }
+
+  function fillCard(li, r, i, total) {
+    const id = r.id;
+    li.classList.toggle('first', i === 0);
+    li.querySelector('.rank').textContent = i + 1;
+    fillHead(li, r);
+    li.querySelector('.up').disabled = readOnly || i === 0;
+    li.querySelector('.down').disabled = readOnly || i === total - 1;
+    const isOpen = open.has(id);
+    li.querySelector('.rtoggle').setAttribute('aria-expanded', String(isOpen));
+    li.querySelector('.rbody').hidden = !isOpen;
+    if (!isOpen) return;
+    const busy = pending.has(id);
+    const setVal = (el, v) => { if (document.activeElement !== el && !busy) el.value = v || ''; };
+    setVal(li.querySelector('.owner'), r.owner);
+    setVal(li.querySelector('.notes'), r.notes);
+    // residents: rebuild only when who's there or their photos change
+    const sig = JSON.stringify(members(r).map(m => [m.id, m.kind, m.photos, !!m.saved]));
+    if (sigs.get(id) !== sig) { sigs.set(id, sig); buildMembers(li, r); }
+    li.querySelectorAll('.member').forEach(row => {
+      const m = members(r).find(x => x.id === row.dataset.mid);
+      const inp = row.querySelector('.mname');
+      if (m && document.activeElement !== inp && !busy) inp.value = m.name || '';
+    });
+    // questions
+    const a = answers(r);
+    li.querySelectorAll('.qs fieldset').forEach(fs => {
+      const key = fs.dataset.key;
+      const v = a[key];
+      const picked = Array.isArray(v) ? v : v ? [v] : [];
+      fs.querySelectorAll('.chip').forEach(b => b.setAttribute('aria-pressed', String(picked.includes(b.dataset.opt))));
+      const other = fs.querySelector('.other');
+      other.hidden = !picked.includes('Other');
+      setVal(other, a[key + 'Other']);
+    });
+    fillRender(li, r);
+    const btn = li.querySelector('.sendbtn');
+    const st = li.querySelector('.status');
+    btn.disabled = readOnly;
+    btn.textContent = renders(r).length ? 'Send changes to Claude' : 'Send room to Claude';
+    st.className = 'status';
+    if (notes.has(id)) { st.textContent = notes.get(id); st.classList.add('good'); }
+    else if (r.status === 'working') st.textContent = 'Claude is painting this room now.';
+    else if (r.status === 'sent') st.textContent = 'Sent. Claude will paint it and it shows up here.';
+    else if (renders(r).length) st.textContent = 'Want changes? Write them in "Anything else?" and send again.';
+    else st.textContent = members(r).length ? '' : 'Add who is in this room first.';
+  }
+
+  function fillRender(li, r) {
+    const box = li.querySelector('.render');
+    const list = renders(r);
+    box.hidden = !list.length;
+    if (!list.length) return;
+    let k = viewing.has(r.id) ? viewing.get(r.id) : list.length - 1;
+    k = Math.min(k, list.length - 1);
+    const cur = list[k];
+    const key = JSON.stringify([list.map(x => x.asset), k, r.chosen]);
+    if (box.dataset.key === key) return;
+    box.dataset.key = key;
+    box.textContent = '';
+    const img = document.createElement('img');
+    img.src = '/_blob/' + cur.asset; img.alt = `${roomTitle(r)}, painted version ${k + 1}`; img.loading = 'lazy';
+    box.appendChild(img);
+    const row = document.createElement('div'); row.className = 'vers';
+    list.forEach((x, j) => {
+      const b = document.createElement('button'); b.type = 'button'; b.textContent = 'v' + (j + 1);
+      b.setAttribute('aria-pressed', String(j === k));
+      b.addEventListener('click', () => { viewing.set(r.id, j); fillRender(li, rooms.get(r.id)); });
+      row.appendChild(b);
+    });
+    const use = document.createElement('button'); use.type = 'button';
+    const chosen = r.chosen === cur.asset;
+    use.textContent = chosen ? 'In the wallpaper' : 'Use this one';
+    use.setAttribute('aria-pressed', String(chosen));
+    use.disabled = readOnly;
+    use.addEventListener('click', () => { queue(r.id, { chosen: cur.asset }, 0); box.dataset.key = ''; fillRender(li, rooms.get(r.id)); });
+    row.appendChild(use);
+    box.appendChild(row);
+  }
+
+  function buildMembers(li, r) {
+    const ul = li.querySelector('.members');
+    ul.textContent = '';
+    for (const m of members(r)) {
+      const row = document.createElement('li');
+      row.className = 'member'; row.dataset.mid = m.id;
+      row.innerHTML = `<div class="mrow"><input type="text" class="mname" maxlength="40"><select class="mkind"></select><button type="button" class="x" aria-label="Remove">✕</button></div><div class="photos"></div>`;
+      const name = row.querySelector('.mname');
+      name.id = `name-${r.id}-${m.id}`; name.placeholder = m.kind === 'Person' ? 'Their name' : 'Pet name';
+      name.setAttribute('aria-label', 'Name');
+      name.value = m.name || '';
+      name.addEventListener('input', e => editMember(r.id, m.id, { name: e.target.value }));
+      const sel = row.querySelector('.mkind');
+      sel.id = `kind-${r.id}-${m.id}`; sel.setAttribute('aria-label', 'Person or pet');
+      for (const k of KINDS) { const o = document.createElement('option'); o.textContent = k; o.selected = k === m.kind; sel.appendChild(o); }
+      sel.addEventListener('change', e => editMember(r.id, m.id, { kind: e.target.value }));
+      row.querySelector('.x').addEventListener('click', () => removeMember(r.id, m.id));
+      const ph = row.querySelector('.photos');
+      if (m.saved) {
+        const s = document.createElement('span'); s.className = 'saved';
+        s.textContent = 'Already drawn and approved. Add photos only if you want a redo.';
+        ph.appendChild(s);
+      }
+      for (const aid of (m.photos || [])) {
+        const box = document.createElement('div'); box.className = 'ph';
+        box.innerHTML = `<img alt=""><button type="button" aria-label="Remove photo">✕</button>`;
+        box.querySelector('img').src = '/_blob/' + aid;
+        box.querySelector('button').addEventListener('click', () => removePhoto(r.id, m.id, aid));
+        ph.appendChild(box);
+      }
+      if (assets && !readOnly) {
+        const add = document.createElement('label'); add.className = 'addph';
+        add.innerHTML = `Add<br>photos<input type="file" accept="image/*" multiple>`;
+        const input = add.querySelector('input');
+        input.id = `photo-${r.id}-${m.id}`;
+        input.addEventListener('change', e => { addPhotos(r.id, m.id, e.target.files, row); e.target.value = ''; });
+        ph.appendChild(add);
+      }
+      const up = document.createElement('span'); up.className = 'upnote'; ph.appendChild(up);
+      ul.appendChild(row);
+    }
+  }
+
+  // ----- edits -----
+  function move(id, dir) {
+    const list = sorted();
+    const i = list.findIndex(r => r.id === id), j = i + dir;
+    if (j < 0 || j >= list.length) return;
+    const a = list[i], b = list[j];
+    const ra = a.rank, rb = b.rank;
+    queue(a.id, { rank: rb }, 0); queue(b.id, { rank: ra }, 0);
+    renderAll();
+    const li = cards.get(id); if (li) li.querySelector(dir < 0 ? '.up' : '.down').focus();
+  }
+  function setMembers(id, list) { queue(id, { people: list }); renderAll(); }
+  function addMember(id, kind) {
+    setMembers(id, [...members(rooms.get(id)), { id: uid(), name: '', kind, photos: [] }]);
+    const li = cards.get(id);
+    const rows = li && li.querySelectorAll('.mname');
+    if (rows && rows.length) rows[rows.length - 1].focus();
+  }
+  function editMember(id, mid, patch) {
+    const list = members(rooms.get(id)).map(m => (m.id === mid ? { ...m, ...patch } : m));
+    queue(id, { people: list });
+    fillHead(cards.get(id), rooms.get(id));
+    if ('kind' in patch) renderAll();
+  }
+  async function removeMember(id, mid) {
+    const m = members(rooms.get(id)).find(x => x.id === mid);
+    setMembers(id, members(rooms.get(id)).filter(x => x.id !== mid));
+    if (m && m.photos && m.photos.length && assets) {
+      try { await saveNow(id); for (const aid of m.photos) await assets.delete(aid); } catch (e) { /* the row no longer points at them */ }
+    }
+  }
+  function pick(id, q, opt) {
+    if (readOnly) return;
+    const a = { ...answers(rooms.get(id)) };
+    if (q.multi) {
+      const cur = Array.isArray(a[q.key]) ? a[q.key] : [];
+      let next = cur.includes(opt) ? cur.filter(x => x !== opt) : [...cur, opt];
+      if (typeof q.multi === 'number' && next.length > q.multi) next = next.slice(next.length - q.multi);
+      a[q.key] = next;
+    } else a[q.key] = a[q.key] === opt ? '' : opt;
+    queue(id, { answers: a }, 300);
+    renderAll();
+    if (opt === 'Other') { const el = $(`other-${id}-${q.key}`); if (el && !el.hidden) el.focus(); }
+  }
+
+  async function shrink(file) {
+    try {
+      const bmp = await createImageBitmap(file);
+      const k = Math.min(1, 1800 / Math.max(bmp.width, bmp.height));
+      const c = document.createElement('canvas');
+      c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
+      c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+      if (bmp.close) bmp.close();
+      const out = await new Promise(r => c.toBlob(r, 'image/jpeg', 0.92));
+      if (out) return out;
+    } catch (e) { /* use the original file */ }
+    return file;
+  }
+  async function addPhotos(id, mid, files, row) {
+    const list = [...files];
+    const note = () => row.querySelector('.upnote');
+    for (let i = 0; i < list.length; i++) {
+      if (note()) note().textContent = `Uploading ${i + 1} of ${list.length}…`;
+      try {
+        const b = await shrink(list[i]);
+        const type = ['image/jpeg', 'image/png', 'image/webp'].includes(b.type) ? b.type : 'image/jpeg';
+        const res = await assets.upload(b, { type });
+        const cur = members(rooms.get(id)).map(m => (m.id === mid ? { ...m, photos: [...(m.photos || []), res.id] } : m));
+        queue(id, { people: cur }, 200);
+        renderAll();
+      } catch (e) {
+        const c = e && e.code;
+        const why = c === 'unsupported_type' ? 'that format isn\'t supported, try a JPEG or PNG'
+          : c === 'too_large' ? 'that photo is over 20 MB'
+          : c === 'rate_limited' ? 'too many at once, wait a moment and add it again'
+          : 'the upload didn\'t go through, try again';
+        const n = cards.get(id) && cards.get(id).querySelector(`[data-mid="${mid}"] .upnote`);
+        if (n) n.textContent = `Photo ${i + 1} not added: ${why}.`;
+        if (c === 'not_granted' || c === 'capability_disabled' || c === 'quota_or_state') break;
+        continue;
+      }
+    }
+    const n = cards.get(id) && cards.get(id).querySelector(`[data-mid="${mid}"] .upnote`);
+    if (n && n.textContent.startsWith('Uploading')) n.textContent = '';
+  }
+  async function removePhoto(id, mid, aid) {
+    const cur = members(rooms.get(id)).map(m => (m.id === mid ? { ...m, photos: (m.photos || []).filter(x => x !== aid) } : m));
+    queue(id, { people: cur }, 0);
+    renderAll();
+    try { await saveNow(id); await assets.delete(aid); } catch (e) { /* the row no longer points at it */ }
+  }
+
+  async function send(id, btn) {
+    const r = rooms.get(id);
+    if (!members(r).length) { notes.set(id, 'Add who is in this room first.'); return renderAll(); }
+    btn.disabled = true;
+    try { await saveNow(id); } catch (e) { btn.disabled = false; return; }
+    const rank = sorted().findIndex(x => x.id === id) + 1;
+    const again = renders(r).length > 0;
+    const text = `${again ? 'Changes for' : 'Paint'} room #${rank}: ${roomTitle(r)} (id ${id}). Details are saved in this page's rooms/${id}.`;
+    let sent = false;
+    if (comments) {
+      try {
+        if ((await comments.canSendToClaude()) === 'available') {
+          await comments.sendToClaude({ anchor: await comments.anchorFor(cards.get(id)), text });
+          sent = true;
+        }
+      } catch (e) { /* fall through to the chat hint */ }
+    }
+    queue(id, { status: 'sent', sentAt: Date.now() }, 0);
+    notes.set(id, sent ? 'Sent to Claude. The painting shows up here when it is ready.' : `Saved. Tell Claude in chat: "paint room #${rank}".`);
+    btn.disabled = false;
+    renderAll();
+  }
+
+  renderAll();
+  (async () => {
+    db = await window.claude?.use?.('db');
+    if (!db) { $('progress').textContent = 'Not connected'; notice('Open this page in Claude while signed in so your rooms and photos save.'); return; }
+    const user = await window.claude.use('user');
+    if (user && user.can && (await user.can('data.write')) === false) { readOnly = true; notice('You can look, but only Conor can change these rooms.'); }
+    assets = await window.claude.use('assets');
+    comments = await window.claude.use('comments');
+    let loaded = false;
+    const slow = setTimeout(() => { if (!loaded) $('progress').textContent = 'Still connecting…'; }, 10000);
+    db.collection('rooms').onSnapshot(snap => {
+      if (!snap.metadata.fromCache) { loaded = true; clearTimeout(slow); }
+      const seen = new Set();
+      snap.docs.forEach(d => {
+        seen.add(d.id);
+        const prev = rooms.get(d.id);
+        const next = { id: d.id, ...d.data(), ...(pending.get(d.id) || {}) };
+        if (prev && renders(prev).length < renders(next).length) { viewing.delete(d.id); notes.delete(d.id); }
+        rooms.set(d.id, next);
+      });
+      if (!snap.metadata.fromCache) [...rooms.keys()].forEach(k => { if (!seen.has(k) && !pending.has(k)) rooms.delete(k); });
+      if (!open.size && rooms.size && !renderAll.opened) { renderAll.opened = true; const first = sorted()[0]; if (first) open.add(first.id); }
+      renderAll();
+    }, err => { clearTimeout(slow); $('progress').textContent = 'Could not load'; notice('Rooms could not load (' + ((err && err.code) || 'error') + '). Reopen the page to try again.'); });
+  })();
+})();
+</script>
