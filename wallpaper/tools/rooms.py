@@ -138,7 +138,10 @@ def paint(rid, n=1):
             "how tall people are in this room: paint every person at that height, busy and natural, placed wherever the scene needs them. "
             "The second image shows the painting style, linework, colour and level of detail to match: its look, not its layout or its people. ")
     lead += "".join(f"Image {i + 3} is {lab}. " for i, lab in enumerate(labels))
-    tail = (" This is one room of a cozy, crammed space station, seen straight on as a cutaway, like a dollhouse room with the front wall removed: "
+    tail = (" Whatever the room is for, it is built like a futuristic space-station bunker: curved riveted metal bulkheads and wall panels, "
+            "glowing control panels and screens built into the walls, chunky retro-future tech, a round porthole onto starry space, "
+            "neat cable runs and soft built-in light strips. Tidy and well kept unless the owner asked for mess."
+            " This is one room of a cozy, crammed space station, seen straight on as a cutaway, like a dollhouse room with the front wall removed: "
             "a flat back wall, the floor along the bottom, the ceiling along the top, no deep perspective. Fill every part of it with detail and life, "
             "Stephen Biesty levels of detail, in a lofi anime night painting style with crisp ink linework and warm lamp glow. Keep the people and the "
             "main action away from the outer edges, which sit behind a door frame. Writing only where it would really exist in the room, in English, "
