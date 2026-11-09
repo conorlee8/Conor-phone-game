@@ -19,7 +19,7 @@ import sys
 from io import BytesIO
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageOps
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from gpaint import MODEL, call, jpeg  # noqa: E402
@@ -50,6 +50,22 @@ def looks(db_name):
     return (d.get("looks", "").rstrip(".") + ". " + EXTRA.get(db_name, "")).strip()
 
 
+def resident_looks(m):
+    """How a resident looks: the approved drawing's notes, else the private notes in rooms/_looks.json."""
+    if m["id"] in APPROVED:
+        return looks(APPROVED[m["id"]][1])
+    f = WORK / "rooms" / "_looks.json"
+    return json.loads(f.read_text()).get(m["id"], "") if f.exists() else ""
+
+
+def owner_of(room):
+    o = (room.get("owner") or "").strip()
+    for suffix in ("'s", "’s"):
+        if o.lower().endswith(suffix):
+            o = o[: -len(suffix)].strip()
+    return o or "a friend"
+
+
 def answer(a, key):
     v = a.get(key)
     vals = v if isinstance(v, list) else [v] if v else []
@@ -61,22 +77,22 @@ def answer(a, key):
 
 def prompt_for(room, double):
     a = room.get("answers", {})
-    owner = (room.get("owner") or "").strip() or "a friend"
+    owner = owner_of(room)
     people = room.get("people", [])
     who = []
     for i, m in enumerate(people):
         desc = m.get("name") or ("a friend" if m.get("kind") == "Person" else "a pet")
         if m.get("kind") != "Person":
             desc += f" (a {m.get('kind', 'pet').lower()})"
-        if m["id"] in APPROVED:
-            extra = looks(APPROVED[m["id"]][1])
-            if extra:
-                desc += f": {extra}"
+        extra = resident_looks(m)
+        if extra:
+            desc += f": {extra}"
         who.append(desc)
     parts = [f"Paint {owner}'s room."]
     kind, into, vibe, scene, details = (answer(a, k) for k in ("type", "into", "vibe", "scene", "details"))
     if kind:
-        parts.append(f"It is a {', '.join(kind).lower()}.")
+        k = ", ".join(kind).lower()
+        parts.append(f"It is {'an' if k[:1] in 'aeiou' else 'a'} {k}.")
     if vibe:
         parts.append(f"It feels {'; '.join(vibe)}.")
     if into:
@@ -103,9 +119,10 @@ def refs_for(room, rid):
         if m["id"] in APPROVED and (WORK / APPROVED[m["id"]][0]).exists():
             imgs.append(Image.open(WORK / APPROVED[m["id"]][0]))
             labels.append(f"the approved character drawing of {name}")
-        photos = sorted((WORK / "rooms" / rid / m["id"]).glob("*.jpg"))[:2]
+        drawn = m["id"] in APPROVED
+        photos = sorted((WORK / "rooms" / rid / m["id"]).glob("*.jpg"))[: 2 if drawn else 3]
         for p in photos:
-            imgs.append(Image.open(p))
+            imgs.append(ImageOps.exif_transpose(Image.open(p)))
             labels.append(f"a photo of {name}")
     return imgs, labels
 
@@ -125,7 +142,7 @@ def paint(rid, n=1):
             "a flat back wall, the floor along the bottom, the ceiling along the top, no deep perspective. Fill every part of it with detail and life, "
             "Stephen Biesty levels of detail, in a lofi anime night painting style with crisp ink linework and warm lamp glow. Keep the people and the "
             "main action away from the outer edges, which sit behind a door frame. Writing only where it would really exist in the room, in English, "
-            "short and legible. No real brands or logos. No border, no door frame, no outer wall: the room fills the whole image edge to edge.")
+            "short and legible. No real brands or logos other than any named above. No border, no door frame, no outer wall: the room fills the whole image edge to edge.")
     text = lead + prompt_for(room, double) + tail
     parts = [jpeg(guide(double)), jpeg(ref.resize((ref.width * 2, ref.height * 2), Image.LANCZOS))] + [jpeg(i, 1024) for i in imgs] + [{"text": text}]
     OUT.mkdir(parents=True, exist_ok=True)

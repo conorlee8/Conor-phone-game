@@ -165,7 +165,8 @@ legend small { font-weight: 500; color: var(--muted); font-size: 13px; margin-le
   const answers = r => (r && r.answers && typeof r.answers === 'object' ? r.answers : {});
   const renders = r => (r && Array.isArray(r.renders) ? r.renders : []);
   const answeredCount = r => QUESTIONS.filter(q => { const v = answers(r)[q.key]; return Array.isArray(v) ? v.length : !!v; }).length;
-  const roomTitle = r => (r.owner && r.owner.trim() ? `${r.owner.trim()}'s room` : `Room ${r.rank}`);
+  const ownerName = r => (r.owner || '').trim().replace(/['’]s$/i, '').trim();
+  const roomTitle = r => (ownerName(r) ? `${ownerName(r)}'s room` : `Room ${r.rank}`);
   const uid = () => 'm' + Math.random().toString(36).slice(2, 9);
   const notice = text => { const n = $('notice'); n.hidden = !text; n.textContent = text || ''; };
 
