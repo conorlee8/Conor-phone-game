@@ -11,3 +11,6 @@ wallpaper/video/tiles/rejected/
 # Gemini job metadata next to the catalog pod loops
 wallpaper/pods/catalog/*.json
 !wallpaper/pods/catalog/catalog.json
+
+# Custom rooms show real people (Conor, friends, family): kept out of the repository
+wallpaper/pods/custom/
