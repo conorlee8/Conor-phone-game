@@ -11,6 +11,7 @@ Room docs and photos live in wallpaper/pods/work/rooms/ (git-ignored: they
 are personal). Paintings go to wallpaper/pods/custom/<room>_<n>.png.
 
     python3 wallpaper/tools/rooms.py paint r1 [--n 2]
+    python3 wallpaper/tools/rooms.py animate r1      # seamless loop of the room's chosen painting
 """
 import argparse
 import base64
@@ -170,14 +171,50 @@ def paint(rid, n=1):
         print("wrote", out.relative_to(ROOT.parent), f"(bay {RANK_BAYS.get(room.get('rank'))})")
 
 
+def animate(rid):
+    """A seamless 8 s loop of the room's chosen painting (Gemini Omni; the painting is the first and last frame)."""
+    import subprocess
+    from pods import cell_clip
+    room = json.loads((WORK / "rooms" / "_db" / "rooms" / f"{rid}.json").read_text())
+    room = room.get("data", room)
+    renders = room.get("renders", [])
+    art = room.get("animFrom") or room.get("chosen") or (renders[-1]["asset"] if renders else None)
+    local = json.loads((WORK / "rooms" / "_renders.json").read_text()).get(art)
+    if not local:
+        sys.exit(f"FAILED: no local painting for asset {art}")
+    owner = owner_of(room)
+    people = ", ".join((m.get("name") or m.get("kind", "")) + ("" if m.get("kind") == "Person" else f" the {m.get('kind', 'pet').lower()}")
+                       for m in room.get("people", []))
+    wish = (room.get("animPrompt") or "").strip()
+    prompt = ("Use this image as both the starting frame and the final frame. Bring this painting of " + owner + "'s room on a cozy space station "
+              "to life in one continuous shot. The camera is completely locked: no zoom, no pan, no cuts. The walls, furniture, signs and objects stay "
+              "exactly where they are. " + (f"In the room: {people}. " if people else "") +
+              (f"What happens: {wish}. " if wish else "Everyone keeps busy and moves naturally, pets fidget, breathe, wag and look around. ") +
+              "Screens flicker and play, fish swim, lights glow gently, steam drifts. Everyone keeps exactly the same face, hair, clothes and markings. "
+              "Nobody leaves the frame and nothing new appears. Keep exactly the same hand-painted lofi anime style, ink linework, colours and lighting. "
+              "Sound: soft room ambience. No music, no dialogue, no on-screen text changes.")
+    still = WORK / "rooms" / rid / "anim_still.jpg"
+    Image.open(OUT / local).convert("RGB").resize((1280, 720), Image.LANCZOS).save(still, quality=92)
+    raw = WORK / "rooms" / rid / "anim_raw.mp4"
+    res = subprocess.run([sys.executable, str(Path(__file__).parent / "omni.py"), str(still), str(raw), "--prompt", prompt], capture_output=True, text=True)
+    print(res.stdout.strip().splitlines()[-1] if res.stdout.strip() else "", res.stderr.strip()[-300:])
+    if res.returncode:
+        sys.exit("FAILED")
+    out = OUT / f"{rid}_anim.mp4"
+    cell_clip(raw, (1280, 720), out, crf=21)
+    print("wrote", out.relative_to(ROOT.parent), f"({out.stat().st_size // 1024} KB) from {local}")
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["paint", "prompt"])
+    ap.add_argument("cmd", choices=["paint", "prompt", "animate"])
     ap.add_argument("room")
     ap.add_argument("--n", type=int, default=1)
     a = ap.parse_args()
     if a.cmd == "paint":
         paint(a.room, a.n)
+    elif a.cmd == "animate":
+        animate(a.room)
     else:
         room = json.loads((WORK / "rooms" / "_db" / "rooms" / f"{a.room}.json").read_text())
         room = room.get("data", room)

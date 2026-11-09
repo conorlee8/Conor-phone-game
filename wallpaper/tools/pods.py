@@ -151,7 +151,7 @@ COLS = 6
 FPS, SECONDS, FADE = 24, 8, 24
 
 
-def cell_clip(src, size, dst):
+def cell_clip(src, size, dst, crf=12):
     """Decode a pod's loop at its atlas size and cross-fade its last second into its first: a seamless loop."""
     import subprocess
     w, h = size
@@ -162,7 +162,7 @@ def cell_clip(src, size, dst):
     if len(fr) < n:
         fr = np.concatenate([fr, np.repeat(fr[-1:], n - len(fr), axis=0)])
     enc = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{w}x{h}", "-r", str(FPS),
-                            "-i", "-", "-c:v", "libx264", "-crf", "12", "-pix_fmt", "yuv420p", str(dst)], stdin=subprocess.PIPE)
+                            "-i", "-", "-c:v", "libx264", "-crf", str(crf), "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(dst)], stdin=subprocess.PIPE)
     for f in range(n - FADE):
         x = fr[f]
         if f < FADE:

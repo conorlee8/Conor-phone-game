@@ -100,6 +100,21 @@ legend small { font-weight: 500; color: var(--muted); font-size: 13px; margin-le
 .vers button[aria-pressed="true"] { border-color: var(--lantern); color: var(--lantern); }
 .chosen { color: var(--lantern); font-family: var(--mono); font-size: 12px; }
 
+.station { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 12px; display: grid; gap: 10px; }
+.shead { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+.shead h2 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 20px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 99px; overflow: hidden; }
+.seg button { background: none; border: 0; padding: 7px 16px; font-size: 14px; }
+.seg button[aria-pressed="true"] { background: var(--lantern); color: var(--void); font-weight: 700; }
+#stationView { width: 100%; max-width: 100%; aspect-ratio: 1824 / 1280; display: block; border-radius: 10px; background: #0c0f23; cursor: pointer; }
+.snote { margin: 0; font-size: 13px; color: var(--muted); }
+
+.anim { display: grid; gap: 8px; padding-top: 14px; border-top: 1px dashed var(--line); }
+.anim video { width: 100%; border-radius: 12px; border: 1px solid var(--line); display: block; background: var(--void); }
+.anim .row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.alt { background: var(--mint); color: var(--void); border: 0; border-radius: 12px; padding: 11px 16px; font-weight: 700; }
+.alt:disabled { opacity: .5; cursor: default; }
+
 .send { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
 .primary { background: var(--lantern); color: var(--void); border: 0; border-radius: 12px; padding: 12px 18px; font-weight: 700; }
 .primary:disabled { opacity: .5; cursor: default; }
@@ -130,6 +145,17 @@ legend small { font-weight: 500; color: var(--muted); font-size: 13px; margin-le
     <p id="notice" class="notice" hidden></p>
     <p id="progress" class="progress">Loading your rooms…</p>
   </header>
+  <section class="station" aria-labelledby="stationTitle">
+    <div class="shead">
+      <h2 id="stationTitle">Your station</h2>
+      <div class="seg" role="group" aria-label="Station view">
+        <button type="button" id="viewStill" aria-pressed="true">Still</button>
+        <button type="button" id="viewMoving" aria-pressed="false">Animated</button>
+      </div>
+    </div>
+    <canvas id="stationView" width="1824" height="1280" aria-label="The station with your rooms in place. Tap a room to open it."></canvas>
+    <p class="snote" id="stationNote">Your rooms appear in their bays as you pick them. Tap a room to open it.</p>
+  </section>
   <ol id="rooms" class="rooms" aria-label="Rooms, ranked"></ol>
 </main>
 
@@ -210,7 +236,90 @@ legend small { font-weight: 500; color: var(--muted); font-size: 13px; margin-le
       fillCard(li, r, i, list.length);
     });
     for (const [id, li] of cards) if (!rooms.has(id)) { li.remove(); cards.delete(id); }
+    station.refresh();
   }
+
+  // ----- the station view: the shell over every room, still or moving -----
+  const LAYOUT = {"size":[1824,1280],"bays":{"b00":[658,210,842,313],"b01":[985,210,1169,313],"b02":[688,330,871,432],"b03":[462,329,645,432],"b04":[962,330,1144,432],"b05":[1186,329,1369,432],"b06":[669,448,851,550],"b07":[443,448,626,550],"b08":[956,450,1345,669],"b09":[686,567,868,670],"b10":[459,568,640,669],"b11":[689,685,871,788],"b12":[479,686,660,787],"b13":[966,686,1147,787],"b14":[1191,686,1372,787],"b15":[683,804,864,905],"b16":[462,804,642,905],"b17":[982,803,1164,905],"b18":[1207,804,1387,905],"b19":[667,921,847,1023],"b20":[981,921,1161,1023],"b21":[674,1039,853,1140],"b22":[979,1039,1158,1140]},"ranks":{"1":"b08","2":"b06","3":"b09","4":"b11","5":"b13","6":"b15","7":"b02","8":"b04","9":"b10","10":"b12"},"catalog":{"b14":[384,432,384,216],"b17":[768,432,384,216],"b19":[1152,432,384,216],"b20":[1536,432,384,216],"b00":[1920,432,384,216],"b01":[0,648,384,216],"b03":[384,648,384,216],"b05":[768,648,384,216],"b07":[1152,648,384,216],"b16":[1536,648,384,216],"b18":[1920,648,384,216],"b21":[0,864,384,216],"b22":[384,864,384,216]}};
+  const SHELL = '/_blob/da705f0b46ce8ed068ad2690ada82109', ATLAS = '/_blob/08fb5332c96a1507fcf25215c9ed014b', ATLAS_VIDEO = '/_blob/df97544e86d110af757e3f2effc2b06d';
+  const station = (() => {
+    const cv = $('stationView'), g = cv.getContext('2d');
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let moving = false, raf = 0;
+    const images = new Map(), videos = new Map();
+    const img = src => { if (!images.has(src)) { const i = new Image(); i.onload = () => draw(); i.src = src; images.set(src, i); } return images.get(src); };
+    const ready = el => el && (el.tagName === 'VIDEO' ? el.readyState >= 2 : el.complete && el.naturalWidth > 0);
+    function vid(src) {
+      if (!videos.has(src)) {
+        const v = document.createElement('video');
+        v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'auto';
+        v.setAttribute('playsinline', ''); v.setAttribute('muted', '');
+        v.src = src;
+        videos.set(src, v);
+      }
+      const v = videos.get(src);
+      if (moving && v.paused) v.play().catch(() => {});
+      return v;
+    }
+    const roomAt = rank => sorted()[rank - 1];
+    function drawBay(src, sx, sy, sw, sh, box) {
+      const [x0, y0, x1, y1] = box;
+      g.drawImage(src, sx, sy, sw, sh, x0, y0, x1 - x0, y1 - y0);
+    }
+    function placeholder(box, label) {
+      const [x0, y0, x1, y1] = box;
+      g.fillStyle = '#1b2033'; g.fillRect(x0, y0, x1 - x0, y1 - y0);
+      g.fillStyle = 'rgba(255,180,94,.85)'; g.font = `${Math.round((y1 - y0) * 0.32)}px "Dela Gothic One", sans-serif`;
+      g.textAlign = 'center'; g.textBaseline = 'middle';
+      g.fillText(label, (x0 + x1) / 2, (y0 + y1) / 2);
+    }
+    function draw() {
+      const shell = img(SHELL);
+      g.fillStyle = '#0c0f23'; g.fillRect(0, 0, cv.width, cv.height);
+      const atlasV = moving ? vid(ATLAS_VIDEO) : null;
+      const atlas = ready(atlasV) ? atlasV : img(ATLAS);
+      for (const [bay, cell] of Object.entries(LAYOUT.catalog)) if (ready(atlas)) drawBay(atlas, ...cell, LAYOUT.bays[bay]);
+      for (const [rank, bay] of Object.entries(LAYOUT.ranks)) {
+        const r = roomAt(+rank), box = LAYOUT.bays[bay];
+        const art = r && pickedArt(r);
+        if (!art) { placeholder(box, '#' + rank); continue; }
+        const a = moving && animFor(r) ? vid('/_blob/' + animFor(r).asset) : null;
+        const src = ready(a) ? a : img('/_blob/' + art);
+        if (!ready(src)) { placeholder(box, '#' + rank); continue; }
+        const w = src.videoWidth || src.naturalWidth, h = src.videoHeight || src.naturalHeight;
+        drawBay(src, 0, 0, w, h, box);
+      }
+      if (ready(shell)) g.drawImage(shell, 0, 0, cv.width, cv.height);
+    }
+    function loop() { draw(); raf = moving ? requestAnimationFrame(loop) : 0; }
+    function setMoving(on) {
+      moving = on && !reduce;
+      $('viewStill').setAttribute('aria-pressed', String(!on));
+      $('viewMoving').setAttribute('aria-pressed', String(on));
+      if (!moving) { for (const v of videos.values()) v.pause(); cancelAnimationFrame(raf); raf = 0; draw(); }
+      else if (!raf) loop();
+      const n = sorted().filter(r => animFor(r)).length;
+      $('stationNote').textContent = on
+        ? (reduce ? 'Your device asks for reduced motion, so the station stays still here.' : `${n} of 10 of your rooms are moving so far. The other station rooms move too. Tap a room to open it.`)
+        : 'Your rooms appear in their bays as you pick them. Tap a room to open it.';
+    }
+    $('viewStill').addEventListener('click', () => setMoving(false));
+    $('viewMoving').addEventListener('click', () => setMoving(true));
+    cv.addEventListener('click', e => {
+      const rc = cv.getBoundingClientRect();
+      const x = (e.clientX - rc.left) / rc.width * cv.width, y = (e.clientY - rc.top) / rc.height * cv.height;
+      for (const [rank, bay] of Object.entries(LAYOUT.ranks)) {
+        const [x0, y0, x1, y1] = LAYOUT.bays[bay];
+        if (x >= x0 && x <= x1 && y >= y0 && y <= y1) {
+          const r = roomAt(+rank); if (!r) return;
+          open.add(r.id); renderAll();
+          const li = cards.get(r.id); if (li) { li.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }); li.querySelector('.rtoggle').focus({ preventScroll: true }); }
+          return;
+        }
+      }
+    });
+    return { refresh: () => { if (!moving) draw(); } };
+  })();
 
   function buildCard(id) {
     const li = document.createElement('li');
@@ -232,6 +341,12 @@ legend small { font-weight: 500; color: var(--muted); font-size: 13px; margin-le
         <div class="qs block"></div>
         <label class="field"><span>Anything else? Inside jokes, signs, favorite things</span><textarea class="notes" maxlength="1500"></textarea></label>
         <div class="send"><button type="button" class="primary sendbtn">Send room to Claude</button><span class="status"></span></div>
+        <div class="anim" hidden>
+          <h3>Make it move</h3>
+          <video class="loop" muted loop playsinline autoplay hidden></video>
+          <label class="field"><span>What should happen in the loop? Optional</span><textarea class="animtext" maxlength="600" placeholder="e.g. I lean in and mash the controller, the boys' tails wag, fish swim, the screen flickers"></textarea></label>
+          <div class="row"><button type="button" class="alt animbtn">Animate this room</button><span class="status animstatus"></span></div>
+        </div>
         <span class="saving"></span>
       </div>`;
     li.querySelector('.owner').id = 'owner-' + id;
@@ -244,6 +359,9 @@ legend small { font-weight: 500; color: var(--muted); font-size: 13px; margin-le
     li.querySelector('.addperson').addEventListener('click', () => addMember(id, 'Person'));
     li.querySelector('.addpet').addEventListener('click', () => addMember(id, 'Dog'));
     li.querySelector('.sendbtn').addEventListener('click', e => send(id, e.currentTarget));
+    li.querySelector('.animtext').id = 'anim-' + id;
+    li.querySelector('.animtext').addEventListener('input', e => queue(id, { animPrompt: e.target.value }));
+    li.querySelector('.animbtn').addEventListener('click', e => animate(id, e.currentTarget));
     const qs = li.querySelector('.qs');
     QUESTIONS.forEach((q, qi) => {
       const fs = document.createElement('fieldset');
@@ -323,6 +441,54 @@ legend small { font-weight: 500; color: var(--muted); font-size: 13px; margin-le
     else if (r.status === 'sent') st.textContent = 'Sent. Claude will paint it and it shows up here.';
     else if (renders(r).length) st.textContent = 'Want changes? Write them in "Anything else?" and send again.';
     else st.textContent = members(r).length ? '' : 'Add who is in this room first.';
+    fillAnim(li, r, setVal);
+  }
+
+  // ----- making a room move -----
+  const pickedArt = r => r.chosen || (renders(r).length ? renders(r)[renders(r).length - 1].asset : null);
+  const animFor = r => (r.anim && r.anim.asset && r.anim.from === pickedArt(r) ? r.anim : null);
+  function fillAnim(li, r, setVal) {
+    const box = li.querySelector('.anim');
+    box.hidden = !renders(r).length;
+    if (box.hidden) return;
+    setVal(li.querySelector('.animtext'), r.animPrompt);
+    const vid = li.querySelector('.loop');
+    const a = animFor(r);
+    const src = a ? '/_blob/' + a.asset : '';
+    if (vid.dataset.src !== src) {
+      vid.dataset.src = src;
+      vid.hidden = !a;
+      if (a) { vid.src = src; vid.play().catch(() => {}); } else vid.removeAttribute('src');
+    }
+    const btn = li.querySelector('.animbtn'), st = li.querySelector('.animstatus');
+    btn.disabled = readOnly || r.animStatus === 'queued' || r.animStatus === 'working';
+    btn.textContent = a ? 'Animate again' : 'Animate this room';
+    st.className = 'status animstatus';
+    if (notes.has('anim:' + r.id)) { st.textContent = notes.get('anim:' + r.id); st.classList.add('good'); }
+    else if (r.animStatus === 'working') st.textContent = 'Claude is animating this room now.';
+    else if (r.animStatus === 'queued') st.textContent = 'Sent. The moving version shows up here in a few minutes.';
+    else if (a) st.textContent = 'This loop is what moves in the station and the wallpaper.';
+    else st.textContent = r.chosen ? 'About $0.80 of Google credit, a few minutes.' : 'Animates the version shown with "In the wallpaper" (or the newest one).';
+  }
+  async function animate(id, btn) {
+    const r = rooms.get(id);
+    if (!pickedArt(r)) return;
+    btn.disabled = true;
+    try { await saveNow(id); } catch (e) { btn.disabled = false; return; }
+    const rank = sorted().findIndex(x => x.id === id) + 1;
+    const text = `Animate room #${rank}: ${roomTitle(r)} (id ${id}). Version and loop notes are saved in this page's rooms/${id}.`;
+    let sent = false;
+    if (comments) {
+      try {
+        if ((await comments.canSendToClaude()) === 'available') {
+          await comments.sendToClaude({ anchor: await comments.anchorFor(cards.get(id).querySelector('.anim')), text });
+          sent = true;
+        }
+      } catch (e) { /* fall through to the chat hint */ }
+    }
+    queue(id, { animStatus: 'queued', animFrom: pickedArt(r), animAt: Date.now() }, 0);
+    notes.set('anim:' + id, sent ? 'Sent to Claude. The moving version shows up here in a few minutes.' : `Saved. Tell Claude in chat: "animate room #${rank}".`);
+    renderAll();
   }
 
   function fillRender(li, r) {
